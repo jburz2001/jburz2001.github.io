@@ -1,8 +1,8 @@
 ---
 layout: page
-title: project 1
-description: a project with a background image
-img: assets/img/12.jpg
+title: ODE Simulation
+description: MATLAB-based simulation of ordinary differential equations
+img: assets/img/ode.png
 importance: 1
 category: work
 ---
