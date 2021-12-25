@@ -2,9 +2,9 @@
 layout: page
 title: projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: Projects that Justin Burzachiello has worked on
 nav: true
-display_categories: [work, fun]
+display_categories: [Kramer Research Group, Microwave Nano-Electronics Lab, M.A.D. Lab, Volunteering, Software Engineering]
 horizontal: false
 ---
 <div class="projects">

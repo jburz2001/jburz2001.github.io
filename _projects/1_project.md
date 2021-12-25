@@ -4,7 +4,7 @@ title: ODE Simulation
 description: MATLAB-based simulation of ordinary differential equations
 img: assets/img/ode.png
 importance: 1
-category: Dr. Kramer
+category: Kramer Research Group
 ---
 
 Every project has a beautiful feature showcase page.
