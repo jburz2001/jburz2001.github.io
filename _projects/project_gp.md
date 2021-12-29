@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Literature Review
-description: Literature review of MOR, AI, and Lagrangian systems
-img: assets/img/3.jpg
-importance: 3
+title: Genetic Programming
+description: GPTIPS2-based symbolic regression
+img: assets/img/gp.png
+importance: 2
 category: Kramer Research Group
 ---
 
