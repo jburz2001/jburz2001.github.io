@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Literature Review
-description: Literature review of MOR, AI, and Lagrangian systems
+description: Reviewed literature on MOR, AI, and Lagrangian systems
 img: assets/img/litReview.jpg
 importance: 3
 category: Kramer Research Group

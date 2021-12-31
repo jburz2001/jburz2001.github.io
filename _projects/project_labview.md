@@ -1,39 +1,40 @@
 ---
 layout: page
-title: ODE Simulation
-description: Simulated ODE-based physical systems with MATLAB
-img: assets/img/ode.png
+title: LabVIEW
+description: Programmed MyRIO embedded system-based devices
+img: assets/img/labview.jpg
 importance: 1
-category: Kramer Research Group
+category: Microwave Nano-Electronics Lab
 ---
 
-I worked with Dr. Boris Kramer and Dr. Harsh Sharma in using machine learning to derive reduced Lagrangians from data. To do so, we needed data, so I used MATLAB to model the dynamics of a mass-spring-damper and linear beam.
+I worked with Dr. Yongtao Cui in using LabVIEW software to program a NI MyRIO for applications that are important in experimental physics. Implemented devices include a lock-in amplifier, digital-to-analog converter, analog-to-digital converter, numerically controlled oscillator, and proportional-integral controller for a phase-locked loop.
 
-## Mass-Spring-Damper (MSD)
+## LabVIEW
 
-### Background
+LabVIEW is a graphical programming language created by National Instruments (NI). This software provides an alternative to textual programming languages used in embedded systems, enabling users to create applications faster with code that is easier to understand.
 
-<div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-</div>
+## MyRIO
 
-The MSD is a cannonical mechanical system composed of masses that are connected via restorative springs and dissipative dampers. This system can model [actual masses connected to springs and dampers](https://www.motioncontroltips.com/what-is-a-tuned-mass-damper-and-how-is-it-used-in-motion-control/), but it also serves as a useful toy model for systems such as [buildings](https://link.springer.com/article/10.1007/s10518-020-00973-2), [turbulent fluids](https://link.springer.com/article/10.1007/s11071-018-04749-x), and even [biological tissue](https://www.semanticscholar.org/paper/Simulation-of-Biological-Tissue-using-Models-Eriksson/dc9f974969e8a0e062b7575bfe852b0e591697b9).
+The MyRIO is an embedded system manufactured by National Instruments (NI). This embedded system contains a real-time component, FPGA, and I/O that can all be interfaced through LabVIEW and a PC.
 
-### Simulation
+## Devices
 
-...
-
-## Linear 1-Dimensional Beam
+### Lock-In Amplifier (LIA)
 
 ...
 
-### Background
+### Digital-to-Analog Converter (DAC)
 
 ...
 
-### Simulation
+### Analog-to-Digital Converter (ADC)
 
 ...
+
+### Proportional-Integral (PI) Controller
+
+...
+
 
 To give your project a background in the portfolio page, just add the img tag to the front matter like so:
 

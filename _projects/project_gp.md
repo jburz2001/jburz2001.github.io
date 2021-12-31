@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Genetic Programming
-description: GPTIPS2-based symbolic regression
+description: Performed GPTIPS2-based symbolic regression
 img: assets/img/gp.png
 importance: 2
 category: Kramer Research Group
