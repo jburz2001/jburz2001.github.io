@@ -1,6 +1,6 @@
 ---
-layout: page_
-title: courses
+layout: page
+# title: dropdown
 nav: true
 dropdown: true
 children: 
