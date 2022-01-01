@@ -104,6 +104,10 @@ collections:
   projects:
     output: true
     permalink: /projects/:path/
+  courses:
+    output: true
+    permalink: /courses/:path/
+
 
 news_limit: 5
 

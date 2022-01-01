@@ -2,7 +2,7 @@
 layout: page
 title: courses
 permalink: /courses/
-description: courses that Justin Burzachiello has worked on
+description: Courses that Justin Burzachiello has worked on
 nav: true
 display_categories: [Computer Science, Mathematics, Physics, Chemistry, Social Science, Humanities]
 horizontal: false
