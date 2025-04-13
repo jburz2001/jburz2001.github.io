@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://jburz2001.github.ioblank/sitemap.xml
+Sitemap: https://jburz2001.github.io/sitemap.xml
