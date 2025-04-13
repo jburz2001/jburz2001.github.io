@@ -28,4 +28,8 @@ latest_posts:
 
 ---
 
-Justin's research interests span scientific machine learning, tensor algebra, and high-performance computing, with broad applications in science and engineering. He previously interned as a SULI software engineer at <a href="https://www.ornl.gov/group/application-engineering">Oak Ridge National Laboratory</a> and as an industrial X‑ray CT systems engineer at <a href="https://vjt.com/">VJ Technologies</a>. Before joining the group, Justin earned a B.S. in Physics from the University of California, Riverside and an M.S. in Computational Applied Mathematics from Stony Brook University.
+My research interests span scientific machine learning, tensor algebra, and high-performance computing, with broad applications in science and engineering. 
+
+I previously interned at the <a href="https://www.ornl.gov/group/application-engineering">Department of Energy's Oak Ridge National Laboratory</a> facility as a <a href="https://science.osti.gov/wdts/suli">SULI</a> software engineer, where I developed verification and validation software for HPC. Later, I interned as an X‑ray CT systems engineer at <a href="https://vjt.com/">VJ Technologies</a>, where I worked on Monte Carlo simulation of radiation transport, X-ray-based non-destructive testing, in addition to setting up CT machines and a particle accelerator.
+
+Before beginning my PhD in Mechanical and Aerospace Engineering at the University of California, San Diego, I graduated Magna Cum Laude with a B.S. in Physics from the University of California, Riverside and later with an M.S. in Computational Applied Mathematics from Stony Brook University.
