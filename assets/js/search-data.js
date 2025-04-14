@@ -365,7 +365,7 @@ ninja.data = [{
             },},{id: "news-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-16th-in-mathematics-in-the-academic-ranking-of-world-universities",
           title: 'Recieved my M.S. in Computational Applied Mathematics from Stony Brook University. In 2024,...',
           description: "",
-          section: "News",},{id: "news-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nations-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
+          section: "News",},{id: "news-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nation-s-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
           title: 'Started my PhD in Mechanical and Aerospace Engineering at the University of California,...',
           description: "",
           section: "News",},{id: "projects-project",
