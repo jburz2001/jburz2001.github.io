@@ -362,7 +362,7 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/the_godfather/";
-            },},{id: "news-i-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-16th-in-mathematics-in-the-academic-ranking-of-world-universities",
+            },},{id: "news-i-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-16th-in-mathematics-worldwide-in-the-academic-ranking-of-world-universities",
           title: 'I recieved my M.S. in Computational Applied Mathematics from Stony Brook University. In...',
           description: "",
           section: "News",},{id: "news-i-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nation-s-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
