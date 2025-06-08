@@ -362,11 +362,14 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/the_godfather/";
-            },},{id: "news-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-16th-in-mathematics-in-the-academic-ranking-of-world-universities",
-          title: 'Recieved my M.S. in Computational Applied Mathematics from Stony Brook University. In 2024,...',
+            },},{id: "news-i-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-16th-in-mathematics-in-the-academic-ranking-of-world-universities",
+          title: 'I recieved my M.S. in Computational Applied Mathematics from Stony Brook University. In...',
           description: "",
-          section: "News",},{id: "news-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nation-s-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
-          title: 'Started my PhD in Mechanical and Aerospace Engineering at the University of California,...',
+          section: "News",},{id: "news-i-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nation-s-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
+          title: 'I started my PhD in Mechanical and Aerospace Engineering at the University of...',
+          description: "",
+          section: "News",},{id: "news-i-will-attend-the-2025-structure-preserving-scientific-computing-and-machine-learning-summer-school-and-hackathon-at-the-university-of-washington-seattle-from-06-16-06-25-sponsored-by-the-nsf-while-there-i-will-learn-about-and-work-with-low-rank-algorithms-operator-splitting-methods-physics-informed-neural-networks-and-more",
+          title: 'I will attend the 2025 Structure–Preserving Scientific Computing and Machine Learning Summer School...',
           description: "",
           section: "News",},{id: "projects-project",
           title: 'Project',
