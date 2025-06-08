@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I will attend the <a href="">2025 Structure--Preserving Scientific Computing and Machine Learning Summer School and Hackathon</a> at the University of Washington, Seattle from 06/16--06/25, sponsored by the NSF. While there I will learn about and work with low--rank algorithms, operator splitting methods, physics--informed neural networks, and more.
+I will attend the <a href="2025 Structure--Preserving Scientific Computing and Machine Learning Summer School and Hackathon">2025 Structure--Preserving Scientific Computing and Machine Learning Summer School and Hackathon</a> at the University of Washington, Seattle from 06/16--06/25, sponsored by the NSF. While there I will not only interact with leading experts in computational mathematics but also learn more about cutting--edge research in low--rank approximations, operator splitting, deep learning, and more.
