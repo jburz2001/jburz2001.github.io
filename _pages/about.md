@@ -2,18 +2,19 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: PhD student in Mechanical Engineering; advised by <a href="https://kramer.ucsd.edu/">Boris Krämer</a>
+
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>Jacobs Hall (EBU1), Rm 4205</p>
+    <p>9736 Engineers Ln</p>
+    <p>La Jolla, CA 92093</p>
 
-selected_papers: true # includes a list of papers marked as "selected={true}"
+selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 
 announcements:
@@ -22,13 +23,13 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 latest_posts:
-  enabled: true
+  enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+<p>My research interests span scientific machine learning, tensor algebra, and high-performance computing, with applications across science and engineering.</p>
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+<p>I interned at the Department of Energy’s <a href="https://www.ornl.gov/group/application-engineering">Oak Ridge National Laboratory</a> as a <a href="https://science.osti.gov/wdts/suli">SULI</a> software engineer, where I developed verification and validation software for supercomputing. Later, I joined <a href="https://vjt.com/">VJ Technologies</a> as an X-ray CT systems engineer intern, where I worked on Monte Carlo simulations of radiation transport, X-ray–based non-destructive testing, in addition to setting up CT machines and a particle accelerator.</p>
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+<p>Prior to beginning my PhD in Mechanical and Aerospace Engineering at the University of California, San Diego, I graduated magna cum laude with a B.S. in Physics from the University of California, Riverside, and earned an M.S. in Computational Applied Mathematics from Stony Brook University.</p>
