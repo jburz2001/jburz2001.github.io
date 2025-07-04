@@ -2,12 +2,10 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description: Materials and information for courses I have taught.
+description: Information about courses I’ve served as a teaching assistant for.
 nav: true
 nav_order: 6
 ---
-
-This page lists the courses I have been a teaching assistant for.
 
 ## Courses at Stony Brook University
 
