@@ -26,7 +26,7 @@ This page lists the courses I have been a teaching assistant for.
   - Markov chains
   - Least-squares regression via pseudoinverse
   - Vector space theory
-  - Applications of linear algebra to economics and population ecology
+
 ---
 
 ### **AMS 361 – Applied Calculus IV: Differential Equations**
@@ -44,6 +44,6 @@ This page lists the courses I have been a teaching assistant for.
   - Systems of inhomogenous ODEs
   - Generalized eigenvectors
   - Laplace transforms and convolutions
-  - Applications of ODEs to physics and population ecology
+
 ---
 
