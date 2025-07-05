@@ -4,7 +4,7 @@ permalink: /teaching/
 title: teaching
 description: Information about courses I’ve served as a teaching assistant for.
 nav: true
-nav_order: 6
+nav_order: 5
 ---
 
 ## Courses at Stony Brook University
