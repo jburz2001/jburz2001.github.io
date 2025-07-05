@@ -14,7 +14,7 @@ ninja.data = [{
           description: "Please click the &quot;PDF&quot; button on this webpage to download my CV.",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/cv/";
+            window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
           },
         },{id: "nav-teaching",
           title: "teaching",
