@@ -1,6 +1,6 @@
 ---
 layout: cv
-permalink: /cv/
+permalink: /assets/pdf/cv_justinBurzachiello.pdf
 title: cv
 nav: true
 nav_order: 5
