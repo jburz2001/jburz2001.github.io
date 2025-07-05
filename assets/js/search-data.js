@@ -9,19 +9,19 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/";
     },
-  },{id: "nav-cv",
-          title: "cv",
-          description: "Please click the &quot;PDF&quot; button on this webpage to download my CV.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
-          },
-        },{id: "nav-teaching",
+  },{id: "nav-teaching",
           title: "teaching",
           description: "Information about courses I’ve served as a teaching assistant for.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/teaching/";
+          },
+        },{id: "nav-cv",
+          title: "cv",
+          description: "Please click the &quot;PDF&quot; button on this webpage to download my CV.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
           },
         },{id: "post-a-post-with-plotly-js",
         
