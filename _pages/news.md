@@ -1,6 +1,6 @@
 ---
 layout: page
-title: news (with scrollbar)
+title: news
 permalink: /news/
 ---
 
