@@ -9,8 +9,8 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/";
     },
-  },{id: "nav-teaching-positions",
-          title: "teaching positions",
+  },{id: "nav-teaching",
+          title: "teaching",
           description: "",
           section: "Navigation",
           handler: () => {
@@ -391,17 +391,20 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/books/the_godfather/";
-            },},{id: "news-i-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-8th-in-mathematics-in-the-usa-and-16th-worldwide-by-the-academic-ranking-of-world-universities",
+            },},{id: "news-i-recieved-my-m-s-in-computational-applied-mathematics-from-stony-brook-university-in-2024-sbu-was-ranked-8th-in-mathematics-in-the-usa-by-the-academic-ranking-of-world-universities",
           title: 'I recieved my M.S. in Computational Applied Mathematics from Stony Brook University. In...',
           description: "",
           section: "News",},{id: "news-i-started-my-phd-in-mechanical-and-aerospace-engineering-at-the-university-of-california-san-diego-in-2025-u-s-news-and-world-report-ranked-ucsd-10th-among-the-nation-s-top-engineering-schools-and-1-for-citations-per-publication-among-public-universities-in-the-us",
           title: 'I started my PhD in Mechanical and Aerospace Engineering at the University of...',
           description: "",
-          section: "News",},{id: "news-i-attended-the-nsf-sponsored-2025-structure-preserving-scientific-computing-and-machine-learning-summer-school-and-hackathon-at-the-university-of-washington-seattle-from-06-16-06-25-while-there-i-studied-dynamical-low-rank-approximations-operator-splitting-and-physics-informed-neural-networks-additionally-i-worked-with-a-scientist-from-lawrence-livermore-national-laboratory-to-implement-a-physics-informed-preconditioner-for-simulating-x-ray-radiative-transport-in-inertial-confiment-fusion",
+          section: "News",},{id: "news-i-attended-the-nsf-sponsored-2025-structure-preserving-scientific-computing-and-machine-learning-summer-school-and-hackathon-at-the-university-of-washington-seattle-from-06-16-06-25-while-there-i-studied-dynamical-low-rank-approximations-operator-splitting-and-physics-informed-neural-networks-i-also-helped-implement-a-physics-informed-preconditioner-for-simulating-x-ray-radiative-transport-in-inertial-confiment-fusion",
           title: 'I attended the NSF–sponsored 2025 Structure–Preserving Scientific Computing and Machine Learning Summer School...',
           description: "",
-          section: "News",},{id: "news-i-attended-uc-san-diego-s-2025-uc-leads-summer-session-dinner-reception-on-07-01-as-a-recipient-of-the-uc-leads-graduate-fellowship-as-an-undergrad-in-uc-leads-i-was-awarded-the-2022-graduate-deans-leadership-award-which-is-given-to-three-scholars-who-exhibited-extraordinary-leadership-during-their-tenure-as-uc-leads-scholars-by-the-uc-leads-executive-steering-committee-and-funded-by-the-deans-of-all-10-uc-graduate-divisions",
+          section: "News",},{id: "news-i-attended-uc-san-diego-s-2025-uc-leads-summer-session-dinner-reception-on-07-01-as-a-recipient-of-the-uc-leads-graduate-fellowship-as-an-undergrad-in-uc-leads-i-was-awarded-the-2022-graduate-deans-leadership-award-for-extraordinary-leadership-funded-by-all-10-university-of-california-graduate-divisions",
           title: 'I attended UC San Diego’s 2025 UC LEADS summer session dinner reception on...',
+          description: "",
+          section: "News",},{id: "news-i-was-accepted-to-attend-the-nextprof-pathfinder-workshop-at-uc-san-diego-from-10-05-10-07-sponsored-by-the-university-of-michigan-uc-san-diego-and-georgia-tech-this-workshop-prepares-participants-for-a-successful-career-in-academia",
+          title: 'I was accepted to attend the NextProf Pathfinder workshop at UC San Diego...',
           description: "",
           section: "News",},{id: "projects-project-1",
           title: 'project 1',
