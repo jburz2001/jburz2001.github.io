@@ -7,7 +7,7 @@ nav: true
 nav_order: 5
 ---
 
-## Courses at Stony Brook University in Applied Mathematics & Statistics (AMS)
+## Stony Brook University | Applied Mathematics & Statistics (AMS)
 
 ### **AMS 210 – Applied Linear Algebra**
 
