@@ -463,7 +463,7 @@ ninja.data = [{
               window.location.href = "/projects/9_project/";
             },},{id: "projects-x-ray-computed-tomography",
           title: 'X--Ray Computed Tomography',
-          description: "Principles of X--Ray CT, including imaging, artifacts, and scanner operation.",
+          description: "In progress",
           section: "Projects",handler: () => {
               window.location.href = "/projects/ct_tutorial/";
             },},{
