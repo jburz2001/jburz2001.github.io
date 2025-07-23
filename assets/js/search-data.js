@@ -9,12 +9,12 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/";
     },
-  },{id: "nav-projects",
-          title: "projects",
-          description: "A growing collection of your cool projects.",
+  },{id: "nav-tutorials",
+          title: "tutorials",
+          description: "Tutorials by Justin",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/projects/";
+            window.location.href = "/tutorials/";
           },
         },{id: "nav-teaching",
           title: "teaching",
@@ -461,6 +461,11 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "projects-x-ray-computed-tomography",
+          title: 'X--Ray Computed Tomography',
+          description: "Principles of X--Ray CT, including imaging, artifacts, and scanner operation.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/ct_tutorial/";
             },},{
         id: 'social-email',
         title: 'email',
