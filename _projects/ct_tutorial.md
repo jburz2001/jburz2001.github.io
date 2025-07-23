@@ -1,17 +1,15 @@
 ---
 layout: page
 title: X--Ray Computed Tomography
-description: Principles of X--Ray CT, including imaging, artifacts, and scanner operation.
-img: assets/img/12.jpg
+description: In progress #Principles of X--Ray CT, including imaging, artifacts, and scanner operation.
+img: assets/img/industrial_ct.jpg
 importance: 1
 category: STEM
 related_publications: true
 ---
 
-(In progress)
-
 # Introduction
- 3D imaging is a powerful experimental tool with many modalities, including magnetic resonance imaging (MRI), and X--ray computed tomography (CT), and more. Each of these has pros and cons; for instance, MRI scanners do not leverage ionizing radiation to form images but the devices themselves require expensive and increasingly scarce cryogenic liquids to cool the superconducting magnet inside of the scanner.
+3D imaging is a powerful experimental tool with many modalities, including magnetic resonance imaging (MRI), and X--ray computed tomography (CT), and more. Each of these has pros and cons; for instance, MRI scanners do not leverage ionizing radiation to form images but the devices themselves require expensive and increasingly scarce cryogenic liquids to cool the superconducting magnet inside of the scanner.
 
 X--ray CT was first developed in the early 1970s, with the invention credited to Sir Godfrey Hounsfield and Dr. Allan Cormack, who were awarded the Nobel Prize in Physiology or Medicine in 1979 for their contributions. While the first CT scanners were designed for medical imaging, over the decades, advancements in CT technology in resolution, speed, and accessibility have expanded its applications beyond medicine into fields such as manufacturing, archaeology, and botany. I refer to the use of CT in non--clinical applications as “industrial CT.” Note that we refer to X--ray CT when we say CT but that CT can be performed with visible light, neutrons, and more.
 
@@ -60,8 +58,8 @@ Intuitively, they occur when low--enough--energy X--rays encounter a dense--enou
 
 Beam hardening streak artifacts are similar to the aforementioned Compton scatter--produced streak artifacts in that they are due to X--ray energy, but these are caused by absorption instead of scattering. These artifacts occur when X--rays passing through a relatively dense substance "harden" (i.e., lower--energy photons are absorbed during transmission through the material but higher--energy photons make it through). Ideally, the X--ray energy spectrum would uniformly attenuate during transport through media; however, some energies are absorbed more than others since materials serve as a “high-pass filter” to X--rays. This results in an increased average energy of the X--rays as they exit the body, leading to inaccuracies in the reconstructed image since substances are more transparent to a higher-average energy X--ray. In circumstances with extremely dense substances, photon starvation may occur where the extremely dense substance in question nearly fully attenuates the incident X--ray beam, resulting in few, if any, photons exiting from it towards the detector, yielding dark areas in the scan that are essentially X--ray shadows.
 
-\section{CT Scan Workflow}
-Performing a CT scan requires taking various steps to set up and perform the scan. The following section is written from the point of view of an operator of the VEDA CORE CT machine using vi5 software, both engineered by VJ Technologies. However, the steps presented are applicable to other machines. These steps include warm--up, geometry alignment, detector calibration, preheat, actuation, and scan.
+# CT Scan Workflow
+Performing a CT scan requires taking various steps to set up and perform the scan. The following section is written from the point of view of an operator of the VEDA CORE CT machine using vi5 software, both engineered by VJ Technologies. However, the steps presented are applicable to other machines. These steps include warm--up, geometry alignment, detector calibration, preheat, actuation, and scan. Once these steps have been completed, the operator can run a CT scan on the object that they wish to scan.
 
 ## Warm--up
 The warm--up phase is the first step of using a CT machine. This step involves ramping both the filament current and tube voltage gradually, from lowest to highest, in order to ensure that the machine can achieve them without extraneous strain on the system that might damage it. To understand how it works, it helps to understand the basic physics of how the X--rays are generated. Inside of the X--ray source is a filament which boils off electrons when heated. The temperature of the filament is set by the CT operator as a current parameter of the X--ray source. This is like how running a current through a wire will warm it up–in the case of the CT filament, it warms up and boils off electrons. Importantly, these electrons are charged particles, so they can be accelerated in some direction if a voltage is applied across some region. This is like how an object with mass will roll downhill due to gravity. However, in the case of electrons, they roll up the electrostatic potential "hill" due to their negative charge, where a difference in values of this potential is called a “voltage." Intuitively, a larger voltage corresponds to a steeper slope on the potential landscape, causing electrons to accelerate faster. The CT operator controls this voltage, and it effectively determines the energy of the X--rays generated due to stronger impacts of the electrons on a target. For generating very high--energy X--rays necessary for CT scanning incredibly dense materials, like part of the chassis of a rocket, klystrons and other devices are used to build particle accelerators.
@@ -72,7 +70,7 @@ But why do we need to run the warm--up when starting up a CT machine? Well, if o
 
 Importantly, the X--rays used for CT can actually damage the detector over time. Thus, during the warm--up phase when X--rays are generated without a need to use them for imaging, it is good practice to shield the detector from them. I do so with a lead brick placed in front of the detector, blocking X--ray radiation from the X--ray source. This is like how one might have a lead bib placed on them at the dentist when getting X--rays done in order to protect their vital organs, but here the lead is used to protect the detector since it doesn't need to detect anything.
 
-\subsection{Detector Calibration}
+## Detector Calibration
 After warming up, one needs to ensure that the X--ray detector is calibrated to the intensity of X--ray radiation from the X--ray source. Doing so helps ensure accurate readings and prevent ring artifacts. To perform detector calibration, one needs to first ensure that the detector has a clear field of view of the X--ray source by removing any obstructions between them. Next, the operator must set the X--ray source to have the values of voltage, current, and integration time that they expect to use during the scan. After that, the operator must wait until the detector has adjusted its readings to the new mean intensity registered at the detector. Afterwards, the operator should turn off the X--ray source altogether to let the detector register its X--ray readings when the source is off (basically, to compute statistics about the background noise). Finally, the CT scanner software will calibrate the dexels based on information gathered in the previous steps.
 
 ## Geometry Alignment
@@ -81,7 +79,4 @@ After the detector calibration phase is the geometry alignment segment. This por
 Now why exactly must geometry alignment be done with a particular object with geometry hard--coded into the software? Well, imagine that you want to gauge the size of a quarter by looking at it. A quarter right in front of your eye will look quite large but a quarter 10 feet away will look quite small in comparison. However, you, as a human who knows what a quarter is, understand that the quarter has a very specific size and that it will look smaller if it's further away. Thus, you can deduce how far away it is at a given time based on how large it appears in your field of view! In a CT scanner, the hard--coded geometry is the CT scanner's "knowledge" about the size of an object, and when it perceives it can then deduce how far it is based on how large it appears in its field of view. This enables the CT scanner to compute geometric quantities necessary for reconstruction, like the source--object--distance.
 
 Importantly, if a CT reconstruction is desired, then geometry alignment must be redone each time that the SOD or SDD is changed. Additionally, before actually performing geometry alignment, the operator should place the object that they would like to scan onto the turntable and adjust the location of the object so that it fits into the field of view at all angles. Only after completing this step should the geometry be aligned, since running geometry alignment effectively tells the scanner to use the current SOD, SDD, and misalignment values.
-
-Once the previous steps have been completed, the operator can run a CT scan on the object that they wish to scan.
-
 
