@@ -1,7 +1,7 @@
 ---
 layout: page
 title: X--Ray Computed Tomography
-description: In progress # Principles of X--Ray CT, including imaging, artifacts, and scanner operation.
+description: In progress # Imaging, artifacts, and scanner operation.
 img: assets/img/industrial_ct.jpg
 importance: 1
 category: STEM
@@ -56,10 +56,10 @@ Notably, substances with higher densities will be more opaque to X--ray radiatio
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/PCB-CT-Scan.png" title="CT scan of hard drive" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/PCB-CT-Scan.jpg" title="CT scan of hard drive" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/Hard-Drive-CT-Scan-Electronics-Auto-Space-Exp-Defense.png" title="CT scan of PCB" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/Hard-Drive-CT-Scan-Electronics-Auto-Space-Exp-Defense.jpg" title="CT scan of PCB" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -105,7 +105,7 @@ Motion artifacts are exhibitions of blurring due to movement of the object being
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/motion_artifact.wbep" title="Motion artifact" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/motion_artifact.jpg" title="Motion artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -118,7 +118,7 @@ Ring artifacts are caused by the malfunction of dexels during CT operation, and 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/ring_artifact.jpeg" title="Ring artifact" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/ring_artifact.jpg" title="Ring artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -148,7 +148,7 @@ Performing a CT scan requires taking various steps to set up and perform the sca
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/veda_core_CT_scanner.webp" title="Veda Core CT scanner" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/veda_core_CT_scanner.jpg" title="Veda Core CT scanner" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
