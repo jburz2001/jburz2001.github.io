@@ -1,12 +1,14 @@
 ---
 layout: page
 title: X--Ray Computed Tomography
-description: In progress #Principles of X--Ray CT, including imaging, artifacts, and scanner operation.
+description: Principles of X--Ray CT, including imaging, artifacts, and scanner operation.
 img: assets/img/industrial_ct.jpg
 importance: 1
 category: STEM
-related_publications: true
+related_publications: false
 ---
+
+Source of thumbnail image: https://yxlon.comet.tech/en/technologies/industrial-ct.
 
 # Introduction
 3D imaging is a powerful experimental tool with many modalities, including magnetic resonance imaging (MRI), and X--ray computed tomography (CT), and more. Each of these has pros and cons; for instance, MRI scanners do not leverage ionizing radiation to form images but the devices themselves require expensive and increasingly scarce cryogenic liquids to cool the superconducting magnet inside of the scanner.
@@ -17,11 +19,11 @@ This blog post details the principles of X--ray computed tomography (CT) that I 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/first_radiograph.jpg" title="First radiograph" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    The first X--ray image. Source: https://www.atlasobscura.com/articles/roentgen-xrays-discovery-radiographs.
+    The first X--ray radiograph that was imaged by Wilhelm Conrad Roentgen in 1895. Source: https://www.atlasobscura.com/articles/roentgen-xrays-discovery-radiographs.
 </div>
 
 
@@ -35,14 +37,14 @@ To understand how this works intuitively, imagine you wanted to inspect the 3D s
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/industrial_ct.jpg" title="Industrial CT" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/medical_ct.jpg" title="Medical CT" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Industrial vs medical CT. Source: https://radiopaedia.org/cases/mobile-phone-x-ray.
+    Industrial CT (left) vs medical CT (right). Source: https://www.matsusada.com/column/ct-tech1.html.
 </div>
 
 
@@ -54,11 +56,14 @@ Notably, substances with higher densities will be more opaque to X--ray radiatio
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/PCB-CT-Scan.jpg" title="CT scan of hard drive" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/Hard-Drive-CT-Scan-Electronics-Auto-Space-Exp-Defense.jpg" title="CT scan of PCB" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Radiograph of cell phone. Source: https://radiopaedia.org/cases/mobile-phone-x-ray.
+    CT scans obtained from radiographs. Printed circuit board (left) and hard drive (right). Source: https://vjt.com/industries/electronics/.
 </div>
 
 
@@ -70,19 +75,25 @@ Importantly, if one obtains many projections at different angles, such as 1200 p
 
 A significant step in the reconstruction process is "back projection," which involves taking the value registered at a dexel and populating all locations along the path in the direction that the X--ray was measured (i.e., co--linear with the ray path). This effectively un--projects the X--ray intensity by assigning all locations that would have contributed to its value with the resulting value. However, this makes no distinction between different locations along the path. Therefore, if an X--ray passed through both air and wood, both the air and wood would be assigned the same value registered by the dexel, even though the wood exhibits a greater density and thus a higher linear attenuation coefficient and greater degree of X--ray opacity/attenuation. To overcome this and obtain information about density in the object space, back projection must be performed on each of the projections obtained during the CT scan. The result will be a 3D image called a “reconstruction” with values proportional to the densities of the substances at different locations in the space. However, if one performs this reconstruction by only naively following these previous steps, then the result will be very blurry and unacceptable for analysis. Thus, an additional step involving filtering the projections is necessary.
 
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/back_projection.jpg" title="Back projection" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Un--filtered back projection. Sub--image (a) shows the ideal result; sub--images (b--f) show results of un--filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
+</div>
+
 ## Filtered Back Projection
 Filtered back projection (FBP) is the process of filtering projection data to back--project it to an accurate reconstruction. The filter in question is a 1--dimensional digital signal sharpening filter (e.g., Ram--Lak ramp filter, Shepp--Logan windowed filter). To perform FBP, it is helpful to store all the projection data in a single data structure called a sinogram. In a sinogram, the abscissa (x-axis) designates the dexel, while the ordinate (y-axis) denotes the rotation angle. A sinogram is constructed row-by-row, where each collection of intensity values registered on all the dexels at some angle is formed into a row and stacked on top of one another as the angle iterates from 0 to 180 degrees. For FBP, the blur present in the original back projection can be massively reduced by sharpening the sinogram row-wise with a 1D digital sharpening filter. Applying the previously described back projection process with data from this filtered sinogram will yield a 3D reconstruction image that is far less blurry. The overall FBP process is a large reason for the word “computed” in computed tomography.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/filtered_back_projection.jpg" title="Filtered back projection" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Naive back projection vs filtered back projection. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
+    Filtered back projection. Sub--image (a) shows the ideal result; sub--images (b--f) show results of filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
 </div>
 
 
@@ -94,11 +105,11 @@ Motion artifacts are exhibitions of blurring due to movement of the object being
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/motion_artifact.jpg" title="Motion artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Motion artifact. Source: https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2017.00232/full.
+    Motion artifact. Sub--image (A) shows an ideal slice of a CT scan; sub--image (B) shows the same slice of a CT scan, but obtained under influence of motion. Source: https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2017.00232/full.
 </div>
 
 
@@ -107,11 +118,11 @@ Ring artifacts are caused by the malfunction of dexels during CT operation, and 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/ring_artifact.jpg" title="Ring artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Ring artifact. Source: https://radiopaedia.org/cases/ring-artifact-4#image-3234993.
+    Ring artifact. Notice the ring--shaped, non--anatomical structure near the middle of this brain scan. Source: https://radiopaedia.org/cases/ring-artifact-3.
 </div>
 
 
@@ -124,11 +135,11 @@ Beam hardening streak artifacts are similar to the aforementioned Compton scatte
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/streak_artifact.jpg" title="Streak artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Ring artifact. Source: https://radiopaedia.org/cases/gunshot-wound-to-face-old-1#image-6170651.
+    Streak artifact. Notice the bright thin lines due to scatter. Source: https://radiopaedia.org/cases/gunshot-wound-to-face-old-1#image-6170651.
 </div>
 
 
@@ -137,11 +148,11 @@ Performing a CT scan requires taking various steps to set up and perform the sca
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/veda_core_CT_scanner.jpg" title="Veda Core CT scanner" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Veda Core CT scanner. Source: https://vjt.com/wp-content/uploads/2022/08/220913_Core-1000x1304.png.
+    Veda Core CT scanner. Source: https://vjt.com/products/veda-core/.
 </div>
 
 
@@ -166,11 +177,11 @@ Importantly, if a CT reconstruction is desired, then geometry alignment must be 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/geometry_alignment.jpg" title="Geometry alignment" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Example object with known geometry (i.e., known radii of circles). Source: https://iopscience.iop.org/article/10.1088/1361-6501/ac38ef.
+    Identifying new and better objects for geometry alignment is an active area of research. Sub--image (a) shows a particular type of geometry alignment object; sub--image (b) shows a more--novel type of geometry alignment object, along with what the overall structure looks like. Each object has well--defined, unambiguous geometry to enable geometry calibration for reconstruction. Source: https://iopscience.iop.org/article/10.1088/1361-6501/ac38ef.
 </div>
 
 
