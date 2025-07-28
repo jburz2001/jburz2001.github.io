@@ -18,7 +18,7 @@ X--ray CT was first developed in the early 1970s, with the invention credited to
 This blog post details the principles of X--ray computed tomography (CT) that I learned as a CT systems engineer intern at VJ Technologies, an engineering firm that focuses on X--ray--based non--destructive testing for industrial and scientific applications.
 
 <div class="row">
-    <div class="col-sm-6 col-md-6 mt-3 mt-md-0">
+    <div class="col-sm-6 col-md-6 mt-3 mt-md-0 text-center">
         {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/first_radiograph.jpg" title="First radiograph" class="img-fluid rounded z-depth-1 d-block mx-auto" %}
     </div>
 </div>
