@@ -81,7 +81,7 @@ A significant step in the reconstruction process is "back projection," which inv
     </div>
 </div>
 <div class="caption">
-    Un--filtered back projection. Subfigure (a) shows the ideal result; sub--images (b--f) show results of un--filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
+    Un--filtered back projection. Subfigure (a) shows the ideal result; subfigures (b--f) show results of un--filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
 </div>
 
 ## Filtered Back Projection
@@ -93,7 +93,7 @@ Filtered back projection (FBP) is the process of filtering projection data to ba
     </div>
 </div>
 <div class="caption">
-    Filtered back projection. Subfigure (a) shows the ideal result; sub--images (b--f) show results of filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
+    Filtered back projection. Subfigure (a) shows the ideal result; subfigures (b--f) show results of filtered back projection with increasing numbers of projections used for reconstruction. Source: https://www.sciencedirect.com/science/article/pii/S1934592519300607.
 </div>
 
 
