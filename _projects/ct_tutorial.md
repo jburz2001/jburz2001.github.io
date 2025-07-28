@@ -19,7 +19,7 @@ This blog post details the principles of X--ray computed tomography (CT) that I 
 
 <div class="row">
     <div class="col-sm-6 col-md-6 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/first_radiograph.jpg" title="First radiograph" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/first_radiograph.jpg" title="First radiograph" class="img-fluid rounded z-depth-1 d-block mx-auto" %}
     </div>
 </div>
 <div class="caption">
