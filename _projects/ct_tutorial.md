@@ -18,7 +18,7 @@ X--ray CT was first developed in the early 1970s, with the invention credited to
 This blog post details the principles of X--ray computed tomography (CT) that I learned as a CT systems engineer intern at VJ Technologies, an engineering firm that focuses on X--ray--based non--destructive testing for industrial and scientific applications.
 
 <div class="row">
-    <div class="col-sm-6 col-md-6 mt-3 mt-md-0 text-center">
+    <div class="col-sm-4 col-md-4 mt-3 mt-md-0 text-center">
         {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/first_radiograph.jpg" title="First radiograph" class="img-fluid rounded z-depth-1 d-block mx-auto" %}
     </div>
 </div>
@@ -100,6 +100,7 @@ Filtered back projection (FBP) is the process of filtering projection data to ba
 # CT Artifacts
 In the ideal world, CT reconstructions would be unaffected by motion, CT scanner limitations, or material properties of the substances being scanned. Unfortunately, these factors can cause distortions or inaccuracies that appear in the reconstructions, yet do not exist physically, called artifacts. They are sort of like hallucinations of the CT scanner. These artifacts compromise the quality and reliability of reconstruction results and are thus important to understand, circumvent, and mitigate. There are many types of CT artifacts and each stems from a different source yet multiple artifacts can be present simultaneously. Here I describe the following artifacts: motion, ring, streak, and beam hardening. Understanding these artifacts is crucial for those interpreting CT results since one must differentiate between artifacts and their lack thereof to ensure accurate analysis.
 
+
 ## Motion Artifacts
 Motion artifacts are exhibitions of blurring due to movement of the object being scanned or the scanner itself during the imaging process. This can result in blurred or distorted images because the structures being scanned do not appear in the same position across the projections. Intuitively, if there is motion during the acquisition of projections, the FBP back--projects information about a single location in the object’s physical space to multiple locations in the reconstruction, yielding a blurred effect. Sources of motion are less common in industrial CT compared with medical CT (since medical CT scans involve scanning living beings) but can still occur. For instance, an inanimate object can wobble due to centrifugal force upon it during its rotation on a turntable during a scan, or heavy machinery can shake the X--ray detector during operation. These motion artifacts can obscure details and make it challenging---if not impossible---to accurately analyze the reconstruction.
 
@@ -117,7 +118,7 @@ Motion artifacts are exhibitions of blurring due to movement of the object being
 Ring artifacts are caused by the malfunction of dexels during CT operation, and they appear as concentric circles (i.e., rings) around the center of the CT reconstruction image. The circular geometry of these artifacts is due to the rotation of the scanner around the object being scanned. Basically, if one or more dexels are miscalibrated or broken, then they will register erroneous X--ray intensity values. If such a dexel registers this error at each angle of object rotation during the CT scan, then these errors will be back-projected into the CT reconstruction as a circular structure with the intensity of this erroneous reading, where the circular structure appears around the central axis of rotation. Thus, the circular geometric appearance of ring artifacts results from the combination of rotational scanning and persistent errors from malfunctioning detectors.
 
 <div class="row">
-    <div class="col-sm-6 col-md-6 mt-3 mt-md-0 text-center">
+    <div class="col-sm-4 col-md-4 mt-3 mt-md-0 text-center">
         {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/ring_artifact.jpg" title="Ring artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -134,7 +135,7 @@ Intuitively, they occur when low--enough--energy X--rays encounter a dense--enou
 Beam hardening streak artifacts are similar to the aforementioned Compton scatter--produced streak artifacts in that they are due to X--ray energy, but these are caused by absorption instead of scattering. These artifacts occur when X--rays passing through a relatively dense substance "harden" (i.e., lower--energy photons are absorbed during transmission through the material but higher--energy photons make it through). Ideally, the X--ray energy spectrum would uniformly attenuate during transport through media; however, some energies are absorbed more than others since materials serve as a “high-pass filter” to X--rays. This results in an increased average energy of the X--rays as they exit the body, leading to inaccuracies in the reconstructed image since substances are more transparent to a higher-average energy X--ray. In circumstances with extremely dense substances, photon starvation may occur where the extremely dense substance in question nearly fully attenuates the incident X--ray beam, resulting in few, if any, photons exiting from it towards the detector, yielding dark areas in the scan that are essentially X--ray shadows.
 
 <div class="row">
-    <div class="col-sm-6 col-md-6 mt-3 mt-md-0 text-center">
+    <div class="col-sm-4 col-md-4 mt-3 mt-md-0 text-center">
         {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/streak_artifact.jpg" title="Streak artifact" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -147,7 +148,7 @@ Beam hardening streak artifacts are similar to the aforementioned Compton scatte
 Performing a CT scan requires taking various steps to set up and perform the scan. The following section is written from the point of view of an operator of the VEDA CORE CT machine using vi5 software, both engineered by VJ Technologies. However, the steps presented are applicable to other machines. These steps include warm--up, geometry alignment, detector calibration, preheat, actuation, and scan. Once these steps have been completed, the operator can run a CT scan on the object that they wish to scan.
 
 <div class="row">
-    <div class="col-sm-6 col-md-6 mt-3 mt-md-0 text-center">
+    <div class="col-sm-4 col-md-4 mt-3 mt-md-0 text-center">
         {% include figure.liquid loading="eager" path="assets/img/ct_tutorial/veda_core_CT_scanner.jpg" title="Veda Core CT scanner" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
