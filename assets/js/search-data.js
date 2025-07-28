@@ -413,7 +413,7 @@ ninja.data = [{
           section: "News",},{id: "news-i-was-accepted-to-attend-the-nextprof-pathfinder-workshop-at-uc-san-diego-from-10-05-10-07-sponsored-by-the-university-of-michigan-uc-san-diego-and-georgia-tech-this-workshop-prepares-participants-for-a-successful-career-in-academia",
           title: 'I was accepted to attend the NextProf Pathfinder workshop at UC San Diego...',
           description: "",
-          section: "News",},{id: "news-i-was-invited-to-present-at-a-uc-leads-workshop-on-08-05-2025-on-how-to-interweave-stories-of-adverse-life-experiences-into-graduate-school-applications-as-a-former-foster-youth-i-find-it-important-to-effectively-convey-triumph-over-adversity-sadly-amp-lt-4-of-foster-youth-obtain-a-4-year-degree-yet-studies-have-shown-that-upwards-of-30-of-foster-care-alumni-suffer-from-ptsd-nearly-more-than-that-of-vietnam-war-veterans",
+          section: "News",},{id: "news-i-was-invited-to-present-at-a-uc-leads-workshop-on-08-05-2025-on-how-to-interweave-stories-of-adverse-life-experiences-into-graduate-school-applications",
           title: 'I was invited to present at a UC LEADS workshop on 08/05/2025 on...',
           description: "",
           section: "News",},{id: "projects-project-1",
