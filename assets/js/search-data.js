@@ -37,7 +37,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
           },
-        },{id: "post-a-post-with-plotly-js",
+        },{id: "post-jax-for-physics-informed-source-separation",
+        
+          title: "JAX for Physics--Informed Source Separation",
+        
+        description: "Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/jax-for-physics-informed-source-separation/";
+          
+        },
+      },{id: "post-a-post-with-plotly-js",
         
           title: "a post with plotly.js",
         
