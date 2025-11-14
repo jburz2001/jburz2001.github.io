@@ -86,8 +86,8 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: MOR & More # blog_name will be displayed in your blog page
-blog_description: Blogs by Justin that may or may not be related to his research in model order reduction (MOR)
+blog_name: MOR & More (UNDER CONSTRUCTION) # blog_name will be displayed in your blog page
+blog_description: Posts by Justin that might be related to his research in model order reduction (MOR)
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts
 
