@@ -72,7 +72,18 @@ Additionally, we can assume that $U_1$ and $U_2$ satisfy their own advection equ
 
 $$
 \begin{equation}
-(U_1, U_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2 + \lambda_{\text{PDE}_1} || \dot{U}_1 + c_1 U^\prime_1 ||_\text{F}^2 + \lambda_{\text{PDE}_2} || \dot{U}_2 + c_2 U^\prime_2 ||_\text{F}^2
+\begin{aligned}
+(U_1, U_2)
+&\in 
+\arg\min_{U_1 \ge 0,\, U_2 \ge 0}
+\Bigg[
+    \frac{1}{2}\,\| U_1 + U_2 - U \|_\text{F}^2 \\
+&\quad
+    +\ \lambda_{\text{PDE}_1}\, \| \dot{U}_1 + c_1 U_1' \|_\text{F}^2 \\
+&\quad
+    +\ \lambda_{\text{PDE}_2}\, \| \dot{U}_2 + c_2 U_2' \|_\text{F}^2
+\Bigg]
+\end{aligned}
 \end{equation}
 $$,
 
@@ -85,7 +96,23 @@ Our constrained optimization problem can be converted into an unconstrained one 
 
 $$
 \begin{equation}
-(U_1^{(k)}, U_2^{(k)}) \in \arg\min_{U_1^{(k)},U_2^{(k)}}\frac{1}{2}|| U_1^{(k)} + U_2^{(k)} - U ||_\text{F}^2 + \lambda_{\text{PDE}_1} || \dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1 ||_\text{F}^2 + \lambda_{\text{PDE}_2} || \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 ||_\text{F}^2 + \frac{1}{2}\mu^{(k)}(|| \min(0, U_1^{(k)}) ||_\text{F}^2 + || \min(0, U_2^{(k)}) ||_\text{F}^2)
+\begin{aligned}
+(U_1^{(k)}, U_2^{(k)}) 
+&\in 
+\arg\min_{U_1^{(k)},\, U_2^{(k)}} 
+\Bigg[
+    \frac{1}{2}\,\| U_1^{(k)} + U_2^{(k)} - U \|_\text{F}^2 \\
+&\quad
+    +\ \lambda_{\text{PDE}_1}\, \| \dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1 \|_\text{F}^2 \\
+&\quad
+    +\ \lambda_{\text{PDE}_2}\, \| \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 \|_\text{F}^2 \\
+&\quad
+    +\ \frac{1}{2}\mu^{(k)} \big( 
+        \| \min(0, U_1^{(k)}) \|_\text{F}^2
+        +\ \| \min(0, U_2^{(k)}) \|_\text{F}^2
+      \big)
+\Bigg]
+\end{aligned}
 \end{equation}
 $$,
 
@@ -95,18 +122,24 @@ Furthermore, we can express this least--squares problem's objective function to 
 
 $$
 \begin{equation}
-(U_1^{(k)}, U_2^{(k)}) \in 
-\arg\min_{U_1^{(k)}, U_2^{(k)}}
+\begin{aligned}
+(U_1^{(k)}, U_2^{(k)})
+&\in
+\arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}
-||
+\Bigg\|
 \begin{bmatrix}
-U_1^{(k)} + U_2^{(k)} - U \\
-2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
-2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
-\sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
-\sqrt{\mu^{(k)}}\min(0, U_2^{(k)})
+U_1^{(k)} + U_2^{(k)} - U \\[6pt]
+2\sqrt{\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
+2\sqrt{\lambda_{\text{PDE}_2}}\;\big(\dot{U}^{(k)}_2 + c_2\, U_2^{(k)\prime}\big) \\[6pt]
+\sqrt{\mu^{(k)}}\,\min(0, U_1^{(k)}) \\[6pt]
+\sqrt{\mu^{(k)}}\,\min(0, U_2^{(k)})
 \end{bmatrix}
-||_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}|| r^{(k)} ||_\text{F}^2
+\Bigg\|_F^{\!2} \\[10pt]
+&=
+\arg\min_{U_1^{(k)},\, U_2^{(k)}}
+\frac{1}{2}\,\| r^{(k)} \|_\text{F}^2
+\end{aligned}
 \end{equation}
 $$,
 
@@ -130,8 +163,8 @@ U_1^{(k)} + U_2^{(k)} - U \\
 2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
 \sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
 \sqrt{\mu^{(k)}}\min(0, U_2^{(k)}) \\
-\frac{1}{2} \langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
-\frac{1}{2} \langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
+2\langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
+2\langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
 \end{bmatrix}
 ||_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}|| r^{(k)} ||_\text{F}^2
 \end{equation}
@@ -189,7 +222,6 @@ $$
 &\approx \frac{1}{2}||\, y - \left(f(x,\beta) + J\delta\beta\right) ||_\text{F}^2 \\
 &= \frac{1}{2}\,\big(y - f(x,\beta) - J\delta\beta\big)^\top \big(y - f(x,\beta) - J\delta\beta\big) \\
 &= \frac{1}{2}(y^\top - f^\top(x,\beta) - \delta\beta^\top J^\top)(y - f(x,\beta) - J\delta\beta) \\
-&= \frac{1}{2} \left(y^\top y - y^\top f(x,\beta) - y^\top J\delta\beta - f^\top(x,\beta)y + f^\top(x,\beta)f(x,\beta) + f^\top(x,\beta)J\delta\beta - \delta\beta^\top J^\top y + \delta\beta^\top J^\top f(x,\beta) + \delta\beta^\top J^\top J \delta\beta\right) \\
 &= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right)
 \end{aligned}
 \end{equation}
@@ -253,7 +285,7 @@ where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \ga
   - singular values of $J^\top J + \gamma I$ equal the eigenvalues and increase in magnitude with $\gamma$, increasing the condition number of the system matrix
   - fast, numerically stable solvers can be used, like conjugate gradient.
 
-Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, assume that $J^\top J$ a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\mu=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 101 / 1.0001 = 100.19$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\mu=0$ yields Gauss--Newton; $\mu\gg 0$ yields gradient descent.
+Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, assume that $J^\top J$ a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\mu=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 100.19$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\mu=0$ yields Gauss--Newton; $\mu\gg 0$ yields gradient descent.
 
 Finally, the solution can be made scale invariant by regularizing with a diagonal matrix formed directly from $J^TJ$ instead of with an arbitrarily chosen identity matrix:
 
@@ -272,19 +304,16 @@ JAX is an incredible Python library that facilitates the use of automatic differ
 First, imports:
 
 ```python
-
 import numpy as np
 import matplotlib.pyplot as plt
 import jax
 import jax.numpy as jnp
 import jaxopt
-
 ```
 
 Next, define helper functions for finite--difference simulation of the superposition of advecting signals:
 
 ```python
-
 # helper functions
 def get_fwd_diff_op(u, dx):
     n = u.shape[0]
@@ -309,13 +338,11 @@ def get_u_next(u_curr, a, dt, Kfwd, Kbwd):
 
 def get_u0(x, mu):
     return np.exp(-((x - mu) ** 2) / 0.0002) / np.sqrt(0.0002 * np.pi)
-
 ```
 
 Then, simulate the individual advection of two Gaussian pulses traveling towards and through each other:
 
 ```python
-
 # space
 x0, xf = 0.0, 1.0
 n = 2**7
@@ -362,13 +389,11 @@ for j in range(1, N_steps + 1):
 
 # compute superposition solution
 U = U1 + U2
-
 ```
 
 Next, visualize the individual PDE solutions and their superposition (which will serve as our observed data that we wish to decompose via physics--informed source separation):
 
 ```python
-
 # plot Minkowski diagrams
 plt.figure()
 plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
@@ -393,13 +418,11 @@ plt.ylabel('x')
 plt.title('U1 + U2')
 plt.colorbar()
 plt.show()
-
 ```
 
 After that, define helper functions for computing the residual that will be minimized:
 
 ```python
-
 def dUdt_center(U, dt):
     return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
 
@@ -436,13 +459,11 @@ def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x)
         jnp.atleast_1d(r_mm1),
         jnp.atleast_1d(r_mm2),
     ])
-
 ```
 
 Now pose the physics--informed source separation problem with JAX's *jax.numpy* syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the *jaxopt.LevenbergMarquardt* method:
 
 ```python
-
 nx, nt = U.shape
 x = jnp.concatenate([U, U], axis=0).ravel()
 
@@ -482,13 +503,11 @@ for k in range(outer_iters):
 
 U_hat  = np.array(x.reshape((2 * nx, nt)))
 U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
-
 ```
 
 Last but not least, visualize the sources inferred through our solved physics--informed source separation problem:
 
 ```python
-
 # plot Minkowski diagrams of inferred
 plt.figure()
 plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
@@ -505,7 +524,6 @@ plt.ylabel('x')
 plt.title('U2_hat')
 plt.colorbar()
 plt.show()
-
 ```
     
 ## Conclusion
