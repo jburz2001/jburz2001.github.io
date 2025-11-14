@@ -193,7 +193,7 @@ $$
 where $[\cdot]_+ = \max(0,\cdot)$ clips negative entries to zero, ensuring that all Lagrange multipliers are positive (each element of $\Lambda_i^{(k)}$ is a Lagrange multiplier).
 
 
-## Levenberg--Marquardt Algorithm for Nonlinear Least--Squares Problems
+## The Levenberg--Marquardt Algorithm for Least--Squares Problems
 The Levenberg--Marquardt algorithm is a workhorse tool for solving both linear and nonlinear least--squares problems with objective function $\frac{1}{2}|| r ||_\text{F}^2$. This algorithm can be thought of as an extension of the Gauss--Newton algorithm that incorporates a trust region for regularization. Let's derive this algorithm with calculus.
 
 First, consider the optimization problem of identifying the parameter, $\hat{\beta}$, which minimizes the least--squares error of fitting observed data, $y$, with a curve, $f(x, \beta)$:
