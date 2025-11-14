@@ -39,7 +39,7 @@ ninja.data = [{
           },
         },{id: "post-jax-for-physics-informed-source-separation",
         
-          title: "JAX for Physics--Informed Source Separation",
+          title: "JAX for Physics–Informed Source Separation",
         
         description: "Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.",
         section: "Posts",
