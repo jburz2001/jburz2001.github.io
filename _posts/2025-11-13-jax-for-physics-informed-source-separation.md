@@ -197,11 +197,13 @@ yielding a system of linear equations whose application is known as the Levenber
 There are various benefits to adding $\gamma I$ to $J^\top J$, namely those stemming from increasing the positive--definiteness of the system matrix. To convey these benefits, let's first use the Rayleigh--Ritz quotient to show that eigenvalues of $J^\top J + \gamma I$ are larger than those of $J^\top J$ when $\gamma \geq 0$:
 
 $$
+\begin{align}
 (J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x_i \\
 x_i^\top (J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x^\top_i x_i \\
 \lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J + \gamma I)x_i}{x^\top_i x_i} \\
 \lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J)x_i}{x^\top_i x_i} + \frac{x_i^\top (\gamma I) x_i}{x^\top_i x_i} \\
 \lambda_i^{\text{LM}} &= \lambda_i^{\text{GN}} + \gamma,
+\end{align}
 $$
 
 where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\mu$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
@@ -228,226 +230,226 @@ JAX is an incredible Python library that facilitates the use of automatic differ
 First, imports:
 
 ```python
-import numpy as np
-import matplotlib.pyplot as plt
-import jax
-import jax.numpy as jnp
-import jaxopt
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import jax
+    import jax.numpy as jnp
+    import jaxopt
 ```
 
 Next, define helper functions for finite--difference simulation of the superposition of advecting signals:
 
 ```python
-# helper functions
-def get_fwd_diff_op(u, dx):
-    n = u.shape[0]
-    main_diag = -1 * np.ones(n)
-    super_diag = np.ones(n - 1)
-    K = np.diag(main_diag) + np.diag(super_diag, k=1)
-    K[-1, 0] = 1
-    return K * (1 / dx)
+    # helper functions
+    def get_fwd_diff_op(u, dx):
+        n = u.shape[0]
+        main_diag = -1 * np.ones(n)
+        super_diag = np.ones(n - 1)
+        K = np.diag(main_diag) + np.diag(super_diag, k=1)
+        K[-1, 0] = 1
+        return K * (1 / dx)
 
-def get_bwd_diff_op(u, dx):
-    n = u.shape[0]
-    main_diag = np.ones(n)
-    sub_diag = -1 * np.ones(n - 1)
-    K = np.diag(main_diag) + np.diag(sub_diag, k=-1)
-    K[0, 0] = 1
-    K[0, -1] = -1
-    return K * (1 / dx)
+    def get_bwd_diff_op(u, dx):
+        n = u.shape[0]
+        main_diag = np.ones(n)
+        sub_diag = -1 * np.ones(n - 1)
+        K = np.diag(main_diag) + np.diag(sub_diag, k=-1)
+        K[0, 0] = 1
+        K[0, -1] = -1
+        return K * (1 / dx)
 
-def get_u_next(u_curr, a, dt, Kfwd, Kbwd):
-    D = Kbwd if a >= 0.0 else Kfwd
-    return u_curr - (a * dt) * (D @ u_curr)
+    def get_u_next(u_curr, a, dt, Kfwd, Kbwd):
+        D = Kbwd if a >= 0.0 else Kfwd
+        return u_curr - (a * dt) * (D @ u_curr)
 
-def get_u0(x, mu):
-    return np.exp(-((x - mu) ** 2) / 0.0002) / np.sqrt(0.0002 * np.pi)
+    def get_u0(x, mu):
+        return np.exp(-((x - mu) ** 2) / 0.0002) / np.sqrt(0.0002 * np.pi)
 ```
 
 Then, simulate the individual advection of two Gaussian pulses traveling towards and through each other:
 
 ```python
-# space
-x0, xf = 0.0, 1.0
-n = 2**7
-x = np.linspace(x0, xf, num=n, endpoint=False)
-dx = x[1] - x[0]
+    # space
+    x0, xf = 0.0, 1.0
+    n = 2**7
+    x = np.linspace(x0, xf, num=n, endpoint=False)
+    dx = x[1] - x[0]
 
-# speed
-c1 = 10.0
-c2 = -c1
+    # speed
+    c1 = 10.0
+    c2 = -c1
 
-# time
-t0, tf = 0.0, 0.02
-courant_number = 0.99
-dt = courant_number * dx / max(abs(c1), abs(c2))
-N_steps = int(np.ceil((tf - t0) / dt))
-dt = (tf - t0) / N_steps
-ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
+    # time
+    t0, tf = 0.0, 0.02
+    courant_number = 0.99
+    dt = courant_number * dx / max(abs(c1), abs(c2))
+    N_steps = int(np.ceil((tf - t0) / dt))
+    dt = (tf - t0) / N_steps
+    ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
 
-# snapshots
-U1 = np.zeros((n, N_steps + 1))
-U2 = np.zeros((n, N_steps + 1))
+    # snapshots
+    U1 = np.zeros((n, N_steps + 1))
+    U2 = np.zeros((n, N_steps + 1))
 
-mu1 = 0.4
-mu2 = 1.0 - mu1
-u1_curr = get_u0(x, mu1)
-u2_curr = get_u0(x, mu2)
-U1[:, 0] = u1_curr
-U2[:, 0] = u2_curr
+    mu1 = 0.4
+    mu2 = 1.0 - mu1
+    u1_curr = get_u0(x, mu1)
+    u2_curr = get_u0(x, mu2)
+    U1[:, 0] = u1_curr
+    U2[:, 0] = u2_curr
 
-# FD operators
-Kfwd = get_fwd_diff_op(u1_curr, dx)
-Kbwd = get_bwd_diff_op(u1_curr, dx)
+    # FD operators
+    Kfwd = get_fwd_diff_op(u1_curr, dx)
+    Kbwd = get_bwd_diff_op(u1_curr, dx)
 
-# simulate
-for j in range(1, N_steps + 1):
-    u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
-    U1[:, j] = u1_curr
+    # simulate
+    for j in range(1, N_steps + 1):
+        u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
+        U1[:, j] = u1_curr
 
-    u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
-    U2[:, j] = u2_curr
+        u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
+        U2[:, j] = u2_curr
 
-    if j % 100 == 0:
-        print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
+        if j % 100 == 0:
+            print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
 
-# compute superposition solution
-U = U1 + U2
+    # compute superposition solution
+    U = U1 + U2
 ```
 
 Next, visualize the individual PDE solutions and their superposition (which will serve as our observed data that we wish to decompose via physics--informed source separation):
 
 ```python
-# plot Minkowski diagrams
-plt.figure()
-plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1')
-plt.colorbar()
-plt.show()
+    # plot Minkowski diagrams
+    plt.figure()
+    plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2')
-plt.colorbar()
-plt.show()
+    plt.figure()
+    plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U2')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1 + U2')
-plt.colorbar()
-plt.show()    
+    plt.figure()
+    plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1 + U2')
+    plt.colorbar()
+    plt.show()    
 ```
 
 After that, define helper functions for computing the residual that will be minimized:
 
 ```python
-def dUdt_center(U, dt):
-    return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
+    def dUdt_center(U, dt):
+        return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
 
-def dUdx_center(U, dx):
-    return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
+    def dUdx_center(U, dx):
+        return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
 
-def pde_res(U, c, dt, dx):
-    return dUdt_center(U, dt) + c * dUdx_center(U, dx)
+    def pde_res(U, c, dt, dx):
+        return dUdt_center(U, dt) + c * dUdx_center(U, dx)
 
-def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
-    nx, nt = U_obs.shape
-    U12 = x.reshape((2 * nx, nt))
-    U1, U2 = U12[:nx, :], U12[nx:, :]
+    def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
+        nx, nt = U_obs.shape
+        U12 = x.reshape((2 * nx, nt))
+        U1, U2 = U12[:nx, :], U12[nx:, :]
 
-    r_dec  = U1 + U2 - U_obs
-    r_pde1 = 2.0 * jnp.sqrt(reg_pde1) * pde_res(U1, c1, dt, dx)
-    r_pde2 = 2.0 * jnp.sqrt(reg_pde2) * pde_res(U2, c2, dt, dx)
+        r_dec  = U1 + U2 - U_obs
+        r_pde1 = 2.0 * jnp.sqrt(reg_pde1) * pde_res(U1, c1, dt, dx)
+        r_pde2 = 2.0 * jnp.sqrt(reg_pde2) * pde_res(U2, c2, dt, dx)
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+        neg1 = jnp.minimum(U1, 0.0)
+        neg2 = jnp.minimum(U2, 0.0)
 
-    r_pen1 = jnp.sqrt(mu) * neg1
-    r_pen2 = jnp.sqrt(mu) * neg2
+        r_pen1 = jnp.sqrt(mu) * neg1
+        r_pen2 = jnp.sqrt(mu) * neg2
 
-    r_mm1 = jnp.sum(lam_1 * (-neg1))
-    r_mm2 = jnp.sum(lam_2 * (-neg2))
+        r_mm1 = jnp.sum(lam_1 * (-neg1))
+        r_mm2 = jnp.sum(lam_2 * (-neg2))
 
-    return jnp.concatenate([
-        r_dec.ravel(),
-        r_pde1.ravel(),
-        r_pde2.ravel(),
-        r_pen1.ravel(),
-        r_pen2.ravel(),
-        jnp.atleast_1d(r_mm1),
-        jnp.atleast_1d(r_mm2),
-    ])    
+        return jnp.concatenate([
+            r_dec.ravel(),
+            r_pde1.ravel(),
+            r_pde2.ravel(),
+            r_pen1.ravel(),
+            r_pen2.ravel(),
+            jnp.atleast_1d(r_mm1),
+            jnp.atleast_1d(r_mm2),
+        ])    
 ```
 
 Now pose the physics--informed source separation problem with JAX's *jax.numpy* syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the *jaxopt.LevenbergMarquardt* method:
 
 ```python
-nx, nt = U.shape
-x = jnp.concatenate([U, U], axis=0).ravel()
+    nx, nt = U.shape
+    x = jnp.concatenate([U, U], axis=0).ravel()
 
-lam_pde1 = 1e-1
-lam_pde2 = 1e-1
+    lam_pde1 = 1e-1
+    lam_pde2 = 1e-1
 
-mu = 10.0
-mu_max = 1e5
-outer_iters = 10
-lm_maxiter = 300
+    mu = 10.0
+    mu_max = 1e5
+    outer_iters = 10
+    lm_maxiter = 300
 
-lam_1 = jnp.zeros_like(U)
-lam_2 = jnp.zeros_like(U)
+    lam_1 = jnp.zeros_like(U)
+    lam_2 = jnp.zeros_like(U)
 
-prev_viol = jnp.inf
-for k in range(outer_iters):
-    print(k)
+    prev_viol = jnp.inf
+    for k in range(outer_iters):
+        print(k)
 
-    x = jaxopt.LevenbergMarquardt(
-        residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
-        maxiter=lm_maxiter
-    ).run(x).params
+        x = jaxopt.LevenbergMarquardt(
+            residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
+            maxiter=lm_maxiter
+        ).run(x).params
 
-    U12 = x.reshape((2 * nx, nt))
-    U1, U2 = U12[:nx, :], U12[nx:, :]
+        U12 = x.reshape((2 * nx, nt))
+        U1, U2 = U12[:nx, :], U12[nx:, :]
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+        neg1 = jnp.minimum(U1, 0.0)
+        neg2 = jnp.minimum(U2, 0.0)
 
-    lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
-    lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
+        lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
+        lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
 
-    viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
-    if float(viol) < 0.8 * float(prev_viol):
-        mu = min(mu_max, 2.0 * mu)
-    prev_viol = viol
+        viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
+        if float(viol) < 0.8 * float(prev_viol):
+            mu = min(mu_max, 2.0 * mu)
+        prev_viol = viol
 
-U_hat  = np.array(x.reshape((2 * nx, nt)))
-U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
+    U_hat  = np.array(x.reshape((2 * nx, nt)))
+    U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
 ```
 
 Last but not least, visualize the sources inferred through our solved physics--informed source separation problem:
 
 ```python
-# plot Minkowski diagrams of inferred
-plt.figure()
-plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1_hat')
-plt.colorbar()
-plt.show()
+    # plot Minkowski diagrams of inferred
+    plt.figure()
+    plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1_hat')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2_hat')
-plt.colorbar()
-plt.show()
+    plt.figure()
+    plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U2_hat')
+    plt.colorbar()
+    plt.show()
 ```
     
 ## Conclusion
