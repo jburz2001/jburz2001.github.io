@@ -314,11 +314,11 @@ JAX is an incredible Python library that facilitates the use of automatic differ
 First, imports:
 
 ```python
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import jax
-    import jax.numpy as jnp
-    import jaxopt
+import numpy as np
+import matplotlib.pyplot as plt
+import jax
+import jax.numpy as jnp
+import jaxopt
 ```
 
 Next, define helper functions for finite--difference simulation of the superposition of advecting signals:
