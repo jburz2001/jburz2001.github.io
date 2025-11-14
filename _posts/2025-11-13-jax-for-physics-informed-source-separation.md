@@ -11,22 +11,23 @@ toc:
   sidebar: left
 ---
 
-## Introduction
-Many important physical systems are measured as compositions of mixed signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes) can corrupt measurements, so it is often vital to isolate the signals of interest. This process is called *source separation* and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
+## Source Separation: From Smoothies to PDEs
+Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called *source separation* and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
 
-As an analogy for blind source separation, imagine if I concocted a delicious smoothie from various ingredients and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! 
+As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of smoothie--informed machine learning.
 
-Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation. Please contact me if you know of a PDE for smoothies. This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
+Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation.<d-footnote Please contact me if you know of a PDE for smoothies.> This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
 
-This post elaborates on these points by explaining: 
-  - An example blind source separation (BSS) problem from physics;
-  - How to regularize the aforementioned BSS problem with physically meaningful loss terms that incorporate *a priori* information about the constituent source signals;
-  - The penalty method for converting numerical constrained optimization problems into unconstrained ones;
-  - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems;    
+This post elaborates on these points by explaining:
+
+  - An example blind source separation (BSS) problem from physics
+  - How to regularize the aforementioned BSS problem with physically meaningful loss terms that incorporate *a priori* information about the constituent source signals
+  - The penalty method for converting numerical constrained optimization problems into unconstrained ones
+  - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems 
   - Implementation in Python using Numpy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
-## Partial Differential Equations
-Much of physics is expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
+## Linear Advection PDE
+Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
 This post demonstrates JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
 
@@ -44,14 +45,14 @@ The rest of this post will assume that there are only two advecting pulses, yiel
 
 where $c_i$ are constants quantifying advection speed. In general, determining the optimal value of $n$ (i.e., the number of sources being mixed) may not be trivial. However, there are plenty of data--driven methods to accomplish this. For instance, one could apply the line Hough transform to the Mikowski spacetime diagram of the observed solution then compute the number of disjoint maxima in this Hough space.
 
-## Penalty Method--Based Numerical Optimization for Physics--Informed Source Separation
-Recall that our observed signal is the superposition of multiple individually advecting signals (whose individuality holds due to the linearity of the advection equation). As such, we can pose the following BSS problem:
+## Constrained Optimization for Physics--Informed Source Separation
+Recall that our observed signal is the superposition of multiple individually advecting signals. As such, we can pose the following BSS problem:
 
 \begin{align}
 (U_1, U_2) \in \arg\min_{U_1,U_2}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2,
 \end{align}
 
-where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is observed signal at timestamps $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a *fudge factor* to remove arithmetically--annoying coefficients of $2$ from gradients of the norm computed with respect to $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(U_1,U_2)$.
+where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is observed signal at timestamps $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a *fudge factor* used to remove irrelevant coefficients of $2$ from gradients of the norm respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(U_1,U_2)$.
 
 This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(U_1,U_2)=(U,0)$ and $(U_1,U_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, *a priori* knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $U_1$ and $U_2$ are non--negative matrices:
 
@@ -61,13 +62,16 @@ This BSS problem is unfortunately ill--posed since there are many equivalently--
 
 Additionally, we can assume that $U_1$ and $U_2$ satisfy their own advection equations:
 
-\begin{align}
+$$
 (U_1, U_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2 + \lambda_{\text{PDE}_1} || \dot{U}_1 + c_1 U^\prime_1 ||_\text{F}^2 + \lambda_{\text{PDE}_2} || \dot{U}_2 + c_2 U^\prime_2 ||_\text{F}^2,
-\end{align}
+$$
 
 where $\dot{U}_i$ is a finite--difference--computed time derivative of $U_i$ and $U^\prime_i$ is a finite--difference--computed spatial derivative. Constants $c_i$ can be computed from observed snapshots $U$, such as by setting $c_i = 1/\text{slope}_i$, where $\text{slope}_i$ is the slope of the $i$th line detected in Hough space via the line Hough transform of $U$.
 
-This constrained optimization problem can be converted into an unconstrained one through the penalty method:
+
+## Unconstrained Optimization for Physics--Informed Source Separation
+
+Our constrained optimization problem can be converted into an unconstrained one through the penalty method. Doing so enables the solution of our constrained optimization problem by using optimizers for unconstrained problems:
 
 \begin{align}
 (U_1^{(k)}, U_2^{(k)}) \in \arg\min_{U_1^{(k)},U_2^{(k)}}\frac{1}{2}|| U_1^{(k)} + U_2^{(k)} - U ||_\text{F}^2 + \lambda_{\text{PDE}_1} || \dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1 ||_\text{F}^2 + \lambda_{\text{PDE}_2} || \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 ||_\text{F}^2 + \frac{1}{2}\mu^{(k)}(|| \min(0, U_1^{(k)}) ||_\text{F}^2 + || \min(0, U_2^{(k)}) ||_\text{F}^2),
