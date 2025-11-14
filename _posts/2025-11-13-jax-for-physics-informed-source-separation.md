@@ -160,8 +160,8 @@ $$
 \Bigg\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\
-2\sqrt{\lambda_\text{PDE}_1}\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
-2\sqrt{\lambda_\text{PDE}_2}\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
+2\sqrt{\lambda_{\text{PDE}_1}}\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
+2\sqrt{\lambda_{\text{PDE}_2}}\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
 \sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
 \sqrt{\mu^{(k)}}\min(0, U_2^{(k)}) \\
 2\langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
@@ -174,7 +174,13 @@ U_1^{(k)} + U_2^{(k)} - U \\
 \end{equation}
 $$,
 
-with matrix--matrix inner product $\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}$.
+with matrix--matrix inner product
+
+$$
+\begin{equation}
+\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}
+\end{equation}
+$$.
 
 In the method of multipliers, Lagrange multipliers are treated as dual variables that are updated each iteration:
 

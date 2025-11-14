@@ -160,7 +160,7 @@ collections:
 markdown: kramdown
 highlighter: rouge
 kramdown:
-  input: kramdown
+  input: GFM
   syntax_highlighter_opts:
     css_class: "highlight"
     span:
