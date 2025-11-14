@@ -26,7 +26,7 @@ This post elaborates on these points by explaining:
   - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems 
   - Implementation in Python using Numpy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
-## Linear Advection PDE
+## The Linear Advection PDE
 Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
 This post demonstrates JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
@@ -127,7 +127,7 @@ $$
 &\in
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}
-\Bigg\|
+\Bigg\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 2\sqrt{\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
@@ -135,7 +135,7 @@ U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_1^{(k)}) \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_2^{(k)})
 \end{bmatrix}
-\Bigg\|_F^{\!2} \\[10pt]
+\Bigg\rVert_F^{\!2} \\[10pt]
 &=
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}\,\| r^{(k)} \|_\text{F}^2
@@ -153,24 +153,28 @@ Consider the following residual constructed by concatenating two additional loss
 
 $$
 \begin{equation}
-(U_1^{(k)}, U_2^{(k)}) \in 
-\arg\min_{U_1^{(k)}, U_2^{(k)}}
+\begin{aligned}
+(U_1^{(k)}, U_2^{(k)}) \in\ 
+&\arg\min_{U_1^{(k)}, U_2^{(k)}}
 \frac{1}{2}
-||
+\Bigg\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\
-2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
-2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
+2\sqrt{\lambda_\text{PDE}_1}\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
+2\sqrt{\lambda_\text{PDE}_2}\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
 \sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
 \sqrt{\mu^{(k)}}\min(0, U_2^{(k)}) \\
 2\langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
 2\langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
 \end{bmatrix}
-||_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}|| r^{(k)} ||_\text{F}^2
+\Bigg\rVert_F^2 
+\\[6pt]
+&= \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\,\lVert r^{(k)} \rVert_F^2
+\end{aligned}
 \end{equation}
 $$,
 
-with matrix--matrix inner product $\langle \Lambda_i^{(k)},\, U_i^{(k)}\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}$.
+with matrix--matrix inner product $\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}$.
 
 In the method of multipliers, Lagrange multipliers are treated as dual variables that are updated each iteration:
 
@@ -245,7 +249,7 @@ Finally, setting this derivative equal to zero yields a system of linear equatio
 $$
 \begin{equation}
 \begin{aligned}
-J^\top J\delta\beta - (y^\top - f^\top(x,\beta))J &\overset{!}{=} 0 \\
+0 &\overset{!}{=} J^\top J\delta\beta - (y^\top - f^\top(x,\beta))J \\
 J^\top J\delta\beta &= (y^\top - f^\top(x,\beta))J \\
 J^\top J\delta\beta &= J^\top(y - f(x,\beta))
 \end{aligned}
@@ -304,11 +308,11 @@ JAX is an incredible Python library that facilitates the use of automatic differ
 First, imports:
 
 ```python
-import numpy as np
-import matplotlib.pyplot as plt
-import jax
-import jax.numpy as jnp
-import jaxopt
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import jax
+    import jax.numpy as jnp
+    import jaxopt
 ```
 
 Next, define helper functions for finite--difference simulation of the superposition of advecting signals:
@@ -343,188 +347,188 @@ def get_u0(x, mu):
 Then, simulate the individual advection of two Gaussian pulses traveling towards and through each other:
 
 ```python
-# space
-x0, xf = 0.0, 1.0
-n = 2**7
-x = np.linspace(x0, xf, num=n, endpoint=False)
-dx = x[1] - x[0]
+    # space
+    x0, xf = 0.0, 1.0
+    n = 2**7
+    x = np.linspace(x0, xf, num=n, endpoint=False)
+    dx = x[1] - x[0]
 
-# speed
-c1 = 10.0
-c2 = -c1
+    # speed
+    c1 = 10.0
+    c2 = -c1
 
-# time
-t0, tf = 0.0, 0.02
-courant_number = 0.99
-dt = courant_number * dx / max(abs(c1), abs(c2))
-N_steps = int(np.ceil((tf - t0) / dt))
-dt = (tf - t0) / N_steps
-ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
+    # time
+    t0, tf = 0.0, 0.02
+    courant_number = 0.99
+    dt = courant_number * dx / max(abs(c1), abs(c2))
+    N_steps = int(np.ceil((tf - t0) / dt))
+    dt = (tf - t0) / N_steps
+    ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
 
-# snapshots
-U1 = np.zeros((n, N_steps + 1))
-U2 = np.zeros((n, N_steps + 1))
+    # snapshots
+    U1 = np.zeros((n, N_steps + 1))
+    U2 = np.zeros((n, N_steps + 1))
 
-mu1 = 0.4
-mu2 = 1.0 - mu1
-u1_curr = get_u0(x, mu1)
-u2_curr = get_u0(x, mu2)
-U1[:, 0] = u1_curr
-U2[:, 0] = u2_curr
+    mu1 = 0.4
+    mu2 = 1.0 - mu1
+    u1_curr = get_u0(x, mu1)
+    u2_curr = get_u0(x, mu2)
+    U1[:, 0] = u1_curr
+    U2[:, 0] = u2_curr
 
-# FD operators
-Kfwd = get_fwd_diff_op(u1_curr, dx)
-Kbwd = get_bwd_diff_op(u1_curr, dx)
+    # FD operators
+    Kfwd = get_fwd_diff_op(u1_curr, dx)
+    Kbwd = get_bwd_diff_op(u1_curr, dx)
 
-# simulate
-for j in range(1, N_steps + 1):
-    u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
-    U1[:, j] = u1_curr
+    # simulate
+    for j in range(1, N_steps + 1):
+        u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
+        U1[:, j] = u1_curr
 
-    u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
-    U2[:, j] = u2_curr
+        u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
+        U2[:, j] = u2_curr
 
-    if j % 100 == 0:
-        print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
+        if j % 100 == 0:
+            print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
 
-# compute superposition solution
-U = U1 + U2
+    # compute superposition solution
+    U = U1 + U2
 ```
 
 Next, visualize the individual PDE solutions and their superposition (which will serve as our observed data that we wish to decompose via physics--informed source separation):
 
 ```python
-# plot Minkowski diagrams
-plt.figure()
-plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1')
-plt.colorbar()
-plt.show()
+    # plot Minkowski diagrams
+    plt.figure()
+    plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2')
-plt.colorbar()
-plt.show()
+    plt.figure()
+    plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U2')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1 + U2')
-plt.colorbar()
-plt.show()
+    plt.figure()
+    plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1 + U2')
+    plt.colorbar()
+    plt.show()
 ```
 
 After that, define helper functions for computing the residual that will be minimized:
 
 ```python
-def dUdt_center(U, dt):
-    return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
+    def dUdt_center(U, dt):
+        return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
 
-def dUdx_center(U, dx):
-    return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
+    def dUdx_center(U, dx):
+        return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
 
-def pde_res(U, c, dt, dx):
-    return dUdt_center(U, dt) + c * dUdx_center(U, dx)
+    def pde_res(U, c, dt, dx):
+        return dUdt_center(U, dt) + c * dUdx_center(U, dx)
 
-def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
-    nx, nt = U_obs.shape
-    U12 = x.reshape((2 * nx, nt))
-    U1, U2 = U12[:nx, :], U12[nx:, :]
+    def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
+        nx, nt = U_obs.shape
+        U12 = x.reshape((2 * nx, nt))
+        U1, U2 = U12[:nx, :], U12[nx:, :]
 
-    r_dec  = U1 + U2 - U_obs
-    r_pde1 = 2.0 * jnp.sqrt(reg_pde1) * pde_res(U1, c1, dt, dx)
-    r_pde2 = 2.0 * jnp.sqrt(reg_pde2) * pde_res(U2, c2, dt, dx)
+        r_dec  = U1 + U2 - U_obs
+        r_pde1 = 2.0 * jnp.sqrt(reg_pde1) * pde_res(U1, c1, dt, dx)
+        r_pde2 = 2.0 * jnp.sqrt(reg_pde2) * pde_res(U2, c2, dt, dx)
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+        neg1 = jnp.minimum(U1, 0.0)
+        neg2 = jnp.minimum(U2, 0.0)
 
-    r_pen1 = jnp.sqrt(mu) * neg1
-    r_pen2 = jnp.sqrt(mu) * neg2
+        r_pen1 = jnp.sqrt(mu) * neg1
+        r_pen2 = jnp.sqrt(mu) * neg2
 
-    r_mm1 = jnp.sum(lam_1 * (-neg1))
-    r_mm2 = jnp.sum(lam_2 * (-neg2))
+        r_mm1 = jnp.sum(lam_1 * (-neg1))
+        r_mm2 = jnp.sum(lam_2 * (-neg2))
 
-    return jnp.concatenate([
-        r_dec.ravel(),
-        r_pde1.ravel(),
-        r_pde2.ravel(),
-        r_pen1.ravel(),
-        r_pen2.ravel(),
-        jnp.atleast_1d(r_mm1),
-        jnp.atleast_1d(r_mm2),
-    ])
+        return jnp.concatenate([
+            r_dec.ravel(),
+            r_pde1.ravel(),
+            r_pde2.ravel(),
+            r_pen1.ravel(),
+            r_pen2.ravel(),
+            jnp.atleast_1d(r_mm1),
+            jnp.atleast_1d(r_mm2),
+        ])
 ```
 
 Now pose the physics--informed source separation problem with JAX's *jax.numpy* syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the *jaxopt.LevenbergMarquardt* method:
 
 ```python
-nx, nt = U.shape
-x = jnp.concatenate([U, U], axis=0).ravel()
+    nx, nt = U.shape
+    x = jnp.concatenate([U, U], axis=0).ravel()
 
-lam_pde1 = 1e-1
-lam_pde2 = 1e-1
+    lam_pde1 = 1e-1
+    lam_pde2 = 1e-1
 
-mu = 10.0
-mu_max = 1e5
-outer_iters = 10
-lm_maxiter = 300
+    mu = 10.0
+    mu_max = 1e5
+    outer_iters = 10
+    lm_maxiter = 300
 
-lam_1 = jnp.zeros_like(U)
-lam_2 = jnp.zeros_like(U)
+    lam_1 = jnp.zeros_like(U)
+    lam_2 = jnp.zeros_like(U)
 
-prev_viol = jnp.inf
-for k in range(outer_iters):
-    print(k)
+    prev_viol = jnp.inf
+    for k in range(outer_iters):
+        print(k)
 
-    x = jaxopt.LevenbergMarquardt(
-        residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
-        maxiter=lm_maxiter
-    ).run(x).params
+        x = jaxopt.LevenbergMarquardt(
+            residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
+            maxiter=lm_maxiter
+        ).run(x).params
 
-    U12 = x.reshape((2 * nx, nt))
-    U1, U2 = U12[:nx, :], U12[nx:, :]
+        U12 = x.reshape((2 * nx, nt))
+        U1, U2 = U12[:nx, :], U12[nx:, :]
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+        neg1 = jnp.minimum(U1, 0.0)
+        neg2 = jnp.minimum(U2, 0.0)
 
-    lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
-    lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
+        lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
+        lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
 
-    viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
-    if float(viol) < 0.8 * float(prev_viol):
-        mu = min(mu_max, 2.0 * mu)
-    prev_viol = viol
+        viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
+        if float(viol) < 0.8 * float(prev_viol):
+            mu = min(mu_max, 2.0 * mu)
+        prev_viol = viol
 
-U_hat  = np.array(x.reshape((2 * nx, nt)))
-U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
+    U_hat  = np.array(x.reshape((2 * nx, nt)))
+    U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
 ```
 
 Last but not least, visualize the sources inferred through our solved physics--informed source separation problem:
 
 ```python
-# plot Minkowski diagrams of inferred
-plt.figure()
-plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1_hat')
-plt.colorbar()
-plt.show()
+    # plot Minkowski diagrams of inferred
+    plt.figure()
+    plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U1_hat')
+    plt.colorbar()
+    plt.show()
 
-plt.figure()
-plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2_hat')
-plt.colorbar()
-plt.show()
+    plt.figure()
+    plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
+    plt.xlabel('t')
+    plt.ylabel('x')
+    plt.title('U2_hat')
+    plt.colorbar()
+    plt.show()
 ```
-    
+
 ## Conclusion
 In this post we demonstrated how to use JAX and JAXopt to implement the Levenberg--Marquardt algorithm for solving a least--squares problem whose objective function is formulated using the method of multipliers (aka, augmented Lagrangian method). This was applied to physics--informed source separation of the superposition of two advecting signals, with physics prescribed by 1D linear advection.
