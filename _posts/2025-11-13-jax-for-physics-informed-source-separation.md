@@ -12,9 +12,9 @@ toc:
 ---
 
 ## Source Separation: From Smoothies to PDEs
-Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called *source separation* and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
+Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called source separation and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
 
-As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of smoothie--informed machine learning.
+As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of "smoothie--informed machine learning."
 
 Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation.<d-footnote Please contact me if you know of a PDE for smoothies.> This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
 
@@ -33,9 +33,9 @@ This post demonstrates JAX for physics--informed source separation with simulate
 
 $$
 \begin{equation}
-\frac{\partial(\sum_{i=1}^{n}u_i)}{\partial t} + \frac{\partial (\sum_{i=1}^{n}c_i u_i)}{\partial x} = 0 = \sum_{i=1}^{n}(\frac{\partial u_i}{\partial t} + \frac{\partial (c_i u_i)}{\partial x})
+\frac{\partial(\sum_{i=1}^{n}u_i)}{\partial t} + \frac{\partial (\sum_{i=1}^{n}c_i u_i)}{\partial x} = 0 = \sum_{i=1}^{n}(\frac{\partial u_i}{\partial t} + \frac{\partial (c_i u_i)}{\partial x}),
 \end{equation}
-$$,
+$$
 
 where $u = \sum_{i=1}^{n}u_i$ is the observed signal and $f = \sum_{i=1}^{n}c_i u_i$ is the total flux.
 
@@ -43,9 +43,9 @@ The rest of this post will assume that there are only two advecting pulses, yiel
 
 $$
 \begin{equation}
-\sum_{i=1}^{2}(\frac{\partial u_i}{\partial t} + \frac{\partial (c_i u_i)}{\partial x})=0
+\sum_{i=1}^{2}(\frac{\partial u_i}{\partial t} + \frac{\partial (c_i u_i)}{\partial x})=0,
 \end{equation}
-$$,
+$$
 
 where $c_i$ are constants quantifying advection speed. In general, determining the optimal value of $n$ (i.e., the number of sources being mixed) may not be trivial. However, there are plenty of data--driven methods to accomplish this. For instance, one could apply the line Hough transform to the Mikowski spacetime diagram of the observed solution then compute the number of disjoint maxima in this Hough space.
 
@@ -54,19 +54,19 @@ Recall that our observed signal is the superposition of multiple individually ad
 
 $$
 \begin{equation}
-(U_1, U_2) \in \arg\min_{U_1,U_2}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2
+(U_1, U_2) \in \arg\min_{U_1,U_2}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2,
 \end{equation}
-$$,
+$$
 
-where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is observed signal at timestamps $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a *fudge factor* used to remove irrelevant coefficients of $2$ from gradients of the norm respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(U_1,U_2)$.
+where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is observed signal at timestamps $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a fudge factor used to remove irrelevant coefficients of $2$ from gradients of the norm respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(U_1,U_2)$.
 
 This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(U_1,U_2)=(U,0)$ and $(U_1,U_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, *a priori* knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $U_1$ and $U_2$ are non--negative matrices:
 
 $$
 \begin{equation}
-(U_1, U_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2
+(U_1, U_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2.
 \end{equation}
-$$.
+$$
 
 Additionally, we can assume that $U_1$ and $U_2$ satisfy their own advection equations:
 
@@ -82,10 +82,10 @@ $$
     +\ \lambda_{\text{PDE}_1}\, \| \dot{U}_1 + c_1 U_1' \|_\text{F}^2 \\
 &\quad
     +\ \lambda_{\text{PDE}_2}\, \| \dot{U}_2 + c_2 U_2' \|_\text{F}^2
-\Bigg]
+\Bigg],
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 where $\dot{U}_i$ is a finite--difference--computed time derivative of $U_i$ and $U^\prime_i$ is a finite--difference--computed spatial derivative. Constants $c_i$ can be computed from observed snapshots $U$, such as by setting $c_i = 1/\text{slope}_i$, where $\text{slope}_i$ is the slope of the $i$th line detected in Hough space via the line Hough transform of $U$.
 
@@ -111,10 +111,10 @@ $$
         \| \min(0, U_1^{(k)}) \|_\text{F}^2
         +\ \| \min(0, U_2^{(k)}) \|_\text{F}^2
       \big)
-\Bigg]
+\Bigg],
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 where $\min$ is a function that computes the elementwise minimum of a matrix with the zero matrix of the same shape, thus penalizing negative values. Index $k$ is used to convey the $k$th iteration of the penalty method. In practice, one often starts the optimization procedure using a small value of $\mu^{(k)}$; obtains $(U_1^{(k)}, U_2^{(k)})$; then recursively solves for $(U_1^{(k+1)}, U_2^{(k+1)})$ until convergence using $\mu^{(k+1)} > \mu^{(k)}$, where $(U_1^{(k)}, U_2^{(k)})$ is the initial guess of $(U_1^{(k+1)}, U_2^{(k+1)})$.
 
@@ -127,7 +127,7 @@ $$
 &\in
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}
-\Bigg\lVert
+\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 2\sqrt{\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
@@ -135,19 +135,19 @@ U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_1^{(k)}) \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_2^{(k)})
 \end{bmatrix}
-\Bigg\rVert_F^{\!2} \\[10pt]
+\rVert_F^{\!2} \\[10pt]
 &=
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
-\frac{1}{2}\,\| r^{(k)} \|_\text{F}^2
+\frac{1}{2}\,\| r^{(k)} \|_\text{F}^2,
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 where $r^{(k)}$ is a single residual formed by stacking all constituent residuals in our objective function into a column vector. This notation with $r^{(k)}$ will facilitate the later use of the Levenberg--Marquardt algorithm for numerical optimization.
 
 ## Augmenting the Penalty Method With Lagrange Multipliers
 
-Recall that we previously converted a constrained optimization problem into an unconstrained one using the penalty method. Intuitively, one recovers the constrained optimization solution in the limit as the penalty term, $\mu^{(k)}$, introduced by the penalty method, goes to infinity. Unfortunately, naively increasing $\mu^{(k)}$ towards infinity can make this optimization problem ill--posed if $\mu^{(k)}$ gets too large. However, one can circumvent the need to increase $\mu^{(k)}$ towards infinity by leveraging the method of multipliers (aka, the augmented Lagrangian method). The method of multipliers is analogous to the method of Lagrange multipliers from analytical optimization theory and forms the foundation of a standard tool in numerical optimization called the *alternating direction method of multipliers*, which is not covered in this post.
+Recall that we previously converted a constrained optimization problem into an unconstrained one using the penalty method. Intuitively, one recovers the constrained optimization solution in the limit as the penalty term, $\mu^{(k)}$, introduced by the penalty method, goes to infinity. Unfortunately, naively increasing $\mu^{(k)}$ towards infinity can make this optimization problem ill--posed if $\mu^{(k)}$ gets too large. However, one can circumvent the need to increase $\mu^{(k)}$ towards infinity by leveraging the method of multipliers (aka, the augmented Lagrangian method). The method of multipliers is analogous to the method of Lagrange multipliers from analytical optimization theory and forms the foundation of a standard tool in numerical optimization called the alternating direction method of multipliers, which is not covered in this post.
 
 Consider the following residual constructed by concatenating two additional loss terms to the $k$th iteration of the residual vector from before:
 
@@ -157,7 +157,7 @@ $$
 (U_1^{(k)}, U_2^{(k)}) \in\ 
 &\arg\min_{U_1^{(k)}, U_2^{(k)}}
 \frac{1}{2}
-\Bigg\lVert
+\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\
 2\sqrt{\lambda_{\text{PDE}_1}}\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
@@ -167,28 +167,28 @@ U_1^{(k)} + U_2^{(k)} - U \\
 2\langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
 2\langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
 \end{bmatrix}
-\Bigg\rVert_F^2 
+\rVert_F^2 
 \\[6pt]
-&= \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\,\lVert r^{(k)} \rVert_F^2
+&= \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\,\lVert r^{(k)} \rVert_F^2,
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 with matrix--matrix inner product
 
 $$
 \begin{equation}
-\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}
+\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}.
 \end{equation}
-$$.
+$$
 
 In the method of multipliers, Lagrange multipliers are treated as dual variables that are updated each iteration:
 
 $$
 \begin{equation}
-\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} - \mu^{(k)}\,{U_i^{(k)}} ]_+
+\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} - \mu^{(k)}\,{U_i^{(k)}} ]_+,
 \end{equation}
-$$,
+$$
 
 where $[\cdot]_+ = \max(0,\cdot)$ clips negative entries to zero, ensuring that all Lagrange multipliers are positive (each element of $\Lambda_i^{(k)}$ is a Lagrange multiplier).
 
@@ -200,25 +200,25 @@ First, consider the optimization problem of identifying the parameter, $\hat{\be
 
 $$
 \begin{equation}
-\hat{\beta} \in \arg\min \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2
+\hat{\beta} \in \arg\min \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2,
 \end{equation}
-$$,
+$$
 
 where the loss function, $\mathcal{L}$, for this problem is the norm being minimized above:
 
 $$
 \begin{equation}
-\mathcal{L} = \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2
+\mathcal{L} = \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2.
 \end{equation}
-$$.
+$$
 
 Let's begin by linearizing function $f$ about $\beta$:
 
 $$
 \begin{equation}
-f(x,\beta+\delta\beta) \approx f(x,\beta) + J\delta\beta
+f(x,\beta+\delta\beta) \approx f(x,\beta) + J\delta\beta,
 \end{equation}
-$$,
+$$
 
 where $J=\frac{\partial f(x,\beta)}{\partial\beta}$ is the Jacobian of $f$.
 
@@ -232,10 +232,10 @@ $$
 &\approx \frac{1}{2}||\, y - \left(f(x,\beta) + J\delta\beta\right) ||_\text{F}^2 \\
 &= \frac{1}{2}\,\big(y - f(x,\beta) - J\delta\beta\big)^\top \big(y - f(x,\beta) - J\delta\beta\big) \\
 &= \frac{1}{2}(y^\top - f^\top(x,\beta) - \delta\beta^\top J^\top)(y - f(x,\beta) - J\delta\beta) \\
-&= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right)
+&= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right).
 \end{aligned}
 \end{equation}
-$$.
+$$
 
 We want to compute the optimization step $\delta\beta$ that yields the minimal loss relative to our current position in the loss landscape, so let's compute the gradient of this loss function with respect to $\delta\beta$:
 
@@ -245,10 +245,10 @@ $$
 \frac{\partial\mathcal{L}}{\partial(\delta\beta)}
 &= \frac{1}{2}(0 + 0 - 0 - 2y^\top J + 2f^\top(x,\beta) J + 2J^\top J\delta\beta)  \\
 &= -y^\top J + f^\top(x,\beta) J + J^\top J\delta\beta \\
-&= J^\top J\delta\beta - (y^\top - f^\top(x,\beta))J
+&= J^\top J\delta\beta - (y^\top - f^\top(x,\beta))J.
 \end{aligned}
 \end{equation}
-$$.
+$$
 
 Finally, setting this derivative equal to zero yields a system of linear equations used to compute the optimal step of optimization parameter $\beta$:
 
@@ -257,10 +257,10 @@ $$
 \begin{aligned}
 0 &\overset{!}{=} J^\top J\delta\beta - (y^\top - f^\top(x,\beta))J \\
 J^\top J\delta\beta &= (y^\top - f^\top(x,\beta))J \\
-J^\top J\delta\beta &= J^\top(y - f(x,\beta))
+J^\top J\delta\beta &= J^\top(y - f(x,\beta)),
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 where the $\overset{!}{=}$ form of the familiar $=$ symbol conveys that we are coercing the expression to equal $0$. Application of this equation is known as the Gauss--Newton algorithm.
 
@@ -268,9 +268,9 @@ Solving the system of linear equations in the Gauss--Newton algorithm may, howev
 
 $$
 \begin{equation}
-(J^\top J + \gamma I)\delta\beta = J^\top(y - f(x,\beta))
+(J^\top J + \gamma I)\delta\beta = J^\top(y - f(x,\beta)),
 \end{equation}
-$$,
+$$
 
 yielding a system of linear equations whose application is known as the Levenberg--Marquardt algorithm. 
 
@@ -283,10 +283,10 @@ $$
 x_i^\top (J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x^\top_i x_i \\
 \lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J + \gamma I)x_i}{x^\top_i x_i} \\
 \lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J)x_i}{x^\top_i x_i} + \frac{x_i^\top (\gamma I) x_i}{x^\top_i x_i} \\
-\lambda_i^{\text{LM}} &= \lambda_i^{\text{GN}} + \gamma
+\lambda_i^{\text{LM}} &= \lambda_i^{\text{GN}} + \gamma,
 \end{aligned}
 \end{equation}
-$$,
+$$
 
 where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\mu$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
 
@@ -301,9 +301,9 @@ Finally, the solution can be made scale invariant by regularizing with a diagona
 
 $$
 \begin{equation}
-(J^\top J + \gamma\text{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta+\delta\beta))
+(J^\top J + \gamma\text{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta+\delta\beta)).
 \end{equation}
-$$.
+$$
 
 A diagonal matrix (rather than one arbitrarily located nonzero elements) is added for regularization to preserve symmetricity.
 
