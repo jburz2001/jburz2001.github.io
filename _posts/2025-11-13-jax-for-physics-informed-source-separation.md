@@ -81,7 +81,7 @@ Furthermore, we can express this least--squares problem's objective function to 
 (U_1^{(k)}, U_2^{(k)}) \in 
 \arg\min_{U_1^{(k)}, U_2^{(k)}}
 \frac{1}{2}
-\left\|
+||
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\
 2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
@@ -89,7 +89,7 @@ U_1^{(k)} + U_2^{(k)} - U \\
 \sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
 \sqrt{\mu^{(k)}}\min(0, U_2^{(k)})
 \end{bmatrix}
-\right\|_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\left\| r^{(k)} \right\|_\text{F}^2,
+||_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}|| r^{(k)} ||_\text{F}^2,
 \end{align}
 
 where $r^{(k)}$ is a single residual formed by stacking all constituent residuals in our objective function into a column vector. This notation with $r^{(k)}$ will facilitate the later use of the Levenberg--Marquardt algorithm for numerical optimization.
@@ -100,11 +100,12 @@ Recall that we previously converted a constrained optimization problem into an u
 
 Consider the following residual constructed by concatenating two additional loss terms to the $k$th iteration of the residual vector from before:
 
-\begin{align}
+\begin{equation}
+\begin{aligned}
 (U_1^{(k)}, U_2^{(k)}) \in 
 \arg\min_{U_1^{(k)}, U_2^{(k)}}
 \frac{1}{2}
-\left\|
+||
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\
 2\sqrt{\lambda_\text{PDE}}_1\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
@@ -114,10 +115,11 @@ U_1^{(k)} + U_2^{(k)} - U \\
 \frac{1}{2} \langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
 \frac{1}{2} \langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
 \end{bmatrix}
-\right\|_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\left\| r^{(k)} \right\|_\text{F}^2,
-\end{align}
+||_F^2 = \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}|| r^{(k)} ||_\text{F}^2,
+\end{aligned}
+\end{equation}
 
-with matrix--matrix inner product $\langle \Lambda_i^{(k)},\, U_i^{(k)}\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell}~(U_i^{(k)})_{j\ell}$.
+with matrix--matrix inner product $\langle \Lambda_i^{(k)},\, U_i^{(k)}\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}$.
 
 In the method of multipliers, Lagrange multipliers are treated as dual variables that are updated each iteration:
 
@@ -134,13 +136,13 @@ The Levenberg--Marquardt algorithm is a workhorse tool for solving both linear a
 First, consider the optimization problem of identifying the parameter, $\hat{\beta}$, which minimizes the least--squares error of fitting observed data, $y$, with a curve, $f(x, \beta)$:
 
 \begin{align}
-\hat{\beta} \in \arg\min \frac{1}{2}\left\| y - f(x,\beta) \right\|_\text{F}^2,
+\hat{\beta} \in \arg\min \frac{1}{2}||| y - f(x,\beta) |||_\text{F}^2,
 \end{align}
 
 where the loss function, $\mathcal{L}$, for this problem is the norm being minimized above:
 
 \begin{align}
-\mathcal{L} = \frac{1}{2}\left\| y - f(x,\beta) \right\|_\text{F}^2.
+\mathcal{L} = \frac{1}{2}||| y - f(x,\beta) |||_\text{F}^2.
 \end{align}
 
 Let's begin by linearizing function $f$ about $\beta$:
@@ -153,32 +155,38 @@ where $J=\frac{\partial f(x,\beta)}{\partial\beta}$ is the Jacobian of $f$.
 
 This linearized $f$ is then plugged into the original residual to define a new loss function in terms of observed data, $y$; fit curve, $f$; Jacobian, $J$; and optimization parameter step; $\delta\beta$:
 
-\begin{align}
+\begin{equation}
+\begin{aligned}
 \mathcal{L}
-= \frac{1}{2}\left\| y - f(x,\beta) \right\|_\text{F}^2 \\
-\approx \frac{1}{2}\left\|\, y - \left(f(x,\beta) + J\delta\beta\right) \right\|_\text{F}^2 \\
-= \frac{1}{2}\,\big(y - f(x,\beta) - J\delta\beta\big)^\top \big(y - f(x,\beta) - J\delta\beta\big) \\
-= \frac{1}{2}(y^\top - f^\top(x,\beta) - \delta\beta^\top J^\top)(y - f(x,\beta) - J\delta\beta) \\
-= \frac{1}{2} \left(y^\top y - y^\top f(x,\beta) - y^\top J\delta\beta - f^\top(x,\beta)y + f^\top(x,\beta)f(x,\beta) + f^\top(x,\beta)J\delta\beta - \delta\beta^\top J^\top y + \delta\beta^\top J^\top f(x,\beta) + \delta\beta^\top J^\top J \delta\beta\right) \\
-= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right).
-\end{align}
+&= \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2 \\
+\approx \frac{1}{2}||\, y - \left(f(x,\beta) + J\delta\beta\right) ||_\text{F}^2 \\
+&= \frac{1}{2}\,\big(y - f(x,\beta) - J\delta\beta\big)^\top \big(y - f(x,\beta) - J\delta\beta\big) \\
+&= \frac{1}{2}(y^\top - f^\top(x,\beta) - \delta\beta^\top J^\top)(y - f(x,\beta) - J\delta\beta) \\
+&= \frac{1}{2} \left(y^\top y - y^\top f(x,\beta) - y^\top J\delta\beta - f^\top(x,\beta)y + f^\top(x,\beta)f(x,\beta) + f^\top(x,\beta)J\delta\beta - \delta\beta^\top J^\top y + \delta\beta^\top J^\top f(x,\beta) + \delta\beta^\top J^\top J \delta\beta\right) \\
+&= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right).
+\end{aligned}
+\end{equation}
 
 We want to compute the optimization step $\delta\beta$ that yields the minimal loss relative to our current position in the loss landscape, so let's compute the gradient of this loss function with respect to $\delta\beta$:
 
-\begin{align}
+\begin{equation}
+\begin{aligned}
 \frac{\partial\mathcal{L}}{\partial(\delta\beta)}
-= \frac{1}{2}(0 + 0 - 0 - 2y^\top J + 2f^\top(x,\beta) J + 2J^\top J)  \\
-= -y^\top J + f^\top(x,\beta) J + J^\top J \\
-= J^\top J - (y^\top - f^\top(x,\beta))J.
-\end{align}
+&= \frac{1}{2}(0 + 0 - 0 - 2y^\top J + 2f^\top(x,\beta) J + 2J^\top J)  \\
+&= -y^\top J + f^\top(x,\beta) J + J^\top J \\
+&= J^\top J - (y^\top - f^\top(x,\beta))J.
+\end{aligned}
+\end{equation}
 
 Finally, setting this derivative equal to zero yields a system of linear equations used to compute the optimal step of optimization parameter $\beta$:
 
-\begin{align}
-J^\top J - (y^\top - f^\top(x,\beta))J \overset{!}{=} 0 \\
-J^\top J = (y^\top - f^\top(x,\beta))J \\
-J^\top J = J^\top(y - f(x,\beta)),
-\end{align}
+\begin{equation}
+\begin{aligned}
+J^\top J - (y^\top - f^\top(x,\beta))J &\overset{!}{=} 0 \\
+J^\top J &= (y^\top - f^\top(x,\beta))J \\
+J^\top J &= J^\top(y - f(x,\beta)),
+\end{aligned}
+\end{equation}
 
 where the $\overset{!}{=}$ form of the familiar $=$ symbol conveys that we are coercing the expression to equal $0$. Application of this equation is known as the Gauss--Newton algorithm.
 
@@ -192,13 +200,15 @@ yielding a system of linear equations whose application is known as the Levenber
 
 There are various benefits to adding $\gamma I$ to $J^\top J$, namely those stemming from increasing the positive--definiteness of the system matrix. To convey these benefits, let's first use the Rayleigh--Ritz quotient to show that eigenvalues of $J^\top J + \gamma I$ are larger than those of $J^\top J$ when $\gamma \geq 0$:
 
-\begin{align}
-(J^\top J + \gamma I)x_i = \lambda_i^{\text{LM}} x_i \\
-x_i^\top (J^\top J + \gamma I)x_i = \lambda_i^{\text{LM}} x^\top_i x_i \\
-\lambda_i^{\text{LM}} = \frac{x_i^\top (J^\top J + \gamma I)x_i}{x^\top_i x_i} \\
-\lambda_i^{\text{LM}} = \frac{x_i^\top (J^\top J)x_i}{x^\top_i x_i} + \frac{x_i^\top (\gamma I) x_i}{x^\top_i x_i} \\
-\lambda_i^{\text{LM}} = \lambda_i^{\text{GN}} + \gamma,
-\end{align}
+\begin{equation}
+\begin{aligned}
+(J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x_i \\
+x_i^\top (J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x^\top_i x_i \\
+\lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J + \gamma I)x_i}{x^\top_i x_i} \\
+\lambda_i^{\text{LM}} &= \frac{x_i^\top (J^\top J)x_i}{x^\top_i x_i} + \frac{x_i^\top (\gamma I) x_i}{x^\top_i x_i} \\
+\lambda_i^{\text{LM}} &= \lambda_i^{\text{GN}} + \gamma,
+\end{aligned}
+\end{equation}
 
 where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\mu$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
   - there exists a unique solution for $\delta\beta$;
@@ -211,10 +221,10 @@ Appropriately choosing $\gamma$ can significantly reduce the condition number of
 Finally, the solution can be made scale invariant by regularizing with a diagonal matrix formed directly from $J^TJ$ instead of with an arbitrarily chosen identity matrix:
 
 \begin{align}
-(J^\top J + \lambda\text{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta+\delta\beta)).
+(J^\top J + \gamma\text{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta+\delta\beta)).
 \end{align}
 
-A diagonal matrix is added for regularization to preserve symmetricity.
+A diagonal matrix (rather than one arbitrarily located nonzero elements) is added for regularization to preserve symmetricity.
 
 
 ## JAX for Physics--Informed Source Separation
