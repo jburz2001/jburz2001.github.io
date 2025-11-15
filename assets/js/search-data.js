@@ -37,7 +37,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
           },
-        },{id: "post-jax-for-physics-informed-source-separation",
+        },{id: "post-polynomial-manifolds-for-dimensionality-reduction",
+        
+          title: "Polynomial Manifolds for Dimensionality Reduction",
+        
+        description: "Derivation of polynomial manifolds / spectral submanifolds from the Taylor series expansion, with additional discourse on properties of the corresponding encoders and decoders.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/polynomial-manifolds-for-dimensionality-reduction/";
+          
+        },
+      },{id: "post-jax-for-physics-informed-source-separation",
         
           title: "JAX for Physics–Informed Source Separation",
         
