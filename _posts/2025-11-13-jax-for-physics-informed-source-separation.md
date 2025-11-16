@@ -306,6 +306,21 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 
 
 ## JAX for Physics--Informed Source Separation
+
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+(Left) Inferred source one from physics--informed source separation. (Middle) True source one + source two. (Right) Inferred source two from physics--informed source separation.
+
+
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+(Left) Inferred source one from physics--informed source separation. (Right) Elementwise difference between true source one and inferred source one, with Frobenius norm percentage error of the images.
+
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+(Left) Inferred source two from physics--informed source separation. (Right) Elementwise difference between true source two and inferred source two, with Frobenius norm percentage error of the images.
+
 JAX is an incredible Python library that facilitates the use of automatic differentiation to easily compute Jacobians for numerical optimization (and anywhere else they may be used, such as in the numerical solution of nonlinear systems of ordinary differential equations using Newton's method). One can also use it for just--in--time (JIT) compilation but we do not do so here. This library forms the backbone of another called JAXopt, where JAXopt has an intuitive interface for calling a routine that uses the Levenberg--Marquardt algorithm to solve a least--squares problem, such as the one we posed using physics--informed regularization. The following illustrates how to solve the optimization problem we've discussed so far through JAXopt.
 
 First, imports:
@@ -315,6 +330,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import jax
 import jax.numpy as jnp
+!pip install jaxopt
 import jaxopt
 ```
 
@@ -375,7 +391,7 @@ U2 = np.zeros((n, N_steps + 1))
 mu1 = 0.4
 mu2 = 1.0 - mu1
 u1_curr = get_u0(x, mu1)
-u2_curr = get_u0(x, mu2)
+u2_curr = 2*get_u0(x, mu2)
 U1[:, 0] = u1_curr
 U2[:, 0] = u2_curr
 
@@ -401,61 +417,74 @@ U = U1 + U2
 Next, visualize the individual PDE solutions and their superposition (which will serve as our observed data that we wish to decompose via physics--informed source separation):
 
 ```python
-# plot Minkowski diagrams
-plt.figure()
-plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1')
-plt.colorbar()
-plt.show()
+vmin = U.min()
+vmax = U.max()
 
-plt.figure()
-plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2')
-plt.colorbar()
-plt.show()
+fig1, ax1 = plt.subplots(figsize=(6, 5))
+im0 = ax1.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto',
+                 vmin=vmin, vmax=vmax)
+ax1.set_xlabel(r'$t$')
+ax1.set_ylabel(r'$x$')
+ax1.set_title(r'$(U_1)_{\text{true}}$')
+plt.colorbar(im0, ax=ax1)
+fig1.tight_layout()
+fig1.savefig("U1_true.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig1)
 
-plt.figure()
-plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1 + U2')
-plt.colorbar()
-plt.show()
+fig2, ax2 = plt.subplots(figsize=(6, 5))
+im1 = ax2.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto',
+                 vmin=vmin, vmax=vmax)
+ax2.set_xlabel(r'$t$')
+ax2.set_ylabel(r'$x$')
+ax2.set_title(r'$(U_2)_{\text{true}}$')
+plt.colorbar(im1, ax=ax2)
+fig2.tight_layout()
+fig2.savefig("U2_true.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig2)
+
+fig3, ax3 = plt.subplots(figsize=(6, 5))
+im2 = ax3.imshow(U, extent=(x0, xf, 0, tf), aspect='auto',
+                 vmin=vmin, vmax=vmax)
+ax3.set_xlabel(r'$t$')
+ax3.set_ylabel(r'$x$')
+ax3.set_title(r'$(U_1)_{\text{true}} + (U_2)_{\text{true}}$')
+plt.colorbar(im2, ax=ax3)
+fig3.tight_layout()
+fig3.savefig("U_sum_true.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig3)
 ```
 
 After that, define helper functions for computing the residual that will be minimized:
 
 ```python
 def dUdt_center(U, dt):
-    return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
+    return (U[:, 2:] - U[:, :-2]) / (2 * dt)
 
 def dUdx_center(U, dx):
-    return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
+    return (U[2:, :] - U[:-2, :]) / (2 * dx)
 
 def pde_res(U, c, dt, dx):
-    return dUdt_center(U, dt) + c * dUdx_center(U, dx)
+    dt_term = dUdt_center(U, dt)[1:-1, :]
+    dx_term = dUdx_center(U, dx)[:, 1:-1]
+    return dt_term + c * dx_term
 
 def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
     nx, nt = U_obs.shape
     U12 = x.reshape((2 * nx, nt))
     U1, U2 = U12[:nx, :], U12[nx:, :]
 
-    r_dec  = U1 + U2 - U_obs
-    r_pde1 = jnp.sqrt(2.0*reg_pde1) * pde_res(U1, c1, dt, dx)
-    r_pde2 = jnp.sqrt(2.0*reg_pde2) * pde_res(U2, c2, dt, dx)
+    r_dec = U1 + U2 - U_obs
+    r_pde1 = jnp.sqrt(2.0 * reg_pde1) * pde_res(U1, c1, dt, dx)
+    r_pde2 = jnp.sqrt(2.0 * reg_pde2) * pde_res(U2, c2, dt, dx)
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+    viol1 = -jnp.minimum(U1, 0.0)
+    viol2 = -jnp.minimum(U2, 0.0)
 
-    r_pen1 = jnp.sqrt(mu) * neg1
-    r_pen2 = jnp.sqrt(mu) * neg2
+    r_pen1 = jnp.sqrt(mu) * viol1
+    r_pen2 = jnp.sqrt(mu) * viol2
 
-    r_mm1 = jnp.sum(lam_1 * (-neg1))
-    r_mm2 = jnp.sum(lam_2 * (-neg2))
+    r_mm1 = jnp.sum(lam_1 * viol1)
+    r_mm2 = jnp.sum(lam_2 * viol2)
 
     return jnp.concatenate([
         r_dec.ravel(),
@@ -474,63 +503,108 @@ Now pose the physics--informed source separation problem with JAX's *jax.numpy* 
 nx, nt = U.shape
 x = jnp.concatenate([U, U], axis=0).ravel()
 
-lam_pde1 = 1e-1
-lam_pde2 = 1e-1
+lam_pde1 = 1e-6
+lam_pde2 = 1e-6
 
-mu = 10.0
-mu_max = 1e5
-outer_iters = 10
-lm_maxiter = 300
+mu = 1e3
+mu_max = 1e6
+outer_iters = 2
+lm_maxiter = 50
 
 lam_1 = jnp.zeros_like(U)
 lam_2 = jnp.zeros_like(U)
 
-prev_viol = jnp.inf
-for k in range(outer_iters):
-    print(k)
+U1ks, U2ks = [], []
+U1_iters, U2_iters = [], []
 
-    x = jaxopt.LevenbergMarquardt(
-        residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
+prev_viol = jnp.inf
+
+for k in range(outer_iters):
+    print("outer iter", k)
+
+    solver = jaxopt.LevenbergMarquardt(
+        residual_fun=lambda x_: get_residual(
+            U, dx, dt, c1, c2,
+            lam_pde1, lam_pde2,
+            mu, lam_1, lam_2,
+            x_
+        ),
         maxiter=lm_maxiter
-    ).run(x).params
+    )
+
+    x = solver.run(init_params=x).params
 
     U12 = x.reshape((2 * nx, nt))
-    U1, U2 = U12[:nx, :], U12[nx:, :]
+    U1_k, U2_k = U12[:nx, :], U12[nx:, :]
+    U1ks.append(U1_k)
+    U2ks.append(U2_k)
 
-    neg1 = jnp.minimum(U1, 0.0)
-    neg2 = jnp.minimum(U2, 0.0)
+    viol1 = -jnp.minimum(U1_k, 0.0)
+    viol2 = -jnp.minimum(U2_k, 0.0)
 
-    lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
-    lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
+    lam_1 = jnp.maximum(0.0, lam_1 + mu * viol1)
+    lam_2 = jnp.maximum(0.0, lam_2 + mu * viol2)
 
-    viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
+    viol = jnp.sqrt(jnp.linalg.norm(viol1, 'fro')**2 +
+                    jnp.linalg.norm(viol2, 'fro')**2)
     if float(viol) < 0.8 * float(prev_viol):
         mu = min(mu_max, 2.0 * mu)
     prev_viol = viol
 
-U_hat  = np.array(x.reshape((2 * nx, nt)))
+U_hat = np.array(x.reshape((2 * nx, nt)))
 U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
 ```
 
 Last but not least, visualize the sources inferred through our solved physics--informed source separation problem:
 
 ```python
-# plot Minkowski diagrams of inferred
-plt.figure()
-plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U1_hat')
-plt.colorbar()
-plt.show()
+rel_err = np.linalg.norm(U1 - U1ks[0], ord='fro') / np.linalg.norm(U1, ord='fro')
+perc_err = 100 * rel_err
 
-plt.figure()
-plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
-plt.xlabel('t')
-plt.ylabel('x')
-plt.title('U2_hat')
-plt.colorbar()
-plt.show()
+fig_recon, ax_recon = plt.subplots(figsize=(6, 5))
+im0 = ax_recon.imshow(U1ks[0], extent=(x0, xf, 0, tf), aspect='auto', vmin=vmin, vmax=vmax)
+ax_recon.set_xlabel(r'$t$')
+ax_recon.set_ylabel(r'$x$')
+ax_recon.set_title(r'$\hat{U}_1$')
+plt.colorbar(im0, ax=ax_recon)
+fig_recon.tight_layout()
+fig_recon.savefig("U1_reconstruction.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig_recon)
+
+fig_err, ax_err = plt.subplots(figsize=(6, 5))
+err = U1 - U1ks[0]
+im1 = ax_err.imshow(err, extent=(x0, xf, 0, tf), aspect='auto')
+ax_err.set_xlabel(r'$t$')
+ax_err.set_ylabel(r'$x$')
+ax_err.set_title(r'$(U_1)_{\text{true}} - \hat{U}_1$, ' + rf'Relative Error = {perc_err:.2f}%')
+plt.colorbar(im1, ax=ax_err)
+fig_err.tight_layout()
+fig_err.savefig("U1_error.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig_err)
+
+rel_err = np.linalg.norm(U2 - U2ks[0], ord='fro') / np.linalg.norm(U2, ord='fro')
+perc_err = 100 * rel_err
+
+fig_recon, ax_recon = plt.subplots(figsize=(6, 5))
+im0 = ax_recon.imshow(U2ks[0], extent=(x0, xf, 0, tf), aspect='auto', vmin=vmin, vmax=vmax)
+ax_recon.set_xlabel(r'$t$')
+ax_recon.set_ylabel(r'$x$')
+ax_recon.set_title(r'$\hat{U}_2$')
+plt.colorbar(im0, ax=ax_recon)
+fig_recon.tight_layout()
+fig_recon.savefig("U2_reconstruction.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig_recon)
+
+fig_err, ax_err = plt.subplots(figsize=(6, 5))
+err = U2 - U2ks[0]
+im1 = ax_err.imshow(err, extent=(x0, xf, 0, tf), aspect='auto')
+ax_err.set_xlabel(r'$t$')
+ax_err.set_ylabel(r'$x$')
+ax_err.set_title(r'$(U_2)_{\text{true}} - \hat{U}_2$, ' + rf'Relative Error = {perc_err:.2f}%')
+plt.colorbar(im1, ax=ax_err)
+fig_err.tight_layout()
+fig_err.savefig("U2_error.jpg", dpi=300, bbox_inches='tight')
+plt.close(fig_err)
 ```
 
 ## Conclusion
