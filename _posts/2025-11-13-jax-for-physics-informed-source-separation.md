@@ -44,6 +44,7 @@ This post elaborates on these points by explaining:
 </div>
 
 <div class="caption">
+    Click on an image to enlarge it.
     <strong>Left:</strong> Simulated true source one.
     <strong>Middle:</strong> Simulated true source one + true source two.
     <strong>Right:</strong> Simulated true source two.
@@ -339,6 +340,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 </div>
 
 <div class="caption">
+    Click on an image to enlarge it.
     <strong>Left:</strong> Inferred source one from physics--informed source separation.
     <strong>Middle:</strong> True source one + true source two.
     <strong>Right:</strong> Inferred source two from physics--informed source separation.
@@ -355,6 +357,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 </div>
 
 <div class="caption">
+    Click on an image to enlarge it.
     <strong>Left:</strong> Inferred source one from physics--informed source separation.
     <strong>Right:</strong> Elementwise difference between true source one and inferred source one, with Frobenius norm percentage error.
 </div>
@@ -370,6 +373,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 </div>
 
 <div class="caption">
+    Click on an image to enlarge it.
     <strong>Left:</strong> Inferred source one from physics--informed source separation.
     <strong>Right:</strong> Elementwise difference between true source two and inferred source two, with Frobenius norm percentage error.
 </div>
