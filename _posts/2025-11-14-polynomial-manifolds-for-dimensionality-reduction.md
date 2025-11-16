@@ -57,7 +57,7 @@ Let's first define the Taylor series expansion of a multivariate, vector--valued
 
 $$
 \begin{equation}
-    \mathbf y(\mathbf x) = \mathbf y(\mathbf x_0) + \left[\mathrm{D}\mathbf y\right]_{\mathbf x_0}(\mathbf x - \mathbf x_0) + \frac{1}{2}\left[\mathrm{D}^2\mathbf y\right]_{\mathbf x_0}(\mathbf x - \mathbf x_0)^{\otimes2} + \frac{1}{3!}\left[\mathrm{D}^3\mathbf y\right]_{\mathbf x_0}(\mathbf x - \mathbf x_0)^{\otimes3} \cdots.
+    \mathbf y(\mathbf x) = \mathbf y(\mathbf x_0) + \left[\mathrm{D}\mathbf y\right]_{\mathbf x_0}(\mathbf x - \mathbf x_0) + \frac{1}{2}\left[\mathrm{D}^2\mathbf y\right]_{\mathbf x_0}(\mathbf x - \mathbf x_0)^{\otimes2} + \cdots.
 \end{equation}
 $$
 
@@ -65,7 +65,7 @@ The rest of this post will consider the Maclaurin expansion (i.e., $\mathbf{x}_0
 
 $$
 \begin{equation}\label{eqn:maclaurin_series}
-    \mathbf y(\mathbf x) = \mathbf f(0) + \left[\mathrm{D}\mathbf y\right]_{0}\,\mathbf x + \frac{1}{2}\left[\mathrm{D}^2\mathbf y\right]_{0}\,\mathbf x^{\otimes2} + \frac{1}{3!}\left[\mathrm{D}^3\mathbf y\right]_{0}\,\mathbf x^{\otimes3} \cdots.
+    \mathbf y(\mathbf x) = \mathbf f(0) + \left[\mathrm{D}\mathbf y\right]_{0}\,\mathbf x + \frac{1}{2}\left[\mathrm{D}^2\mathbf y\right]_{0}\,\mathbf x^{\otimes2} + \cdots.
 \end{equation}
 $$
 
@@ -197,8 +197,8 @@ $$
     x_{1} \\ 
     \vdots \\ 
     x_{n}
-    \end{pmatrix}
-    + \frac{1}{2}
+    \end{pmatrix} \\
+    &\quad + \frac{1}{2}
     \begin{pmatrix}
     x_{1} & \cdots & x_{n}
     \end{pmatrix}
@@ -214,45 +214,28 @@ $$
     \end{pmatrix}
     + \cdots\notag\\
     &= y(\mathbf{0})
-    + 
-    \begin{bmatrix}
-    \frac{\partial y}{\partial x_{1}}(\mathbf{0})x_{1} +\dots+ 
-    \frac{\partial y}{\partial x_{n}}(\mathbf{0})x_{n}
-    \end{bmatrix}
-    + \frac{1}{2}
-    \begin{pmatrix}
-    x_{1} & \cdots & x_{n}
-    \end{pmatrix}
-    \begin{pmatrix}
-    \frac{\partial^{2}y}{\partial x_{1}^{2}}(\mathbf{0})x_{1}+\dots+\frac{\partial^{2}y}{\partial x_{1}\partial x_{n}}(\mathbf{0})x_{n} \\
-    \frac{\partial^{2}y}{\partial x_{2}\partial x_{1}}(\mathbf{0})x_{1}+\dots+\frac{\partial^{2}y}{\partial x_{2}\partial x_{n}}(\mathbf{0})x_{n} \\
-    \vdots \\
-    \frac{\partial^{2}y}{\partial x_{n}\partial x_{1}}(\mathbf{0})x_{1}+\dots+\frac{\partial^{2}y}{\partial x_{n}^{2}}(\mathbf{0})x_{n}
-    \end{pmatrix}
-    +\dots\notag\\
-    &= y(\mathbf{0})
     +
     \begin{bmatrix}
     \frac{\partial y}{\partial x_{1}}(\mathbf{0})x_{1} +\dots+
     \frac{\partial y}{\partial x_{n}}(\mathbf{0})x_{n}
-    \end{bmatrix}
-    +
-    \left[
-    1/2\frac{\partial^{2}y}{\partial x_{1}^{2}}(\mathbf{0})x_{1}^{2}
+    \end{bmatrix} \\
+    &\quad +
+    \frac{1}{2}\left[
+    \frac{\partial^{2}y}{\partial x_{1}^{2}}(\mathbf{0})x_{1}^{2}
     +\dots
-    +1/2\frac{\partial^{2}y}{\partial x_{1}\partial x_{n}}(\mathbf{0})x_{1}x_{n} 
-    + 1/2\frac{\partial^{2}y}{\partial x_{2}\partial x_{1}}(\mathbf{0})x_{2}x_{1} 
+    +\frac{\partial^{2}y}{\partial x_{1}\partial x_{n}}(\mathbf{0})x_{1}x_{n} 
+    + \frac{\partial^{2}y}{\partial x_{2}\partial x_{1}}(\mathbf{0})x_{2}x_{1} 
     + \dots \right]+\dots\notag\\
     &= y(\mathbf{0})
     + \sum_{j=1}^{m}\left[ \frac{\partial y}{\partial x_{j}}(\mathbf{0})x_{j} \right]
-    + \sum_{j=1}^{m}\sum_{k=1}^{m} \left[ 1/2\frac{\partial^{2}y}{\partial x_{j}\partial x_{k}}(\mathbf{0})x_{j}x_{k} \right]
+    + \frac{1}{2} \sum_{j=1}^{m}\sum_{k=1}^{m} \left[ \frac{\partial^{2}y}{\partial x_{j}\partial x_{k}}(\mathbf{0})x_{j}x_{k} \right]
     + \dots\notag\\
     &= y(\mathbf{0})+[\mathrm{D}y]_{\mathbf{0}}[\mathbf{x}] + \frac{1}{2}[\mathrm{D}^{2}y]_{\mathbf{0}}[\mathbf{x},\mathbf{x}]+\dots\notag,
 \end{aligned}
 \end{equation}
 $$
 
-where the last line of Equation~\eqref{eqn:scalar-valued,multivariate_derivation} leverages the notation of multilinear forms as functions of $\mathbf{x}$.
+where the last line leverages the notation of multilinear forms as functions of $\mathbf{x}$.
 
 We now write out the Taylor expansion of this $\mathbf{y}$ via the Taylor expansion operator $\mathcal{T}$. Notably, we take advantage of Einstein summation notation to convey the summations involved in computing this Taylor expansion:
 
@@ -264,12 +247,12 @@ $$
 \end{equation}
 $$
 
-where letters $J$ and $H$ are used in Equation~\eqref{eqn:taylor_scalarValuedMultivar} due to their associations with the Jacobian and Hessian, respectively.
+where letters $J$ and $H$ are used due to their associations with the Jacobian and Hessian, respectively.
 
 
 ### Multiple Inputs, Multiple Ouputs $(n\neq1, N\neq1)$
 
-Finally, let's consider the Maclaurin expansion of a multivariate, vector--valued function. Instead of deriving it from scratch, we invoke the results of Equations~\eqref{eqn:taylor_vectorValuedUnivariate}~and~\eqref{eqn:taylor_scalarValuedMultivar} to obtain its form. Recall from Equation~\eqref{eqn:taylor_vectorValuedUnivariate} that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element. Furthermore, Equation~\eqref{eqn:taylor_scalarValuedMultivar} conveys that the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
+Finally, let's consider the Maclaurin expansion of a multivariate, vector--valued function. Recall that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element and that the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
 
 $$
 \begin{equation}
@@ -307,28 +290,21 @@ $$
 \end{equation}
 $$
 
-The following table defines the multilinear found in Equation~\eqref{eqn:taylor_general}.
-\begin{table}[h]
-\centering
-\begin{tabular}{c c l}
-\toprule
-Form & Mapping & Description \\
-\midrule
-\(G\) & \(X \to \mathbb{R}\) & Linear form \\
-\(H\) & \(X \times X \to \mathbb{R}\) & Bilinear form \\
-\(I\) & \(X \times X \times X \to \mathbb{R}\) & Trilinear form \\
-\(J\) & \(X \times X \times X \times X \to \mathbb{R}\) & Quadrilinear form \\
-\(F\) & \(X^{k} \to \mathbb{R}\) & \(k\)–linear form \\
-\bottomrule
-\end{tabular}
-\caption{Multilinear form definitions.}
-\end{table}
+The following table defines multiliner forms:
+
+| Form | Mapping | Description |
+|------|---------|-------------|
+| $G$ | $X \to \mathbb{R}$ | Linear form |
+| $H$ | $X \times X \to \mathbb{R}$ | Bilinear form |
+| $I$ | $X \times X \times X \to \mathbb{R}$ | Trilinear form |
+| $J$ | $X \times X \times X \times X \to \mathbb{R}$ | Quadrilinear form |
+| $F$ | $X^k \to \mathbb{R}$ | $k$–linear form |
 
 
 ## Posing an Optimization Problem to Parameterize a Truncated Maclaurin Polynomial
 
 
-Let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion akin to Equation~\eqref{eqn:taylor_vectorValuedMultivariate}: 
+Let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion: 
 
 $$
 \begin{equation}
@@ -385,14 +361,14 @@ $$
     \vdots \\
     \mathcal{T}[y_{N}]-y_{N}(\mathbf{0})
     \end{pmatrix}
-    =
+    &=
     \begin{pmatrix}
     \mathcal{\tilde{T}}[y_{1}] \\
     \mathcal{\tilde{T}}[y_{2}] \\
     \vdots \\
     \mathcal{\tilde{T}}[y_{N}]
-    \end{pmatrix}
-    =
+    \end{pmatrix} \\
+    &=
     \begin{pmatrix}
     G_{1j}(\mathbf{0})[x_{j}] \\
     G_{2j}(\mathbf{0})[x_{j}] \\
@@ -480,7 +456,7 @@ $$
 
 where the factor of $1/2$ was absorbed into each $H_i(\mathbf{0};j,k)$.
 
-To better understand Equation~\eqref{eqn:pull-out}, we now write out the elements of its matrix operators explicitly:
+To better understand this equation, we now write out the elements of its matrix operators explicitly:
 
 $$
 \begin{equation}
@@ -520,7 +496,7 @@ $$
 \end{equation}
 $$
 
-We can thus deduce the sizes of the respective matrix operators from Equation~\eqref{eqn:ytilde_matrices}, where Kronecker product notation and matrices $\mathbf{T}_1$ and $\mathbf{T}_2$ have been leveraged for conciseness:
+We can thus deduce the sizes of the respective matrix operators, where Kronecker product notation and matrices $\mathbf{T}_1$ and $\mathbf{T}_2$ have been leveraged for conciseness:
 
 $$
 \begin{equation}
@@ -551,7 +527,7 @@ H_{N}(\mathbf{0};j,k)
 $$
 
 
-Equation~\eqref{eqn:ytilde_sizes} considers an infinite series Maclaurin expansion. Let us now consider the following truncated expansion, yielding a quadratic approximation of $\tilde{\mathbf{y}}$:
+So far we have considered an infinite series Maclaurin expansion. Let us now consider the following truncated expansion, yielding a quadratic approximation of $\tilde{\mathbf{y}}$:
 
 $$
 \begin{equation}
@@ -597,7 +573,7 @@ $$
 \end{equation}
 $$
 
-Finally, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can  rewrite Equation~\eqref{eqn:result} using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
+Finally, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can  rewrite our truncated expansion using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
 
 $$
 \begin{equation}
@@ -614,7 +590,7 @@ $$
 
 ## Sequential Closure Modeling
 
-Ideally, we would be able to easily solve for the global minimizer of~\eqref{eqn:result_with_orthogonal_matrices}, but the optimization problem posed by~\eqref{eqn:result_with_orthogonal_matrices} is generally nonlinear and non--convex, making it difficult to solve numerically. We can instead solve for decoders $\{\textbf{V}_1, \textbf{V}_2, \dots, \textbf{V}_d\}$ sequentially, using reconstruction error with respect to decoders $\{\textbf{V}_1,\dots,\textbf{V}_{p-1}\}$ to formulate a linear least--squares optimization problem for inferring decoder $\textbf{V}_p$. While there do exist algorithms to obtain decoders which yield more--accurate reduced order models, $\{\mathbf{V}_k\}_{k=1}^d$, this method is relatively simple to implement and understand in comparison.
+One way to solve for decoders $\{\textbf{V}_1, \textbf{V}_2, \dots, \textbf{V}_d\}$ is to do so sequentially: using reconstruction error with respect to decoders $\{\textbf{V}_1,\dots,\textbf{V}_{p-1}\}$ to formulate a linear least--squares optimization problem for inferring decoder $\textbf{V}_p$.
 
 ### Inferring $\mathbf{V}_1$
 
@@ -628,7 +604,7 @@ $$
 \end{equation}
 $$
 
-The solution to~\eqref{eqn:V1_min_problem} is given by the matrix of POD basis vectors obtained through the SVD.
+The solution to this least--squares problem is given by the matrix of POD basis vectors obtained through the SVD.
 
 With linear decoder $\mathbf{V}_1$ now in hand we can compute the reconstruction error associated with it, $\mathcal{E}_1$:
 
@@ -645,7 +621,7 @@ This reconstruction error with respect to $\mathbf{V}_1$ can then be used as the
 
 ### Inferring $\mathbf{V}_2$
 
-We can leverage Equation~\eqref{eqn:err_after_linear} to formulate an optimization problem for $\mathbf{V}_2$ such that it best fixes the error left over from $\mathbf{V}_1$. This is written out in the following equation, where $\mathbf{W}_2=\mathbf{S}^{\diamond 2} = \mathbf{S}\diamond\mathbf{S}=\begin{pmatrix}
+We can leverage $\mathcal{E}_1$ to formulate an optimization problem for $\mathbf{V}_2$ such that it best fixes the error left over from $\mathbf{V}_1$. This is written out in the following equation, where $\mathbf{W}_2=\mathbf{S}^{\diamond 2} = \mathbf{S}\diamond\mathbf{S}=\begin{pmatrix}
     \mathbf{s}_1\otimes\mathbf{s}_1 \dots \mathbf{s}_K\otimes \mathbf{s}_K
 \end{pmatrix}$ is the second Khatri--Rao power of $\mathbf{S}$, storing all quadratic snapshot monomials of all snapshots:
 
@@ -671,7 +647,7 @@ $$
 
 where the factor of $1/2$ in front of the Frobenius norm exists to simplify the arithmetic encountered in matrix calculus--based optimization.
 
-With Equation~\eqref{eqn:V2_cost_function} in hand we can put it into an equivalent but more suitable form for optimization by taking advantage of the trace operator, $\text{tr}$, as done as follows:
+With an equation for $J(\mathbf{V}_{2})$ in hand we can put it into an equivalent but more suitable form for optimization by taking advantage of the trace operator, $\text{tr}$, as done as follows:
 
 $$
 \begin{equation}
@@ -696,9 +672,9 @@ $$
 \end{equation}
 $$
 
-where we can see that including the factor of $1/2$ in our loss function Equation~\eqref{eqn:V2_cost_function} allows us to have no non--unity scalars in our expression of the gradient in Equation~\eqref{eqn:V2_gradient}.
+where we can see that including the factor of $1/2$ in $J(\mathbf{V}_{2})$ allows us to have no non--unity scalars in our expression of the gradient in the equation for $\nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2})$.
 
-Now that we have the gradient in Equation~\eqref{eqn:V2_gradient} we can force it to be $0$ so that we identify a root of $\nabla_{\mathbf{V}_2}J(\mathbf{V}_2)$ and thus an extremum of $J(\mathbf{V}_2)$:
+Now that we have $\nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2})$ we can force it to be $0$ so that we identify a root of $\nabla_{\mathbf{V}_2}J(\mathbf{V}_2)$ and thus an extremum of $J(\mathbf{V}_2)$:
 
 $$
 \begin{equation}
@@ -710,7 +686,7 @@ $$
 
 where $\overset{!}{=}$ notation is used since we are forcing $\nabla_{\mathbf{V}_2}J(\mathbf{V}_2)$ to equal $0$ for optimization purposes.
 
-Finally, we can solve for $\mathbf{V}_2$ from Equation~\eqref{eqn:V2_optimization_via_gradient} to show that $\mathbf{V}_2\perp\mathbf{V}_1$:
+Finally, we can solve for $\mathbf{V}_2$ to show that $\mathbf{V}_2\perp\mathbf{V}_1$:
 
 $$
 \begin{equation}
@@ -736,7 +712,7 @@ $$
 \end{equation}
 $$
 
-Our goal so far, however, is to infer the $\mathbf{V}_2$ that minimizes the loss function~\eqref{eqn:V2_cost_function}. Given that the optimization problem in~\eqref{eqn:V2_least_squares} is a linear least--squares problem, we can solve it with the QR decomposition as follows:
+Our goal so far, however, is to infer the $\mathbf{V}_2$ that minimizes its given loss function. Since the optimization problem is a linear least--squares problem, we can solve it with the QR decomposition as follows:
 
 $$
 \begin{equation}
@@ -764,7 +740,7 @@ $$
 
 where $\mathbf{W}_3 = \mathbf{S}^{\diamond3} =  \mathbf{S}\diamond \mathbf{S}\diamond \mathbf{S} = (\mathbf{s}_1\otimes\mathbf{s}_1\otimes\mathbf{s}_1\dots\mathbf{s}_K\otimes\mathbf{s}_K\otimes\mathbf{s}_K)$ is the third Khatri--Rao power of $\mathbf{S}$ that stores all cubic monomial terms of all snapshots.
 
-Akin to the derivation of Equation~\eqref{eqn:V2_orthogonal_to_V1}, we can prove that $\mathbf{V}_3$ is orthogonal to both $\mathbf{V_1}$ and $\mathbf{V_2}$:
+We can prove that $\mathbf{V}_3$ is orthogonal to both $\mathbf{V_1}$ and $\mathbf{V_2}$:
 
 $$
 \begin{equation}
@@ -823,7 +799,7 @@ $$
 
 such that $\mathbf{V}_{k+1}\perp \{ \mathbf{V}_1,\mathbf{V}_2,\dots,\mathbf{V}_k \}$.
 
-Lastly, we can solve a system of linear equations to infer $\mathbf{V}_{k+1}$, where the derivation is analogous to those used to derive expressions for $\mathbf{V}_1$ and $\mathbf{V}_2$ via Equations~\eqref{eqn:V2_least_squares}~and~~\eqref{eqn:V3_least_squares}:
+Lastly, we can solve a system of linear equations to infer $\mathbf{V}_{k+1}$, where the derivation is analogous to those used to derive expressions for $\mathbf{V}_1$ and $\mathbf{V}_2$:
 
 $$
 \begin{equation}
