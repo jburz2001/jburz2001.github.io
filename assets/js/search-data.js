@@ -59,11 +59,11 @@ ninja.data = [{
             window.location.href = "/blog/2025/latent-manifolds-from-the-taylor-series-expansion/";
           
         },
-      },{id: "post-physics-informed-source-separation-in-progress",
+      },{id: "post-physics-informed-source-separation",
         
-          title: "Physics–Informed Source Separation (IN PROGRESS)",
+          title: "Physics–Informed Source Separation",
         
-        description: "TODO figures, proofreading",
+        description: "Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.",
         section: "Posts",
         handler: () => {
           
