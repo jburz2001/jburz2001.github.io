@@ -25,7 +25,7 @@ This post elaborates on these points by explaining:
   - The penalty method for converting numerical constrained optimization problems into unconstrained ones
   - The method of multipliers for improving convergence of the penalty method
   - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems 
-  - Implementation in Python using the NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
+  - Implementation in Python using NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
 ## The Linear Advection PDE
 
