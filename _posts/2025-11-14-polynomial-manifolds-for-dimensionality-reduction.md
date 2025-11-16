@@ -285,7 +285,7 @@ $$
 \begin{equation}
 \begin{aligned}\label{eqn:taylor_general}
 \mathcal{T}[f_{i}]&=
-\frac{1}{0!}f_{i}(\mathbf{0}) + \frac{1}{1!}G_{ij}(\mathbf{0})[x_{j}] + \frac{1}{2!}H_{ijk}(\mathbf{0})[x_{j},x_{k}] + \frac{1}{3!}I_{ijkl}(\mathbf{0})[x_{j},x_{k},x_{l}] + \frac{1}{4!}J_{ijklm}(\mathbf{0})[x_{j},x_{k},x_{l},x_{m}] + \dots~.
+\frac{1}{0!}f_{i}(\mathbf{0}) + \frac{1}{1!}G_{ij}(\mathbf{0})[x_{j}] + \frac{1}{2!}H_{ijk}(\mathbf{0})[x_{j},x_{k}] + \cdots~.
 \end{aligned}
 \end{equation}
 $$
@@ -296,8 +296,6 @@ The following table defines multiliner forms:
 |------|---------|-------------|
 | $G$ | $X \to \mathbb{R}$ | Linear form |
 | $H$ | $X \times X \to \mathbb{R}$ | Bilinear form |
-| $I$ | $X \times X \times X \to \mathbb{R}$ | Trilinear form |
-| $J$ | $X \times X \times X \times X \to \mathbb{R}$ | Quadrilinear form |
 | $F$ | $X^k \to \mathbb{R}$ | $k$–linear form |
 
 
@@ -655,7 +653,6 @@ $$
     \frac{1}{2}\lVert \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \rVert_\text{F}^2 &= \frac{1}{2}\text{tr}\left( \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)^{\top} \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)  \right)  \nonumber\\
     &=\frac{1}{2}\text{tr} \left( \left( \mathbf{V}_{2}\mathbf{W}_{2}-\mathcal{E}_{1} \right) \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)  \right) \nonumber \\
     &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} - \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} - \mathcal{E}_{1}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} + \mathcal{E}_{1}\mathcal{E}_{1}^{\top} \right) \nonumber \\
-    &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) - \frac{1}{2}\text{tr}\left( \mathcal{E}_{1}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) + \frac{1}{2}\text{tr}(\mathcal{E}_{1}\mathcal{E}_{1}^{\top}) \nonumber\\
     &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) + \frac{1}{2}\text{tr}\left( \mathcal{E}_{1}\mathcal{E}_{1}^{\top} \right) 
 \end{aligned}
 \end{equation}
@@ -666,7 +663,8 @@ Our goal is to minimize the loss function $J(\mathbf{V}_2)$ with respect to the 
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:V2_gradient}
-    \nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2}) &= \frac{1}{2}\nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) + \cancel{ \frac{1}{2}\nabla_{\mathbf{V}_{2}}\text{tr}\left( \left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right) S_{1}S_{1}^{\top}\left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right)  \right) }  \nonumber\\
+    \nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2}) &= \frac{1}{2}\nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) 
+    &\quad + \cancel{ \frac{1}{2}\nabla_{\mathbf{V}_{2}}\text{tr}\left( \left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right) S_{1}S_{1}^{\top}\left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right)  \right) }  \nonumber\\
     &= \mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} - \mathbf{W}_{2}\mathcal{E}_{1}^{\top},
 \end{aligned}
 \end{equation}
