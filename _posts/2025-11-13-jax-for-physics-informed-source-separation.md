@@ -28,6 +28,11 @@ This post elaborates on these points by explaining:
   - Implementation in Python using the NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
 ## The Linear Advection PDE
+
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+
 Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
 This post uses JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
