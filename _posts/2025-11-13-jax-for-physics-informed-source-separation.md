@@ -109,8 +109,8 @@ $$
     +\ \lambda_{\text{PDE}_2}\, \| \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 \|_\text{F}^2 \\
 &\quad
     +\ \frac{1}{2}\mu^{(k)} \big( 
-        \| \min(0, U_1^{(k)}) \|_\text{F}^2
-        +\ \| \min(0, U_2^{(k)}) \|_\text{F}^2
+        \| -\min(0, U_1^{(k)}) \|_\text{F}^2
+        +\ \| -\min(0, U_2^{(k)}) \|_\text{F}^2
       \big)
 \Bigg],
 \end{aligned}
@@ -133,8 +133,8 @@ $$
 U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 \sqrt{2\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
 \sqrt{2\lambda_{\text{PDE}_2}}\;\big(\dot{U}^{(k)}_2 + c_2\, U_2^{(k)\prime}\big) \\[6pt]
-\sqrt{\mu^{(k)}}\,\min(0, U_1^{(k)}) \\[6pt]
-\sqrt{\mu^{(k)}}\,\min(0, U_2^{(k)})
+\sqrt{\mu^{(k)}}\,-\min(0, U_1^{(k)}) \\[6pt]
+\sqrt{\mu^{(k)}}\,-\min(0, U_2^{(k)})
 \end{bmatrix}
 \right\rVert_F^{\!2} \\[10pt]
 &=
@@ -179,7 +179,7 @@ In the method of multipliers, Lagrange multipliers are treated as dual variables
 
 $$
 \begin{equation}
-\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} - \mu^{(k)}~\min\left(0, U_i^{(k)} \right) ]_+,
+\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} + \mu^{(k)}~\left(-\min\left(0, U_i^{(k)}\right) \right) ]_+,
 \end{equation}
 $$
 
@@ -285,7 +285,7 @@ where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \ga
 
   - there exists a unique solution for $\delta\beta$
   - the step taken is always a descent direction
-  - fast, numerically stable solvers can be used, like conjugate gradient.
+  - conjugate gradient, a fast and numerically stable solver, can be used.
 
 Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, let's assume that $J^\top J$ is a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\gamma=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 100.99$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\gamma=0$ yields Gauss--Newton; $\gamma\gg 0$ yields gradient descent.
 
