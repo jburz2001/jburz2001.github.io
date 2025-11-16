@@ -16,20 +16,21 @@ Physical systems are often measured as mixtures of signals. For instance, seismo
 
 As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of "smoothie--informed machine learning."
 
-Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation.<d-footnote Please contact me if you know of a PDE for smoothies.> This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
+Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation. This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
 
 This post elaborates on these points by explaining:
 
   - An example blind source separation (BSS) problem from physics
   - How to regularize the aforementioned BSS problem with physically meaningful loss terms that incorporate *a priori* information about the constituent source signals
   - The penalty method for converting numerical constrained optimization problems into unconstrained ones
+  - The method of multipliers for improving convergence of the penalty method
   - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems 
-  - Implementation in Python using Numpy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
+  - Implementation in Python using the NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
 ## The Linear Advection PDE
 Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
-This post demonstrates JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
+This post uses JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
 
 $$
 \begin{equation}
@@ -47,24 +48,24 @@ $$
 \end{equation}
 $$
 
-where $c_i$ are constants quantifying advection speed. In general, determining the optimal value of $n$ (i.e., the number of sources being mixed) may not be trivial. However, there are plenty of data--driven methods to accomplish this. For instance, one could apply the line Hough transform to the Mikowski spacetime diagram of the observed solution then compute the number of disjoint maxima in this Hough space.
+where $c_i$ are constants quantifying advection speed. In general, determining the optimal value of $n$ (i.e., the number of sources being mixed) may not be trivial. However, there are plenty of data--driven methods to accomplish this. For instance, one could apply the line Hough transform to the Minkowski spacetime diagram of the observed solution then compute the number of disjoint maxima in this Hough space.
 
 ## Constrained Optimization for Physics--Informed Source Separation
 Recall that our observed signal is the superposition of multiple individually advecting signals. As such, we can pose the following BSS problem:
 
 $$
 \begin{equation}
-(U_1, U_2) \in \arg\min_{U_1,U_2}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2,
+(\hat{U}_1, \hat{U}_2) \in \arg\min_{U_1,U_2}\frac{1}{2} \left\lVert U_1 + U_2 - U \right\rVert_\text{F}^2,
 \end{equation}
 $$
 
-where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is observed signal at timestamps $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a fudge factor used to remove irrelevant coefficients of $2$ from gradients of the norm respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(U_1,U_2)$.
+where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is the observed signal at timestamp $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a fudge factor used to remove irrelevant coefficients of $2$ from gradients of the norm with respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(\hat{U}_1,\hat{U}_2)$.
 
-This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(U_1,U_2)=(U,0)$ and $(U_1,U_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, *a priori* knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $U_1$ and $U_2$ are non--negative matrices:
+This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(\hat{U}_1,\hat{U}_2)=(U,0)$ and $(\hat{U}_1,\hat{U}_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, *a priori* knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $\hat{U}_1$ and $\hat{U}_2$ are non--negative matrices:
 
 $$
 \begin{equation}
-(U_1, U_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2}|| U_1 + U_2 - U ||_\text{F}^2.
+(\hat{U}_1, \hat{U}_2) \in \arg\min_{U_1\geq 0,U_2\geq 0}\frac{1}{2} \left\lVert U_1 + U_2 - U \right\rVert_\text{F}^2.
 \end{equation}
 $$
 
@@ -73,7 +74,7 @@ Additionally, we can assume that $U_1$ and $U_2$ satisfy their own advection equ
 $$
 \begin{equation}
 \begin{aligned}
-(U_1, U_2)
+(\hat{U}_1, \hat{U}_2)
 &\in 
 \arg\min_{U_1 \ge 0,\, U_2 \ge 0}
 \Bigg[
@@ -87,7 +88,7 @@ $$
 \end{equation}
 $$
 
-where $\dot{U}_i$ is a finite--difference--computed time derivative of $U_i$ and $U^\prime_i$ is a finite--difference--computed spatial derivative. Constants $c_i$ can be computed from observed snapshots $U$, such as by setting $c_i = 1/\text{slope}_i$, where $\text{slope}_i$ is the slope of the $i$th line detected in Hough space via the line Hough transform of $U$.
+where $\dot{U}_i$ is a finite--difference--computed time derivative of $U_i$ and $U^\prime_i$ is a finite--difference--computed spatial derivative. Constants $c_i$ can be computed from observed snapshots $U$, such as from the slope of the $i$th line detected in Hough space via the line Hough transform of $U$.
 
 
 ## Unconstrained Optimization for Physics--Informed Source Separation
@@ -97,7 +98,7 @@ Our constrained optimization problem can be converted into an unconstrained one 
 $$
 \begin{equation}
 \begin{aligned}
-(U_1^{(k)}, U_2^{(k)}) 
+(\hat{U}_1^{(k)}, \hat{U}_2^{(k)}) 
 &\in 
 \arg\min_{U_1^{(k)},\, U_2^{(k)}} 
 \Bigg[
@@ -116,26 +117,26 @@ $$
 \end{equation}
 $$
 
-where $\min$ is a function that computes the elementwise minimum of a matrix with the zero matrix of the same shape, thus penalizing negative values. Index $k$ is used to convey the $k$th iteration of the penalty method. In practice, one often starts the optimization procedure using a small value of $\mu^{(k)}$; obtains $(U_1^{(k)}, U_2^{(k)})$; then recursively solves for $(U_1^{(k+1)}, U_2^{(k+1)})$ until convergence using $\mu^{(k+1)} > \mu^{(k)}$, where $(U_1^{(k)}, U_2^{(k)})$ is the initial guess of $(U_1^{(k+1)}, U_2^{(k+1)})$.
+where $\min$ is a function that computes the elementwise minimum of a matrix with the zero matrix of the same shape, thus penalizing negative values. Index $k$ is used to convey the $k$th iteration of the penalty method. In practice, one often starts the optimization procedure using a small value of $\mu^{(k)}$; obtains $(\hat{U}_1^{(k)}, \hat{U}_2^{(k)})$; then recursively solves for $(\hat{U}_1^{(k+1)}, \hat{U}_2^{(k+1)})$ until convergence using $\mu^{(k+1)} > \mu^{(k)}$, where $(\hat{U}_1^{(k)}, \hat{U}_2^{(k)})$ is the initial guess of $(\hat{U}_1^{(k+1)}, \hat{U}_2^{(k+1)})$.
 
 Furthermore, we can express this least--squares problem's objective function to be minimized using a single norm:
 
 $$
 \begin{equation}
 \begin{aligned}
-(U_1^{(k)}, U_2^{(k)})
+(\hat{U}_1^{(k)}, \hat{U}_2^{(k)})
 &\in
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}
-\lVert
+\left\lVert
 \begin{bmatrix}
 U_1^{(k)} + U_2^{(k)} - U \\[6pt]
-2\sqrt{\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
-2\sqrt{\lambda_{\text{PDE}_2}}\;\big(\dot{U}^{(k)}_2 + c_2\, U_2^{(k)\prime}\big) \\[6pt]
+\sqrt{2\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
+\sqrt{2\lambda_{\text{PDE}_2}}\;\big(\dot{U}^{(k)}_2 + c_2\, U_2^{(k)\prime}\big) \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_1^{(k)}) \\[6pt]
 \sqrt{\mu^{(k)}}\,\min(0, U_2^{(k)})
 \end{bmatrix}
-\rVert_F^{\!2} \\[10pt]
+\right\rVert_F^{\!2} \\[10pt]
 &=
 \arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \frac{1}{2}\,\| r^{(k)} \|_\text{F}^2,
@@ -149,27 +150,18 @@ where $r^{(k)}$ is a single residual formed by stacking all constituent residual
 
 Recall that we previously converted a constrained optimization problem into an unconstrained one using the penalty method. Intuitively, one recovers the constrained optimization solution in the limit as the penalty term, $\mu^{(k)}$, introduced by the penalty method, goes to infinity. Unfortunately, naively increasing $\mu^{(k)}$ towards infinity can make this optimization problem ill--posed if $\mu^{(k)}$ gets too large. However, one can circumvent the need to increase $\mu^{(k)}$ towards infinity by leveraging the method of multipliers (aka, the augmented Lagrangian method). The method of multipliers is analogous to the method of Lagrange multipliers from analytical optimization theory and forms the foundation of a standard tool in numerical optimization called the alternating direction method of multipliers, which is not covered in this post.
 
-Consider the following residual constructed by concatenating two additional loss terms to the $k$th iteration of the residual vector from before:
+The following equation represents the penalty method objective augmented with Lagrange multipliers:
 
 $$
 \begin{equation}
 \begin{aligned}
-(U_1^{(k)}, U_2^{(k)}) \in\ 
-&\arg\min_{U_1^{(k)}, U_2^{(k)}}
-\frac{1}{2}
-\lVert
-\begin{bmatrix}
-U_1^{(k)} + U_2^{(k)} - U \\
-2\sqrt{\lambda_{\text{PDE}_1}}\,(\dot{U}^{(k)}_1 + c_1 U^{(k)\prime}_1) \\
-2\sqrt{\lambda_{\text{PDE}_2}}\,(\dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2) \\
-\sqrt{\mu^{(k)}}\min(0, U_1^{(k)}) \\
-\sqrt{\mu^{(k)}}\min(0, U_2^{(k)}) \\
-2\langle \Lambda_1^{(k)},\, U_1^{(k)} \rangle \\
-2\langle \Lambda_2^{(k)},\, U_2^{(k)} \rangle
-\end{bmatrix}
-\rVert_F^2 
-\\[6pt]
-&= \arg\min_{U_1^{(k)}, U_2^{(k)}} \frac{1}{2}\,\lVert r^{(k)} \rVert_F^2,
+(\hat{U}_1^{(k)}, \hat{U}_2^{(k)}) \in
+&\;\arg\min_{U_1^{(k)},\, U_2^{(k)}} 
+\Bigg[
+\frac{1}{2}\, \bigl\lVert r^{(k)} \bigr\rVert_F^2 \\
+&\qquad + \big\langle \Lambda_1^{(k)},\, -\min(0, U_1^{(k)}) \big\rangle
+       + \big\langle \Lambda_2^{(k)},\, -\min(0, U_2^{(k)}) \big\rangle
+\Bigg],
 \end{aligned}
 \end{equation}
 $$
@@ -178,7 +170,8 @@ with matrix--matrix inner product
 
 $$
 \begin{equation}
-\left\langle \Lambda_i^{(k)},\, U_i^{(k)} \right\rangle = \sum_{j,\ell} (\Lambda_i^{(k)})_{j\ell} (U_i^{(k)})_{j\ell}.
+\left\langle A, B \right\rangle 
+= \sum_{j,\ell} A_{j\ell} B_{j\ell}.
 \end{equation}
 $$
 
@@ -186,7 +179,7 @@ In the method of multipliers, Lagrange multipliers are treated as dual variables
 
 $$
 \begin{equation}
-\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} - \mu^{(k)}\,{U_i^{(k)}} ]_+,
+\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} - \mu^{(k)}~\min\left(0, U_i^{(k)} \right) ]_+,
 \end{equation}
 $$
 
@@ -194,13 +187,13 @@ where $[\cdot]_+ = \max(0,\cdot)$ clips negative entries to zero, ensuring that 
 
 
 ## The Levenberg--Marquardt Algorithm for Least--Squares Problems
-The Levenberg--Marquardt algorithm is a workhorse tool for solving both linear and nonlinear least--squares problems with objective function $\frac{1}{2}|| r ||_\text{F}^2$. This algorithm can be thought of as an extension of the Gauss--Newton algorithm that incorporates a trust region for regularization. Let's derive this algorithm with calculus.
+The Levenberg--Marquardt algorithm is a workhorse tool for solving both linear and nonlinear least--squares problems with objective function $\frac{1}{2} \left\lVert r \right\rVert_\text{F}^2$. This algorithm can be thought of as an extension of the Gauss--Newton algorithm that incorporates a trust region for regularization. Let's derive this algorithm with calculus.
 
 First, consider the optimization problem of identifying the parameter, $\hat{\beta}$, which minimizes the least--squares error of fitting observed data, $y$, with a curve, $f(x, \beta)$:
 
 $$
 \begin{equation}
-\hat{\beta} \in \arg\min \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2,
+\hat{\beta} \in \arg\min \frac{1}{2} \left\lVert y - f(x,\beta) \right\rVert_\text{F}^2,
 \end{equation}
 $$
 
@@ -208,7 +201,7 @@ where the loss function, $\mathcal{L}$, for this problem is the norm being minim
 
 $$
 \begin{equation}
-\mathcal{L} = \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2.
+\mathcal{L} = \frac{1}{2} \left\lVert y - f(x,\beta) \right\rVert_\text{F}^2.
 \end{equation}
 $$
 
@@ -222,14 +215,14 @@ $$
 
 where $J=\frac{\partial f(x,\beta)}{\partial\beta}$ is the Jacobian of $f$.
 
-This linearized $f$ is then plugged into the original residual to define a new loss function in terms of observed data, $y$; fit curve, $f$; Jacobian, $J$; and optimization parameter step; $\delta\beta$:
+This linearized $f$ is then plugged into the original residual to define a new loss function in terms of observed data, $y$; fit curve, $f$; Jacobian, $J$; and optimization parameter step, $\delta\beta$:
 
 $$
 \begin{equation}
 \begin{aligned}
 \mathcal{L}
-&= \frac{1}{2}|| y - f(x,\beta) ||_\text{F}^2 \\
-&\approx \frac{1}{2}||\, y - \left(f(x,\beta) + J\delta\beta\right) ||_\text{F}^2 \\
+&= \frac{1}{2} \left\lVert y - f(x,\beta) \right\rVert_\text{F}^2 \\
+&\approx \frac{1}{2} \left\lVert\, y - \left(f(x,\beta) + J\delta\beta\right) \right\rVert_\text{F}^2 \\
 &= \frac{1}{2}\,\big(y - f(x,\beta) - J\delta\beta\big)^\top \big(y - f(x,\beta) - J\delta\beta\big) \\
 &= \frac{1}{2}(y^\top - f^\top(x,\beta) - \delta\beta^\top J^\top)(y - f(x,\beta) - J\delta\beta) \\
 &= \frac{1}{2} \left( y^\top y + f^\top f - 2y^\top f - 2y^\top J \delta\beta + 2f^\top J \delta\beta + \delta\beta^\top J^\top J \delta\beta \right).
@@ -288,24 +281,23 @@ x_i^\top (J^\top J + \gamma I)x_i &= \lambda_i^{\text{LM}} x^\top_i x_i \\
 \end{equation}
 $$
 
-where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\mu$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
+where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\gamma$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
 
   - there exists a unique solution for $\delta\beta$
   - the step taken is always a descent direction
-  - singular values of $J^\top J + \gamma I$ equal the eigenvalues and increase in magnitude with $\gamma$, increasing the condition number of the system matrix
   - fast, numerically stable solvers can be used, like conjugate gradient.
 
-Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, assume that $J^\top J$ a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\mu=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 100.19$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\mu=0$ yields Gauss--Newton; $\mu\gg 0$ yields gradient descent.
+Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, let's assume that $J^\top J$ is a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\gamma=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 100.99$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\gamma=0$ yields Gauss--Newton; $\gamma\gg 0$ yields gradient descent.
 
 Finally, the solution can be made scale invariant by regularizing with a diagonal matrix formed directly from $J^TJ$ instead of with an arbitrarily chosen identity matrix:
 
 $$
 \begin{equation}
-(J^\top J + \gamma\text{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta+\delta\beta)).
+(J^\top J + \gamma\,\mathrm{diag}(J^\top J))\delta\beta = J^\top(y - f(x,\beta)).
 \end{equation}
 $$
 
-A diagonal matrix (rather than one arbitrarily located nonzero elements) is added for regularization to preserve symmetricity.
+A diagonal matrix (rather than one with arbitrarily located nonzero elements) is added for regularization to preserve symmetry.
 
 
 ## JAX for Physics--Informed Source Separation
@@ -353,187 +345,187 @@ def get_u0(x, mu):
 Then, simulate the individual advection of two Gaussian pulses traveling towards and through each other:
 
 ```python
-    # space
-    x0, xf = 0.0, 1.0
-    n = 2**7
-    x = np.linspace(x0, xf, num=n, endpoint=False)
-    dx = x[1] - x[0]
+# space
+x0, xf = 0.0, 1.0
+n = 2**7
+x = np.linspace(x0, xf, num=n, endpoint=False)
+dx = x[1] - x[0]
 
-    # speed
-    c1 = 10.0
-    c2 = -c1
+# speed
+c1 = 10.0
+c2 = -c1
 
-    # time
-    t0, tf = 0.0, 0.02
-    courant_number = 0.99
-    dt = courant_number * dx / max(abs(c1), abs(c2))
-    N_steps = int(np.ceil((tf - t0) / dt))
-    dt = (tf - t0) / N_steps
-    ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
+# time
+t0, tf = 0.0, 0.02
+courant_number = 0.99
+dt = courant_number * dx / max(abs(c1), abs(c2))
+N_steps = int(np.ceil((tf - t0) / dt))
+dt = (tf - t0) / N_steps
+ts = np.linspace(t0, tf, N_steps + 1, endpoint=True)
 
-    # snapshots
-    U1 = np.zeros((n, N_steps + 1))
-    U2 = np.zeros((n, N_steps + 1))
+# snapshots
+U1 = np.zeros((n, N_steps + 1))
+U2 = np.zeros((n, N_steps + 1))
 
-    mu1 = 0.4
-    mu2 = 1.0 - mu1
-    u1_curr = get_u0(x, mu1)
-    u2_curr = get_u0(x, mu2)
-    U1[:, 0] = u1_curr
-    U2[:, 0] = u2_curr
+mu1 = 0.4
+mu2 = 1.0 - mu1
+u1_curr = get_u0(x, mu1)
+u2_curr = get_u0(x, mu2)
+U1[:, 0] = u1_curr
+U2[:, 0] = u2_curr
 
-    # FD operators
-    Kfwd = get_fwd_diff_op(u1_curr, dx)
-    Kbwd = get_bwd_diff_op(u1_curr, dx)
+# FD operators
+Kfwd = get_fwd_diff_op(u1_curr, dx)
+Kbwd = get_bwd_diff_op(u1_curr, dx)
 
-    # simulate
-    for j in range(1, N_steps + 1):
-        u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
-        U1[:, j] = u1_curr
+# simulate
+for j in range(1, N_steps + 1):
+    u1_curr = get_u_next(u1_curr, c1, dt, Kfwd, Kbwd)
+    U1[:, j] = u1_curr
 
-        u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
-        U2[:, j] = u2_curr
+    u2_curr = get_u_next(u2_curr, c2, dt, Kfwd, Kbwd)
+    U2[:, j] = u2_curr
 
-        if j % 100 == 0:
-            print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
+    if j % 100 == 0:
+        print(f" Step {j:4d}/{N_steps:4d}, t = {ts[j]:.5f}")
 
-    # compute superposition solution
-    U = U1 + U2
+# compute superposition solution
+U = U1 + U2
 ```
 
 Next, visualize the individual PDE solutions and their superposition (which will serve as our observed data that we wish to decompose via physics--informed source separation):
 
 ```python
-    # plot Minkowski diagrams
-    plt.figure()
-    plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
-    plt.xlabel('t')
-    plt.ylabel('x')
-    plt.title('U1')
-    plt.colorbar()
-    plt.show()
+# plot Minkowski diagrams
+plt.figure()
+plt.imshow(U1, extent=(x0, xf, 0, tf), aspect='auto')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('U1')
+plt.colorbar()
+plt.show()
 
-    plt.figure()
-    plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
-    plt.xlabel('t')
-    plt.ylabel('x')
-    plt.title('U2')
-    plt.colorbar()
-    plt.show()
+plt.figure()
+plt.imshow(U2, extent=(x0, xf, 0, tf), aspect='auto')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('U2')
+plt.colorbar()
+plt.show()
 
-    plt.figure()
-    plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
-    plt.xlabel('t')
-    plt.ylabel('x')
-    plt.title('U1 + U2')
-    plt.colorbar()
-    plt.show()
+plt.figure()
+plt.imshow(U, extent=(x0, xf, 0, tf), aspect='auto')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('U1 + U2')
+plt.colorbar()
+plt.show()
 ```
 
 After that, define helper functions for computing the residual that will be minimized:
 
 ```python
-    def dUdt_center(U, dt):
-        return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
+def dUdt_center(U, dt):
+    return (U[2:, 1:-1] - U[:-2, 1:-1]) / (2 * dt)
 
-    def dUdx_center(U, dx):
-        return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
+def dUdx_center(U, dx):
+    return (U[1:-1, 2:] - U[1:-1, :-2]) / (2 * dx)
 
-    def pde_res(U, c, dt, dx):
-        return dUdt_center(U, dt) + c * dUdx_center(U, dx)
+def pde_res(U, c, dt, dx):
+    return dUdt_center(U, dt) + c * dUdx_center(U, dx)
 
-    def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
-        nx, nt = U_obs.shape
-        U12 = x.reshape((2 * nx, nt))
-        U1, U2 = U12[:nx, :], U12[nx:, :]
+def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x):
+    nx, nt = U_obs.shape
+    U12 = x.reshape((2 * nx, nt))
+    U1, U2 = U12[:nx, :], U12[nx:, :]
 
-        r_dec  = U1 + U2 - U_obs
-        r_pde1 = 2.0 * jnp.sqrt(reg_pde1) * pde_res(U1, c1, dt, dx)
-        r_pde2 = 2.0 * jnp.sqrt(reg_pde2) * pde_res(U2, c2, dt, dx)
+    r_dec  = U1 + U2 - U_obs
+    r_pde1 = jnp.sqrt(2.0*reg_pde1) * pde_res(U1, c1, dt, dx)
+    r_pde2 = jnp.sqrt(2.0*reg_pde2) * pde_res(U2, c2, dt, dx)
 
-        neg1 = jnp.minimum(U1, 0.0)
-        neg2 = jnp.minimum(U2, 0.0)
+    neg1 = jnp.minimum(U1, 0.0)
+    neg2 = jnp.minimum(U2, 0.0)
 
-        r_pen1 = jnp.sqrt(mu) * neg1
-        r_pen2 = jnp.sqrt(mu) * neg2
+    r_pen1 = jnp.sqrt(mu) * neg1
+    r_pen2 = jnp.sqrt(mu) * neg2
 
-        r_mm1 = jnp.sum(lam_1 * (-neg1))
-        r_mm2 = jnp.sum(lam_2 * (-neg2))
+    r_mm1 = jnp.sum(lam_1 * (-neg1))
+    r_mm2 = jnp.sum(lam_2 * (-neg2))
 
-        return jnp.concatenate([
-            r_dec.ravel(),
-            r_pde1.ravel(),
-            r_pde2.ravel(),
-            r_pen1.ravel(),
-            r_pen2.ravel(),
-            jnp.atleast_1d(r_mm1),
-            jnp.atleast_1d(r_mm2),
-        ])
+    return jnp.concatenate([
+        r_dec.ravel(),
+        r_pde1.ravel(),
+        r_pde2.ravel(),
+        r_pen1.ravel(),
+        r_pen2.ravel(),
+        jnp.atleast_1d(r_mm1),
+        jnp.atleast_1d(r_mm2),
+    ])
 ```
 
 Now pose the physics--informed source separation problem with JAX's *jax.numpy* syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the *jaxopt.LevenbergMarquardt* method:
 
 ```python
-    nx, nt = U.shape
-    x = jnp.concatenate([U, U], axis=0).ravel()
+nx, nt = U.shape
+x = jnp.concatenate([U, U], axis=0).ravel()
 
-    lam_pde1 = 1e-1
-    lam_pde2 = 1e-1
+lam_pde1 = 1e-1
+lam_pde2 = 1e-1
 
-    mu = 10.0
-    mu_max = 1e5
-    outer_iters = 10
-    lm_maxiter = 300
+mu = 10.0
+mu_max = 1e5
+outer_iters = 10
+lm_maxiter = 300
 
-    lam_1 = jnp.zeros_like(U)
-    lam_2 = jnp.zeros_like(U)
+lam_1 = jnp.zeros_like(U)
+lam_2 = jnp.zeros_like(U)
 
-    prev_viol = jnp.inf
-    for k in range(outer_iters):
-        print(k)
+prev_viol = jnp.inf
+for k in range(outer_iters):
+    print(k)
 
-        x = jaxopt.LevenbergMarquardt(
-            residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
-            maxiter=lm_maxiter
-        ).run(x).params
+    x = jaxopt.LevenbergMarquardt(
+        residual_fun=lambda x_: get_residual(U, dx, dt, c1, c2, lam_pde1, lam_pde2, mu, lam_1, lam_2, x_),
+        maxiter=lm_maxiter
+    ).run(x).params
 
-        U12 = x.reshape((2 * nx, nt))
-        U1, U2 = U12[:nx, :], U12[nx:, :]
+    U12 = x.reshape((2 * nx, nt))
+    U1, U2 = U12[:nx, :], U12[nx:, :]
 
-        neg1 = jnp.minimum(U1, 0.0)
-        neg2 = jnp.minimum(U2, 0.0)
+    neg1 = jnp.minimum(U1, 0.0)
+    neg2 = jnp.minimum(U2, 0.0)
 
-        lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
-        lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
+    lam_1 = jnp.maximum(0.0, lam_1 - mu * neg1)
+    lam_2 = jnp.maximum(0.0, lam_2 - mu * neg2)
 
-        viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
-        if float(viol) < 0.8 * float(prev_viol):
-            mu = min(mu_max, 2.0 * mu)
-        prev_viol = viol
+    viol = jnp.sqrt(jnp.linalg.norm(neg1, ord='fro')**2 + jnp.linalg.norm(neg2, ord='fro')**2)
+    if float(viol) < 0.8 * float(prev_viol):
+        mu = min(mu_max, 2.0 * mu)
+    prev_viol = viol
 
-    U_hat  = np.array(x.reshape((2 * nx, nt)))
-    U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
+U_hat  = np.array(x.reshape((2 * nx, nt)))
+U1_hat, U2_hat = U_hat[:nx, :], U_hat[nx:, :]
 ```
 
 Last but not least, visualize the sources inferred through our solved physics--informed source separation problem:
 
 ```python
-    # plot Minkowski diagrams of inferred
-    plt.figure()
-    plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
-    plt.xlabel('t')
-    plt.ylabel('x')
-    plt.title('U1_hat')
-    plt.colorbar()
-    plt.show()
+# plot Minkowski diagrams of inferred
+plt.figure()
+plt.imshow(U1_hat, extent=(x0, xf, 0, tf), aspect='auto')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('U1_hat')
+plt.colorbar()
+plt.show()
 
-    plt.figure()
-    plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
-    plt.xlabel('t')
-    plt.ylabel('x')
-    plt.title('U2_hat')
-    plt.colorbar()
-    plt.show()
+plt.figure()
+plt.imshow(U2_hat, extent=(x0, xf, 0, tf), aspect='auto')
+plt.xlabel('t')
+plt.ylabel('x')
+plt.title('U2_hat')
+plt.colorbar()
+plt.show()
 ```
 
 ## Conclusion
