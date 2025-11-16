@@ -290,7 +290,7 @@ $$
 
 yielding a system of linear equations whose application is known as the Levenberg--Marquardt algorithm. 
 
-There are various benefits to adding $\gamma I$ to $J^\top J$, namely those stemming from increasing the positive--definiteness of the system matrix. To convey these benefits, let's first use the Rayleigh--Ritz quotient to show that eigenvalues of $J^\top J + \gamma I$ are larger than those of $J^\top J$ when $\gamma \geq 0$:
+There are various benefits to adding $\gamma I$ to $J^\top J$, namely those stemming from increasing the positive--definiteness of the system matrix. To convey these benefits, let's first use the Rayleigh--Ritz quotient to show that eigenvalues of $J^\top J + \gamma I$ are larger than those of $J^\top J$ when $\gamma > 0$:
 
 $$
 \begin{equation}
