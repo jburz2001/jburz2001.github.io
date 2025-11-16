@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Physics–Informed Source Separation (IN PROGRESS)
+title: Physics–Informed Source Separation
 date: 2025-11-13 10:14:00-0400
-description: TODO figures, proofreading # Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.
+description: Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.
 tags: ML optimization PDEs inverse-problems physics--informed JAX
 categories: numerical-methods
 giscus_comments: false
