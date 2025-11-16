@@ -31,15 +31,15 @@ This post elaborates on these points by explaining:
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 </div>
 
@@ -326,15 +326,15 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 </div>
 
@@ -346,11 +346,11 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 </div>
 
@@ -361,11 +361,11 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
 </div>
 
