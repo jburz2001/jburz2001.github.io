@@ -37,22 +37,33 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/assets/pdf/cv_justinBurzachiello.pdf";
           },
-        },{id: "post-polynomial-manifolds-for-dimensionality-reduction",
+        },{id: "post-x-ray-computed-tomography-in-progress",
         
-          title: "Polynomial Manifolds for Dimensionality Reduction",
+          title: "X--Ray Computed Tomography (IN PROGRESS)",
         
-        description: "Derivation of polynomial manifolds / spectral submanifolds from the Taylor series expansion, with additional discourse on properties of the corresponding encoders and decoders.",
+        description: "TODO figures, proofreading",
         section: "Posts",
         handler: () => {
           
-            window.location.href = "/blog/2025/polynomial-manifolds-for-dimensionality-reduction/";
+            window.location.href = "/blog/2025/x-ray-computed-tomography/";
           
         },
-      },{id: "post-jax-for-physics-informed-source-separation",
+      },{id: "post-latent-manifolds-from-the-taylor-series-expansion-in-progress",
         
-          title: "JAX for Physics–Informed Source Separation",
+          title: "Latent Manifolds From the Taylor Series Expansion (IN PROGRESS)",
         
-        description: "Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.",
+        description: "TODO figures, simpler wording, less mathematically overwhelming, proofreading",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/latent-manifolds-from-the-taylor-series-expansion/";
+          
+        },
+      },{id: "post-physics-informed-source-separation-in-progress",
+        
+          title: "Physics–Informed Source Separation (IN PROGRESS)",
+        
+        description: "TODO figures, proofreading",
         section: "Posts",
         handler: () => {
           
