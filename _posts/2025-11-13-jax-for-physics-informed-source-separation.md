@@ -132,8 +132,8 @@ $$
     +\ \lambda_{\text{PDE}_2}\, \| \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 \|_\text{F}^2 \\
 &\quad
     +\ \frac{1}{2}\mu^{(k)} \big( 
-        \| -\min(0, U_1^{(k)}) \|_\text{F}^2
-        +\ \| -\min(0, U_2^{(k)}) \|_\text{F}^2
+        \| \min(0,\,-U_1^{(k)}) \|_\text{F}^2
+        +\ \| \min(0,\,-U_2^{(k)}) \|_\text{F}^2
       \big)
 \Bigg],
 \end{aligned}
@@ -156,8 +156,8 @@ $$
 U_1^{(k)} + U_2^{(k)} - U \\[6pt]
 \sqrt{2\lambda_{\text{PDE}_1}}\;\big(\dot{U}^{(k)}_1 + c_1\, U_1^{(k)\prime}\big) \\[6pt]
 \sqrt{2\lambda_{\text{PDE}_2}}\;\big(\dot{U}^{(k)}_2 + c_2\, U_2^{(k)\prime}\big) \\[6pt]
-\sqrt{\mu^{(k)}}\,-\min(0, U_1^{(k)}) \\[6pt]
-\sqrt{\mu^{(k)}}\,-\min(0, U_2^{(k)})
+\sqrt{\mu^{(k)}}\,\min(0,\,-U_1^{(k)}) \\[6pt]
+\sqrt{\mu^{(k)}}\,\min(0,\,-U_2^{(k)})
 \end{bmatrix}
 \right\rVert_F^{\!2} \\[10pt]
 &=
@@ -182,8 +182,8 @@ $$
 &\;\arg\min_{U_1^{(k)},\, U_2^{(k)}} 
 \Bigg[
 \frac{1}{2}\, \bigl\lVert r^{(k)} \bigr\rVert_F^2 \\
-&\qquad + \big\langle \Lambda_1^{(k)},\, -\min(0, U_1^{(k)}) \big\rangle
-       + \big\langle \Lambda_2^{(k)},\, -\min(0, U_2^{(k)}) \big\rangle
+&\qquad + \big\langle \Lambda_1^{(k)},\, \min(0,\,-U_1^{(k)}) \big\rangle
+       + \big\langle \Lambda_2^{(k)},\, \min(0,\,-U_2^{(k)}) \big\rangle
 \Bigg],
 \end{aligned}
 \end{equation}
@@ -202,7 +202,7 @@ In the method of multipliers, Lagrange multipliers are treated as dual variables
 
 $$
 \begin{equation}
-\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} + \mu^{(k)}~\left(-\min\left(0, U_i^{(k)}\right) \right) ]_+,
+\Lambda_i^{(k+1)} = [\Lambda_i^{(k)} + \mu^{(k)}~\left(\min\left(0,\,-U_i^{(k)}\right) \right) ]_+,
 \end{equation}
 $$
 
