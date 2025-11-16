@@ -3,7 +3,7 @@ layout: post
 title: Physics–Informed Source Separation (IN PROGRESS)
 date: 2025-11-13 10:14:00-0400
 description: TODO figures, proofreading # Formulation and numerical solution of a PDE source separation inverse problem that is regularized with physics--informed a priori information.
-tags: ML optimization PDEs inverse-problems physics-informed JAX
+tags: ML optimization PDEs inverse-problems physics--informed JAX
 categories: numerical-methods
 giscus_comments: false
 related_posts: false
@@ -29,9 +29,26 @@ This post elaborates on these points by explaining:
 
 ## The Linear Advection PDE
 
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+</div>
+
+<div class="caption">
+    <strong>Left:</strong> Simulated true source one.
+    <strong>Middle:</strong> Simulated true source one + true source two.
+    <strong>Right:</strong> Simulated true source two.
+    This article explains how to extract the data in the left and right images from the middle image.
+</div>
 
 Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
@@ -307,19 +324,56 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 
 ## JAX for Physics--Informed Source Separation
 
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-(Left) Inferred source one from physics--informed source separation. (Middle) True source one + source two. (Right) Inferred source two from physics--informed source separation.
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
 
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U_sum_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
 
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-(Left) Inferred source one from physics--informed source separation. (Right) Elementwise difference between true source one and inferred source one, with Frobenius norm percentage error of the images.
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+</div>
 
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-{% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
-(Left) Inferred source two from physics--informed source separation. (Right) Elementwise difference between true source two and inferred source two, with Frobenius norm percentage error of the images.
+<div class="caption">
+    <strong>Left:</strong> Inferred source one from physics--informed source separation.
+    <strong>Middle:</strong> True source one + true source two.
+    <strong>Right:</strong> Inferred source two from physics--informed source separation.
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+</div>
+
+<div class="caption">
+    <strong>Left:</strong> Inferred source one from physics--informed source separation.
+    <strong>Right:</strong> Elementwise difference between true source one and inferred source one, with Frobenius norm percentage error.
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/posts/physics--informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
+    </div>
+</div>
+
+<div class="caption">
+    <strong>Left:</strong> Inferred source one from physics--informed source separation.
+    <strong>Right:</strong> Elementwise difference between true source two and inferred source two, with Frobenius norm percentage error.
+</div>
+
 
 JAX is an incredible Python library that facilitates the use of automatic differentiation to easily compute Jacobians for numerical optimization (and anywhere else they may be used, such as in the numerical solution of nonlinear systems of ordinary differential equations using Newton's method). One can also use it for just--in--time (JIT) compilation but we do not do so here. This library forms the backbone of another called JAXopt, where JAXopt has an intuitive interface for calling a routine that uses the Levenberg--Marquardt algorithm to solve a least--squares problem, such as the one we posed using physics--informed regularization. The following illustrates how to solve the optimization problem we've discussed so far through JAXopt.
 
