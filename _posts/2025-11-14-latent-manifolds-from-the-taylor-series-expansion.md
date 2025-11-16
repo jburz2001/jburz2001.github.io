@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Polynomial Manifolds for Dimensionality Reduction
+title: Latent Manifolds From the Taylor Series Expansion (IN PROGRESS)
 date: 2025-11-14 10:14:00-0400
-description: Derivation of polynomial manifolds / spectral submanifolds from the Taylor series expansion, with additional discourse on properties of the corresponding encoders and decoders.
+description: TODO figures, simpler wording, less mathematically overwhelming, proofreading # Derivation of polynomial manifolds / spectral submanifolds from the Taylor series expansion, with additional discourse on properties of the corresponding encoders and decoders.
 tags: ML optimization dimensionality-reduction
 categories: numerical-methods
 giscus_comments: false
@@ -663,8 +663,8 @@ Our goal is to minimize the loss function $J(\mathbf{V}_2)$ with respect to the 
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:V2_gradient}
-    \nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2}) &= \frac{1}{2}\nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) 
-    &\quad + \cancel{ \frac{1}{2}\nabla_{\mathbf{V}_{2}}\text{tr}\left( \left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right) S_{1}S_{1}^{\top}\left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right)  \right) }  \nonumber\\
+    \nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2}) &= \frac{1}{2}\nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \nabla_{\mathbf{V}_{2}}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) \\
+    &\quad + \cancel{ \frac{1}{2}\nabla_{\mathbf{V}_{2}}\text{tr}\left( \left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right) S_{1}S_{1}^{\top}\left( \mathbf{I}-\mathbf{V}_{1}\mathbf{V}_{1}^{\top} \right)  \right) }  \nonumber \\
     &= \mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} - \mathbf{W}_{2}\mathcal{E}_{1}^{\top},
 \end{aligned}
 \end{equation}
