@@ -12,6 +12,7 @@ toc:
 ---
 
 ## Source Separation: From Smoothies to PDEs
+
 Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called source separation and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
 
 As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of "smoothie--informed machine learning."
@@ -74,6 +75,7 @@ $$
 where $c_i$ are constants quantifying advection speed. In general, determining the optimal value of $n$ (i.e., the number of sources being mixed) may not be trivial. However, there are plenty of data--driven methods to accomplish this. For instance, one could apply the line Hough transform to the Minkowski spacetime diagram of the observed solution then compute the number of disjoint maxima in this Hough space.
 
 ## Constrained Optimization for Physics--Informed Source Separation
+
 Recall that our observed signal is the superposition of multiple individually advecting signals. As such, we can pose the following BSS problem:
 
 $$
@@ -210,6 +212,7 @@ where $[\cdot]_+ = \max(0,\cdot)$ clips negative entries to zero, ensuring that 
 
 
 ## The Levenberg--Marquardt Algorithm for Least--Squares Problems
+
 The Levenberg--Marquardt algorithm is a workhorse tool for solving both linear and nonlinear least--squares problems with objective function $\frac{1}{2} \left\lVert r \right\rVert_\text{F}^2$. This algorithm can be thought of as an extension of the Gauss--Newton algorithm that incorporates a trust region for regularization. Let's derive this algorithm with calculus.
 
 First, consider the optimization problem of identifying the parameter, $\hat{\beta}$, which minimizes the least--squares error of fitting observed data, $y$, with a curve, $f(x, \beta)$:
@@ -379,7 +382,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
 </div>
 
 
-JAX is an incredible Python library that facilitates the use of automatic differentiation to easily compute Jacobians for numerical optimization (and anywhere else they may be used, such as in the numerical solution of nonlinear systems of ordinary differential equations using Newton's method). One can also use it for just--in--time (JIT) compilation but we do not do so here. This library forms the backbone of another called JAXopt, where JAXopt has an intuitive interface for calling a routine that uses the Levenberg--Marquardt algorithm to solve a least--squares problem, such as the one we posed using physics--informed regularization. The following illustrates how to solve the optimization problem we've discussed so far through JAXopt.
+JAX is an incredible Python library that facilitates the use of automatic differentiation to easily compute Jacobians for numerical optimization (and anywhere else they may be used, such as in the numerical solution of nonlinear systems of ordinary differential equations using Newton's method). One can also use it for just--in--time (JIT) compilation but we do not do so here. This library forms the backbone of another called JAXopt, which has an intuitive interface for calling a routine that uses the Levenberg--Marquardt algorithm to solve a least--squares problem, such as the one we posed using physics--informed regularization. The following illustrates how to solve the optimization problem we've discussed so far through JAXopt.
 
 First, imports:
 
@@ -665,4 +668,5 @@ plt.close(fig_err)
 ```
 
 ## Conclusion
+
 In this post we demonstrated how to use JAX and JAXopt to implement the Levenberg--Marquardt algorithm for solving a least--squares problem whose objective function is formulated using the method of multipliers (aka, augmented Lagrangian method). This was applied to physics--informed source separation of the superposition of two advecting signals, with physics prescribed by 1D linear advection.

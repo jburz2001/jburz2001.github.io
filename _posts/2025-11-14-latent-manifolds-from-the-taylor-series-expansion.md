@@ -52,6 +52,9 @@ The identification and use of latent manifolds from data is a field of machine l
 
 ## The Taylor Series Expansion
 
+Recall that our goal is to sample the state of a dynamical system's physical observables over time and use these data to parameterize a "surface" upon which our data live. The word surface is used loosely here since it can be 1--dimensional (a curve), 2--dimensional (a fabric), or of any higher dimension. These surfaces are called manifolds and possess important mathematical structure that is the subject of immense study in mathematics through differential geometry, topology, and more. Regardless, it helps to make assumptions on our inferred parameterization of a latent manifold, such as its dimensionality and nonlinearity. Assuming that our latent manifold is a function of the corresponding system's latent variables, we can impose different functions as structures to represent it. In this post we'll assume the parameterization as a power series function of latent variables; more specifically, as a Taylor series function of latent variables.
+
+Taylor's Theorem states that an $m$ times continuously differentiable function can be approximated by its $n$th degree Taylor polynomial plus a remainder. This post assumes (for simplicity) that the latent manifold under study is an analytic function such that it is infinitely differentiable and possesses a convergent Taylor series expansion about every point, but this is not true for all dynamical systems since not all vector fields are analytic. Researchers in the spectral submanifold community strongly emphasize the importance of the continuous differentiability of the Taylor series latent manifold but others those who call these latent manifolds polynomial manifolds tend to not do so.
 
 Let's first define the Taylor series expansion of a multivariate, vector--valued function, $\mathbf{y}:\mathbb{R}^{n}\rightarrow\mathbb{R}^N$, where $(\cdot)^{\otimes p}:\mathbb{R}^N\rightarrow\mathbb{R}^{n^p}$ denotes the $p$th Kronecker power and $[\mathrm{D}^p\mathbf{y}]_{\mathbf{x}_0}$ denotes the tensor of all $p$th--order partial derivatives of elements of $\mathbf{y}$ with respect to elements of $\mathbf{x}$---each evaluated at $\mathbf{x}_0$ after derivative computation:
 
@@ -71,14 +74,14 @@ $$
 
 Expanding our Taylor series about the origin ensures that we can construct a non--affine subspace to serve as the abscissae of our inferred latent manifold. In particular, we will build the latent manifold as a graph over this subspace spanned by the latent variables. As we will later show, the range of the linear decoder, $\mathbf{V}_1$, can well--approximate the latent manifold's tangent space about the origin since it is inferred from data as the aforementioned Taylor expansion's Jacobian.
 
-Leveraging a Maclaurin expansion does not, however, mean that the physical observables, $\mathbf{y}_i\in\mathbb{R}^N$ naturally exist about the origin. In practice, these snapshots of the dynamical system's state are shifted about the origin, but various methods exist to do so. In polynomial manifold literature, the mean snapshot is typically chosen as the anchor of the abscissa but the initial snapshot has also been used. However, in spectral submanifold literature, a hyperbolic fixed point of the dynamical system is shifted to the origin to anchorthe abscissa.
+Leveraging a Maclaurin expansion does not, however, mean that the physical observables, $\mathbf{y}_i\in\mathbb{R}^N$ naturally exist about the origin. In practice, these snapshots of the dynamical system's state are shifted about the origin, but various methods exist to do so. In polynomial manifold literature, the mean snapshot is typically chosen as the anchor of the abscissa but the initial snapshot has also been used. However, in spectral submanifold literature, a hyperbolic fixed point of the dynamical system is shifted to the origin to anchorthe abscissa. Those familiar with linear principal component analysis (PCA) / proper orthogonal decomposition (POD) likely recognize this step of shifting data about the origin (usually using the mean datum as the origin). This is because, as we'll see, linear PCA/POD methods construct latent manifolds as linear manifolds (i.e., subspaces) by truncating the multivariate, vector--valued Maclaurin series expansion to neglect quadratic and higher--order nonlinear structures in their data.
 
-The following subsections explicitly write out the Taylor expansions for the different valuse of $n$ and $N$.
+The following subsections derive Taylor expansions for the different valuse of $n$ and $N$. Pardon me for using both "Taylor expansion" and "Maclaurin expansion" terminology in this post. Both terminologies are correct anyways since a Maclaurin expansion is a special case of the Taylor expansion and we will assume that our latent manifolds are constructed about the origin.
 
 
 ### One Input, One Output $(n=1,N=1)$
 
-In this subsection we consider the Maclaurin expansion of a univariate, scalar--valued function, where $\mathbf{y}\equiv y$, $\mathbf{x}\equiv x$, and $\mathbf{0}\equiv 0$:
+In this subsection we consider the Taylor expansion of a univariate, scalar--valued function, where $\mathbf{y}\equiv y$, $\mathbf{x}\equiv x$, and $\mathbf{0}\equiv 0$:
 
 $$
 \begin{equation}
@@ -108,10 +111,11 @@ $$
 \end{equation}
 $$
 
+This corresponds to a dynamical system with one physical observable described by one latent variable. Dimensionality reduction would not be applied here since we are already measuing a single quantity, the minimal we could track.
 
 ### One Input, Multiple Outputs $(n=1, N\neq1)$
 
-Now we consider the Maclaurin expansion of a univariate, vector--valued function, where $\mathbf{x}\equiv x$ and $\mathbf{0}\equiv 0$:
+Now we consider the Taylor expansion of a univariate, vector--valued function, where $\mathbf{x}\equiv x$ and $\mathbf{0}\equiv 0$:
 
 $$
 \begin{equation}
@@ -171,10 +175,12 @@ $$
 \end{equation}
 $$
 
+Here, one could envision a dynamical system with $N$ physical observables but a singular latent variable "pulling the strings" behind the scenes. Systems well--described by a singular latent variable are rather rare but it turns out that systems described by two form an important class of dynamical systems, motivating the case of $(n\neq1,\,N\neq1)$ case we are building up to. Take note that I said referred to systems "well--described" by a singular latent variable and not systems "fully--described" by a singular latent variable. This is because a single latent variable might describe most of the dynamics---perhaps even the dynamics we actually care about---but not all of the observed data.
+
 
 ### Multiple Inputs, One Output $(n\neq1, N=1)$
 
-Here we consider the Maclaurin expansion of a multivariate, scalar--valued function, where $\mathbf{y}\equiv y$:
+Here we consider the Taylor expansion of a multivariate, scalar--valued function, where $\mathbf{y}\equiv y$:
 
 $$
 \begin{equation}
@@ -249,10 +255,11 @@ $$
 
 where letters $J$ and $H$ are used due to their associations with the Jacobian and Hessian, respectively.
 
+This case is the "anti--dimensionality reduction" case, since we have multiple latent variables describing a single physical observable, so it doesn't make much sense to study in and of itself for dimensionality reduction. However, as we'll soon see, this case of $(n=1, N\neq1)$ is important for deriving the Taylor expansion of a function where $(n\neq1, N\neq1)$.
 
 ### Multiple Inputs, Multiple Ouputs $(n\neq1, N\neq1)$
 
-Finally, let's consider the Maclaurin expansion of a multivariate, vector--valued function. Recall that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element and that the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
+Finally, let's consider the Taylor expansion of a multivariate, vector--valued function. Recall that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element and that the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
 
 $$
 \begin{equation}
@@ -276,6 +283,8 @@ $$
 \end{equation}
 $$
 
+This is the most general case and forms the mathematical foundation for inferring latent manifolds from data. Here, we have any number of latent variables describing any number of physical observables.
+
 
 ### Multilinear Forms
 
@@ -290,7 +299,7 @@ $$
 \end{equation}
 $$
 
-The following table defines multiliner forms:
+The following table defines multilinear forms:
 
 | Form | Mapping | Description |
 |------|---------|-------------|
@@ -298,11 +307,13 @@ The following table defines multiliner forms:
 | $H$ | $X \times X \to \mathbb{R}$ | Bilinear form |
 | $F$ | $X^k \to \mathbb{R}$ | $k$–linear form |
 
+The structure of the inferred latent manifold parameterized by a Taylor series expansion has its polynomial nonlinear structure encoded by different multilinear forms: the linear form encodes linear structure (i.e., that underpinning the subspace inferred through PCA/POD); the quadratic form encodes quadratic structure (i.e., the quadratic structure of a quadratic manifold); and so on for $k$--linear forms and higher order structure.
 
 ## Posing an Optimization Problem to Parameterize a Truncated Maclaurin Polynomial
 
+Now we want to leverage the equation for a general Taylor series expansion when $(n\neq1, N\neq1)$ so that we can use it as a model for our underlying latent manifold. Doing so facilitates its use in an optimization problem for parameterizing the multilinear forms composing the Taylor polynomial. This optimization problem is the same one solved in PCA/POD, spectral submanifold, and polynomial manifold applications. Be aware that this subsection is rather mathy (as if this blog post wasn't already).
 
-Let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion: 
+First, let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion: 
 
 $$
 \begin{equation}
@@ -539,6 +550,8 @@ $$
 \end{equation}
 $$
 
+This truncation is necessary since our end goal is to solve a problem on a computer, so we cannot infer an infinite amount of terms. However, it does not mean that our results won't be accurate, as truncations such that the largest $d$ is $1$ are common---they, in fact, formulate linear PCA/POD!
+
 Assuming that we have access to numerical data sufficiently describing $\tilde{\mathbf{y}}$ and $\mathbf{x}$, we can thus pose the following least--squares optimization problem to infer the values of $G_{i}(\mathbf{0};j)$ and $H_{i}(\mathbf{0};j,k)$ where $i\in \{ 1,2,\dots,N \}$ and $j,k\in\{1,2,\dots,n\}$:
 
 $$
@@ -584,7 +597,6 @@ $$
 \end{aligned}
 \end{equation}
 $$
-
 
 ## Sequential Closure Modeling
 
@@ -806,6 +818,7 @@ $$
 \end{aligned}
 \end{equation}
 $$
+
 
 ## Conclusion
 
