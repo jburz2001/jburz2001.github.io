@@ -463,7 +463,7 @@ $$
 \end{equation}
 $$
 
-where the factor of $1/2$ was absorbed into each $H_i(\mathbf{0};j,k)$.
+where the factor of $1/2$ was absorbed into each $H_i(\mathbf{0};j,k)$ to simplify notation.
 
 To better understand this equation, we now write out the elements of its matrix operators explicitly:
 
