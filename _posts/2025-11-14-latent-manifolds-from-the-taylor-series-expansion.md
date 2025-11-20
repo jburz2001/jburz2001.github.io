@@ -648,7 +648,7 @@ This reconstruction error with respect to $\mathbf{V}_1$ can then be used as the
 
 ### Inferring $\mathbf{V}_2$
 
-We can leverage $\mathcal{E}_1$ to formulate an optimization problem for $\mathbf{V}_2$ such that it best fixes the error left over from $\mathbf{V}_1$. This is written out in the following equation, where $\mathbf{W}_2=\mathbf{S}^{\diamond 2} = \mathbf{S}\diamond\mathbf{S}=\begin{pmatrix}
+We can leverage $\mathcal{E}_1$ to formulate an optimization problem for $\mathbf{V}_2$ such that it best fixes the error left over from $\mathbf{V}_1$. This is written out in the following equation, where $\mathbf{W}_2=\mathbf{S}^{\odot 2} = \mathbf{S}\odot\mathbf{S}=\begin{pmatrix}
     \mathbf{s}_1\otimes\mathbf{s}_1 \dots \mathbf{s}_K\otimes \mathbf{s}_K
 \end{pmatrix}$ is the second Khatri--Rao power of $\mathbf{S}$, storing all quadratic snapshot monomials of all snapshots:
 
@@ -765,7 +765,7 @@ $$
 \end{equation}
 $$
 
-where $\mathbf{W}_3 = \mathbf{S}^{\diamond3} =  \mathbf{S}\diamond \mathbf{S}\diamond \mathbf{S} = (\mathbf{s}_1\otimes\mathbf{s}_1\otimes\mathbf{s}_1\dots\mathbf{s}_K\otimes\mathbf{s}_K\otimes\mathbf{s}_K)$ is the third Khatri--Rao power of $\mathbf{S}$ that stores all cubic monomial terms of all snapshots.
+where $\mathbf{W}_3 = \mathbf{S}^{\diamond3} =  \mathbf{S}\odot \mathbf{S}\odot \mathbf{S} = (\mathbf{s}_1\otimes\mathbf{s}_1\otimes\mathbf{s}_1\dots\mathbf{s}_K\otimes\mathbf{s}_K\otimes\mathbf{s}_K)$ is the third Khatri--Rao power of $\mathbf{S}$ that stores all cubic monomial terms of all snapshots.
 
 We can prove that $\mathbf{V}_3$ is orthogonal to both $\mathbf{V_1}$ and $\mathbf{V_2}$:
 
@@ -810,7 +810,7 @@ $$
 \end{equation}
 $$
 
-where $\mathbf{W}\_{k+1}=\mathbf{S}^{\diamond(k+1)}$ is the $(k+1)$th Khatri--Rao power of $\mathbf{S}$ and $\mathcal{E}\_k$ is the reconstruction error with respect to decoders $\{ \mathbf{V}\_p \}\_{p=1}^{k}$.
+where $\mathbf{W}\_{k+1}=\mathbf{S}^{\odot(k+1)}$ is the $(k+1)$th Khatri--Rao power of $\mathbf{S}$ and $\mathcal{E}\_k$ is the reconstruction error with respect to decoders $\{ \mathbf{V}\_p \}\_{p=1}^{k}$.
 
 Next, we can prove that decoder $\mathbf{V}\_{k+1}$ is orthogonal to $\{ \mathbf{V}\_1, \dots, \mathbf{V}\_{k}\}$:
 
