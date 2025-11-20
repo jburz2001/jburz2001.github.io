@@ -612,7 +612,7 @@ $$
 \end{equation}
 $$
 
-where $\tilde{\mathbf{Y}} = \begin{bmatrix} \tilde{\mathbf{y}}_1 & \cdots & \tilde{\mathbf{y}}_K \end{bmatrix}$ and $mathbf{S}^{\odot p} = \begin{bmatrix} \mathbf{s}_1^{\otimes p} & \cdots & \mathbf{s}_K^{\otimes p} \end{bmatrix}$, and $K$ is the number of samples (aka, snapshots).
+where $\tilde{\mathbf{Y}} = \begin{bmatrix} \tilde{\mathbf{y}}_1 & \cdots & \tilde{\mathbf{y}}_K \end{bmatrix}$ and $\mathbf{S}^{\odot p} = \begin{bmatrix} \mathbf{s}_1^{\otimes p} & \cdots & \mathbf{s}_K^{\otimes p} \end{bmatrix}$, and $K$ is the number of samples (aka, snapshots).
 
 
 ## Sequential Closure Modeling
