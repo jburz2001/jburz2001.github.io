@@ -682,9 +682,9 @@ $$
 \end{equation}
 $$
 
-where we can see that including the factor of $1/2$ in $J(\mathbf{V}_{2})$ allows us to have no non--unity scalars in our expression of the gradient in the equation for $\nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2})$.
+where we can see that including the factor of $1/2$ in $J(\mathbf{V}\_2)$ allows us to have no non--unity scalars in our expression of the gradient in the equation for $\nabla_{\mathbf{V}\_{2}}J(\mathbf{V}\_{2})$.
 
-Now that we have $\nabla_{\mathbf{V}_{2}}J(\mathbf{V}_{2})$ we can force it to be $0$ so that we identify a root of $\nabla_{\mathbf{V}_2}J(\mathbf{V}_2)$ and thus an extremum of $J(\mathbf{V}_2)$:
+Now that we have $\nabla_{\mathbf{V}\_{2}}J(\mathbf{V}\_{2})$ we can force it to be $0$ so that we identify a root of $\nabla_{\mathbf{V}\_2}J(\mathbf{V}\_2)$ and thus an extremum of $J(\mathbf{V}\_2)$:
 
 $$
 \begin{equation}
@@ -762,7 +762,7 @@ $$
 \end{equation}
 $$
 
-where $\left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right] \left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right]^{\top}$ is a projector onto the orthogonal complement of $\text{span}\{ \mathbf{v}^{(1)}_1, \dots, \mathbf{v}^{(n)}_1, \mathbf{v}^{(1)}_2, \dots, \mathbf{v}^{(n^2)}_1 \}$. Therefore, $\mathbf{V}_3\perp \{\mathbf{V}_1, \mathbf{V}_2\}$.
+where $\left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right] \left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right]^{\top}$ is a projector onto the orthogonal complement of $\text{span}\{ \mathbf{v}^{(1)}\_1, \dots, \mathbf{v}^{(n)}\_1, \mathbf{v}^{(1)}\_2, \dots, \mathbf{v}^{(n^2)}\_1 \}$. Therefore, $\mathbf{V}\_3 \perp \{\mathbf{V}\_1, \mathbf{V}\_2\}$.
 
 Additionally, we can identify a closed--form solution to the least--squares problem for $\mathbf{V}_3$ using the QR decomposition:
 
@@ -781,7 +781,7 @@ $$
 
 ### Inferring $\mathbf{V}_{k+1}$
 
-Finally, we may apply logic analogous to that used to derive $\mathbf{V}_2$ from $\mathbf{V}_1$ and $\mathbf{V_3}$ from $\{\mathbf{V_1},\mathbf{V_2}\}$ in order to derive $\mathbf{V}_{k+1}$ from $\{\mathbf{V}_k\}_{k=1}^d$.
+Finally, we may apply logic analogous to that used to derive $\mathbf{V}\_2$ from $\mathbf{V}\_1$ and $\mathbf{V}\_3$ from $\{\mathbf{V}\_1,\mathbf{V}\_2\}$ in order to derive $\mathbf{V}\_{k+1}$ from $\{\mathbf{V}\_k\}\_{k=1}^d$.
 
 We begin by posing the following least--squares problem for $\mathbf{V}_{k+1}$:
 
@@ -793,9 +793,9 @@ $$
 \end{equation}
 $$
 
-where $\mathbf{W}_{k+1}=\mathbf{S}^{\diamond(k+1)}$ is the $(k+1)$th Khatri--Rao power of $\mathbf{S}$ and $\mathcal{E}_k$ is the reconstruction error with respect to decoders $\{ \mathbf{V}_p \}_{p=1}^{k}$.
+where $\mathbf{W}\_{k+1}=\mathbf{S}^{\diamond(k+1)}$ is the $(k+1)$th Khatri--Rao power of $\mathbf{S}$ and $\mathcal{E}\_k$ is the reconstruction error with respect to decoders $\{ \mathbf{V}\_p \}\_{p=1}^{k}$.
 
-Next, we can prove that decoder $\mathbf{V}_{k+1}$ is orthogonal to $\{ \mathbf{V}_1, \dots,\mathbf{V}_{k}\}$: 
+Next, we can prove that decoder $\mathbf{V}\_{k+1}$ is orthogonal to $\{ \mathbf{V}\_1, \dots, \mathbf{V}\_{k}\}$:
 
 $$
 \begin{equation}
