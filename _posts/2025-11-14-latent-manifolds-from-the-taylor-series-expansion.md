@@ -13,17 +13,17 @@ toc:
 
 ## Latent Variables of a Dynamical System
 
-Computational physics simulations often solve large systems of coupled ordinary differential equations (ODEs). Such systems may naturally model the physics (e.g., molecular dynamics); othertimes, they may result from a method of lines discretization of an unsteady state partial differential equation (PDE)---discretion in space but not in time. Regardless of their origin, these systems abound and can be modeled as a deceptively simple equation:
+Computational physics simulations often solve large systems of coupled ordinary differential equations (ODEs). Such systems may naturally model the physics (e.g., molecular dynamics); other times, they may result from a method of lines discretization of an unsteady state partial differential equation (PDE)---discretization in space but not in time. Regardless of their origin, these systems abound and can often be modeled as a deceptively simple equation:
 
 $$
 \begin{equation}
-    \frac{d\mathbf{y}}{dt} = \mathbf{f}(x, t),
+    \frac{d\mathbf{y}}{dt} = \mathbf{f}(\mathbf{y}, t),
 \end{equation}
 $$
 
-where $\mathbf{y}$ is the state of the dynamical system, $t$ is time, and $f$ is the so--called vector field of the dynamical system that models how the state evolves over time.
+where $\mathbf{y}$ is the state of the dynamical system, $t$ is time, and $f$ is the vector field of the dynamical system, which models how the state evolves over time.
 
-In this dynamical system, $\mathbf{y} = \mathbf{y}(t)\in\mathbb{R}^{N}$ since the state has $N$ degrees of freedom. As an example, let's say an engineer wants to model the diffusion of temperature through a 12--inch metal rod after a candle is placed near it at the left. In real--life there are an uncountably infinite number of positions along the rod: $1.1$in from the left, $1.11$in from the left, $1.111$in from the left, and so on ad infinitum. This means that one can analytically model the system's temperature as a function---an infinite dimensional vector---of space and time, yielding the following PDE:
+In this dynamical system, $\mathbf{y} = \mathbf{y}(t)\in\mathbb{R}^{N}$ since the state has $N$ degrees of freedom. As an example, let's say an engineer wants to model the diffusion of temperature through a 12-inch metal rod after a candle is placed near it on the left end. In real--life there are an uncountably infinite number of positions along the rod: $1.1$in from the left, $1.11$in from the left, $1.111$in from the left, and so on ad infinitum. This means that one can analytically model the system's temperature as a function of space and time, yielding the following PDE:
 
 $$
 \begin{equation}
@@ -33,7 +33,7 @@ $$
 
 where $\nu$ is a diffusion constant quantifying the thermal conductivity of the rod, $\frac{\partial^2}{\partial x^2}$ is a 2nd--order partial differential operator in space, and $T\in\mathbb{R}^{\infty}$ is temperature modeled as a function of location $x$ and time $t$. The algebraic structure of this equation and the spectral properties of the differential operators encode the physics.
 
-Computers, however, have limited memory, so the aforementioned infinite continuum of positions along the 1D rod must be discretized into a finite collection of cells spanning the 12--inches of space. The number of discretization cells is effectively the spatial resolution of the computational physics model. Using the method of lines to semi--discretize the 1D linear heat equation yields the following system of ODEs:
+Computers, however, have limited memory, so the aforementioned infinite continuum of positions along the 1D rod must be discretized into a finite collection of cells spanning the 12 inches of metal. The number of discretization cells is effectively the spatial resolution of the computational physics model. Using the method of lines to semi--discretize the 1D linear heat equation yields the following system of ODEs:
 
 $$
 \begin{equation}
@@ -45,7 +45,7 @@ where $\mathbf{y}\in\mathbb{R}^N$ with $N$ being the number of discretization ce
 
 The integer, $N$, is arbitrary, but larger values correspond to higher spatial resolution, which may be necessary for resolving details. Unfortunately, increasing $N$ increases computational costs in both memory and time since more data must be stored and processed. This is just like how having a 4K resolution image of me is great since you have $N = 3840 \times 2160 = 8,294,400$ pixels to resolve fine details with but such a 4K image requires much more storage than a Full HD image with $N = 1920 \times 1080 = 2,073,600$ pixels. 
 
-The number $N$ is arbitrary---you can still simulate diffusion with $N=10$, $N=100$, or $N=1,000,000$! Importantly though, the actual physics are aptly modeled with a small number of latent variables that we don't directly observe. In other words, even though we have $n$ physical observables (i.e., the temperature readings at each of our $n$ cells), there are actually be $n\ll N$ latent variables that evolve over time! This is best understood geometrically: the state of a dynamical system can be envisioned as a point in $\mathbb{R}^N$ that flies around over time; in physics, the path traced out happens to be some curve in low--dimensional surface. To better imagine this concept, put your index finger on your nose then move your finger back and forth as if you were tracing out Pinoccio's nose. This curve you traced out with your finger is a 1--dimensional curve embedded in a 3--dimensional space, so positions along the curve can aptly be described with a single latent variable, that being the "distance from nose" instead of 3 different physical observables $x$, $y$, and $z$! In physics, the same logic applies, but we can take computer simulations with hundreds of millions of physical observables but simulate them in the latent manifolds rather than in the high--dimensional physical observable space, yielding astronomial speedups. As an example, researchers have taken a soft robot with $N\approx 800,000$ degrees of freedom but controlled it by actuating $n=2$ latent variables.
+The number $N$ is arbitrary---you can still simulate diffusion with $N=10$, $N=100$, or $N=1,000,000$! Importantly though, the actual physics are aptly modeled with a small number of latent variables that we don't directly observe. In other words, even though we have $N$ physical observables (i.e., the temperature readings at each of our $N$ cells), there are actually $n\ll N$ latent variables that evolve over time! This is best understood geometrically: the state of a dynamical system can be envisioned as a point in $\mathbb{R}^N$ that flies around over time; in physics, the path traced out happens to be some curve in low--dimensional surface. To better imagine this concept, put your index finger on your nose then move your finger back and forth as if you were tracing out Pinocchio's nose. This curve you traced out with your finger is a 1--dimensional curve embedded in a 3--dimensional space, so positions along the curve can aptly be described with a single latent variable, that being the "distance from nose" instead of 3 different physical observables $x$, $y$, and $z$! In physics, the same logic applies, but we can take computer simulations with hundreds of millions of physical observables but simulate them in the latent manifolds rather than in the high--dimensional physical observable space, yielding astronomical speedups. As an example, researchers have taken a soft robot with $N\approx 800,000$ degrees of freedom but controlled it by actuating $n=2$ latent variables.
 
 The identification and use of latent manifolds from data is a field of machine learning called dimensionality reduction; it is paramount to model order reduction in computational physics, principal component analysis in statistics, and autoencoder architectures in deep learning--based artificial intelligence. This post discusses how to infer latent manifolds from snapshots of the state of a physical system under the assumption that the manifold is well--modeled by a Taylor series expansion. In doing so, we will derive the data--driven optimization problem used to infer what some researchers in model order reduction call a polynomial manifold but others call a spectral submanifold.
 
@@ -74,9 +74,9 @@ $$
 
 Expanding our Taylor series about the origin ensures that we can construct a non--affine subspace to serve as the abscissae of our inferred latent manifold. In particular, we will build the latent manifold as a graph over this subspace spanned by the latent variables. As we will later show, the range of the linear decoder, $\mathbf{V}_1$, can well--approximate the latent manifold's tangent space about the origin since it is inferred from data as the aforementioned Taylor expansion's Jacobian.
 
-Leveraging a Maclaurin expansion does not, however, mean that the physical observables, $\mathbf{y}_i\in\mathbb{R}^N$ naturally exist about the origin. In practice, these snapshots of the dynamical system's state are shifted about the origin, but various methods exist to do so. In polynomial manifold literature, the mean snapshot is typically chosen as the anchor of the abscissa but the initial snapshot has also been used. However, in spectral submanifold literature, a hyperbolic fixed point of the dynamical system is shifted to the origin to anchorthe abscissa. Those familiar with linear principal component analysis (PCA) / proper orthogonal decomposition (POD) likely recognize this step of shifting data about the origin (usually using the mean datum as the origin). This is because, as we'll see, linear PCA/POD methods construct latent manifolds as linear manifolds (i.e., subspaces) by truncating the multivariate, vector--valued Maclaurin series expansion to neglect quadratic and higher--order nonlinear structures in their data.
+Leveraging a Maclaurin expansion does not, however, mean that the physical observables, $\mathbf{y}_i\in\mathbb{R}^N$ naturally exist about the origin. In practice, these snapshots of the dynamical system's state are shifted about the origin, but various methods exist to do so. In polynomial manifold literature, the mean snapshot is typically chosen as the anchor of the abscissa but the initial snapshot has also been used. However, in spectral submanifold literature, a hyperbolic fixed point of the dynamical system is shifted to the origin to anchor the abscissa. Those familiar with linear principal component analysis (PCA) / proper orthogonal decomposition (POD) likely recognize this step of shifting data about the origin (usually using the mean datum as the origin). This is because, as we'll see, linear PCA/POD methods construct latent manifolds as subspaces. They do this by truncating the multivariate, vector--valued Maclaurin series expansion to neglect quadratic and higher--order nonlinear structures in their data.
 
-The following subsections derive Taylor expansions for the different valuse of $n$ and $N$. Pardon me for using both "Taylor expansion" and "Maclaurin expansion" terminology in this post. Both terminologies are correct anyways since a Maclaurin expansion is a special case of the Taylor expansion and we will assume that our latent manifolds are constructed about the origin.
+The following subsections derive Taylor expansions for the different values of $n$ and $N$. Pardon me for using both "Taylor expansion" and "Maclaurin expansion" terminology in this post. Both terminologies are correct anyway since a Maclaurin expansion is a special case of the Taylor expansion and we will assume that our latent manifolds are constructed about the origin.
 
 
 ### One Input, One Output $(n=1,N=1)$
@@ -94,7 +94,7 @@ $$
       \underbrace{ [\mathrm{D}^2y]_{0} }_{1\times 1}\,
       \underbrace{ x^{\otimes 2} }_{1\times 1}
     + \cdots\\
-    &= f(0) + \frac{1}{2}\left[ \frac{\partial y}{\partial x}(0) \right]x + \frac{1}{2}\left[\frac{\partial^{2}y}{\partial x^{2}}(0)\right]x^{2} + \dots~,\notag
+    &= y(0) + \frac{1}{2}\left[ \frac{\partial y}{\partial x}(0) \right]x + \frac{1}{2}\left[\frac{\partial^{2}y}{\partial x^{2}}(0)\right]x^{2} + \dots~,\notag
 \end{aligned}
 \end{equation}
 $$
@@ -111,7 +111,7 @@ $$
 \end{equation}
 $$
 
-This corresponds to a dynamical system with one physical observable described by one latent variable. Dimensionality reduction would not be applied here since we are already measuing a single quantity, the minimal we could track.
+This corresponds to a dynamical system with one physical observable described by one latent variable. Dimensionality reduction would not be applied here since we are already measuring a single quantity, the minimal number we could track.
 
 ### One Input, Multiple Outputs $(n=1, N\neq1)$
 
@@ -255,11 +255,11 @@ $$
 
 where letters $J$ and $H$ are used due to their associations with the Jacobian and Hessian, respectively.
 
-This case is the "anti--dimensionality reduction" case, since we have multiple latent variables describing a single physical observable, so it doesn't make much sense to study in and of itself for dimensionality reduction. However, as we'll soon see, this case of $(n=1, N\neq1)$ is important for deriving the Taylor expansion of a function where $(n\neq1, N\neq1)$.
+This case is the "anti--dimensionality reduction" case, since we have multiple latent variables describing a single physical observable, so it we can only increase dimension. However, as we'll soon see, this case of $(n=1, N\neq1)$ is important for deriving the Taylor expansion of a function where $(n\neq1, N\neq1)$.
 
-### Multiple Inputs, Multiple Ouputs $(n\neq1, N\neq1)$
+### Multiple Inputs, Multiple Outputs $(n\neq1, N\neq1)$
 
-Finally, let's consider the Taylor expansion of a multivariate, vector--valued function. Recall that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element and that the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
+Finally, let's consider the Taylor expansion of a multivariate, vector--valued function. Recall that the Taylor expansion of a vector--valued function is a vector of Taylor expansions of each element. Additionally, the Taylor expansion of a multivariate, scalar--valued function can be written concisely with Einstein summation notation. Using these principles, we arrive at the following equation for the Taylor expansion of a multivariate, vector--valued function:
 
 $$
 \begin{equation}
@@ -660,7 +660,7 @@ $$
 \end{equation}
 $$
 
-Computing $\mathbf{V}_2$ as the quadratic decoder that best--closes the linear model parameterized by $\mathbf{V}_1$ establishes that $\mathbf{V}_2\perp\mathbf{V}_1$. We will now derive this.
+Computing $\mathbf{V}_2$ as the quadratic decoder that best--closes the linear model parameterized by $\mathbf{V}_1$ establishes that $\mathbf{V}_2~\perp~\mathbf{V}_1$. We will now derive this.
 
 First we define the loss function, $J$, that we intend to optimize. For optimizing $\mathbf{V}_2$ through our sequential optimization framework, $J=J(\mathbf{V}_2)$. We are seeking the least--squares solution and thus obtain the following loss function:
 
@@ -713,7 +713,7 @@ $$
 
 where $\overset{!}{=}$ notation is used since we are forcing $\nabla_{\mathbf{V}_2}J(\mathbf{V}_2)$ to equal $0$ for optimization purposes.
 
-Finally, we can solve for $\mathbf{V}_2$ to show that $\mathbf{V}_2\perp\mathbf{V}_1$:
+Finally, we can solve for $\mathbf{V}_2$ to show that $\mathbf{V}_2~\perp~\mathbf{V}_1$:
 
 $$
 \begin{equation}
@@ -726,7 +726,7 @@ $$
 \end{equation}
 $$
 
-where $\tilde{\mathbf{V}}_1\tilde{\mathbf{V}}_1^\top$ is an orthogonal projector onto the orthogonal complement of $\mathbf{V}_1$. Therefore, $\mathbf{V}_2\perp \mathbf{V}_1$.
+where $\tilde{\mathbf{V}}_1\tilde{\mathbf{V}}_1^\top$ is an orthogonal projector onto the orthogonal complement of $\mathbf{V}_1$. Therefore, $\mathbf{V}_2~\perp~ \mathbf{V}_1$.
 
 Additionally, we can compute the reconstruction error after leveraging both the linear and quadratic decoder, $\mathcal{E}_2$:
 
@@ -779,7 +779,7 @@ $$
 \end{equation}
 $$
 
-where $\left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right] \left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right]^{\top}$ is a projector onto the orthogonal complement of $\text{span}\{ \mathbf{v}^{(1)}\_1, \dots, \mathbf{v}^{(n)}\_1, \mathbf{v}^{(1)}\_2, \dots, \mathbf{v}^{(n^2)}\_1 \}$. Therefore, $\mathbf{V}\_3 \perp \{\mathbf{V}\_1, \mathbf{V}\_2\}$.
+where $\left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right] \left[ \tilde{\mathbf{V}}\_{1} \tilde{\mathbf{V}}\_{2} \right]^{\top}$ is a projector onto the orthogonal complement of $\text{span}\{ \mathbf{v}^{(1)}\_1, \dots, \mathbf{v}^{(n)}\_1, \mathbf{v}^{(1)}\_2, \dots, \mathbf{v}^{(n^2)}\_1 \}$. Therefore, $\mathbf{V}\_3 ~\perp~ \{\mathbf{V}\_1, \mathbf{V}\_2\}$.
 
 Additionally, we can identify a closed--form solution to the least--squares problem for $\mathbf{V}_3$ using the QR decomposition:
 
@@ -824,7 +824,7 @@ $$
 \end{equation}
 $$
 
-such that $\mathbf{V}_{k+1}\perp \{ \mathbf{V}_1,\mathbf{V}_2,\dots,\mathbf{V}_k \}$.
+such that $\mathbf{V}_{k+1}~\perp~ \{ \mathbf{V}_1,\mathbf{V}_2,\dots,\mathbf{V}_k \}$.
 
 Lastly, we can solve a system of linear equations to infer $\mathbf{V}_{k+1}$, where the derivation is analogous to those used to derive expressions for $\mathbf{V}_1$ and $\mathbf{V}_2$:
 
@@ -839,4 +839,4 @@ $$
 
 ## Conclusion
 
-In this post we have showed how to solve an optimization problem from data to infer latent manifolds modeled by truncated Taylor series expansions. Such manifolds form the basis of polynomial manifolds and spectral submanifolds used in model order reduction. In fact, Justin suspects that they are different names of the same optimization result.
+In this post we have shown how to solve an optimization problem from data to infer latent manifolds modeled by truncated Taylor series expansions. Such manifolds form the basis for both polynomial manifolds and spectral submanifolds in model order reduction. In fact, Justin suspects that they are different names of the same optimization result.
