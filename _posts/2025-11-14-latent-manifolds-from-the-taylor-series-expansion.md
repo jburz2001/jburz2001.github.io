@@ -600,7 +600,7 @@ $$
 
 ## Sequential Closure Modeling
 
-One way to solve for decoders $\{\mathbf{V}_1, \mathbf{V}_2, \dots, \mathbf{V}_d\}$ is to do so sequentially: using reconstruction error with respect to decoders $\{\mathbf{V}_1,\dots,\mathbf{V}_{p-1}\}$ to formulate a linear least--squares optimization problem for inferring decoder $\mathbf{V}_p$.
+One way to solve for decoders $\{\mathbf{V}\_1, \mathbf{V}\_2, \dots, \mathbf{V}\_d\}$ is to do so sequentially: using reconstruction error with respect to decoders $\{\mathbf{V}\_1, \dots, \mathbf{V}\_{p-1}\}$ to formulate a linear least–squares optimization problem for inferring decoder $\mathbf{V}\_p$.
 
 ### Inferring $\mathbf{V}_1$
 
