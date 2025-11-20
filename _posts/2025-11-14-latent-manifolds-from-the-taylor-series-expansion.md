@@ -584,7 +584,7 @@ $$
 \end{equation}
 $$
 
-Finally, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can  rewrite our truncated expansion using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
+Next, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can  rewrite our truncated expansion using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
 
 $$
 \begin{equation}
@@ -597,6 +597,23 @@ $$
 \end{aligned}
 \end{equation}
 $$
+
+Finally, given that we use multiple samples of the dynamical system's physical observables, we need to perform this optimization with respect to all samples simultaneously. This is done storing all samples as columns in matrices:
+
+$$
+\begin{equation}
+\begin{aligned}
+    \left( \mathbf{V}_1, \dots, \mathbf{V}_d \right) = \text{argmin}_{\{ \mathbf{V}_{p} \}}
+    \left\lVert  
+    \tilde{\mathbf{Y}}
+    - \sum_{p=1}^d\mathbf{V}_p\mathbf{s}_K^{\otimes p}
+    \right\rVert_F^2,
+\end{aligned}
+\end{equation}
+$$
+
+where $\tilde{\mathbf{Y}} = \begin{bmatrix} \tilde{\mathbf{y}}_1 & \cdots & \tilde{\mathbf{y}}_K \end{bmatrix}$ and $mathbf{S}^{\odot p} = \begin{bmatrix} \mathbf{s}_1^{\otimes p} & \cdots & \mathbf{s}_K^{\otimes p} \end{bmatrix}$, and $K$ is the number of samples (aka, snapshots).
+
 
 ## Sequential Closure Modeling
 
