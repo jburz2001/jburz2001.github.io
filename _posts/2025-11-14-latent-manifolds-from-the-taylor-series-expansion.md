@@ -606,7 +606,7 @@ $$
     \left( \mathbf{V}_1, \dots, \mathbf{V}_d \right) = \text{argmin}_{\{ \mathbf{V}_{p} \}}
     \left\lVert  
     \tilde{\mathbf{Y}}
-    - \sum_{p=1}^d\mathbf{V}_p\mathbf{s}_K^{\otimes p}
+    - \sum_{p=1}^d\mathbf{V}_p\mathbf{S}_K^{\odot p}
     \right\rVert_F^2,
 \end{aligned}
 \end{equation}
