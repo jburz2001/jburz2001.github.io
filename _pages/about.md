@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: PhD student in Mech. Engineering at UC San Diego; advised by <a href="https://kramer.ucsd.edu/">Boris Krämer</a>.
+subtitle: PhD student in Mech. Engineering at UC San Diego; advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
 
 
 profile:
