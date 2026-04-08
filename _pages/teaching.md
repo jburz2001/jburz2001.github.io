@@ -7,6 +7,23 @@ nav: true
 nav_order: 5
 ---
 
+## University of California, San Diego | Mechanical & Aerospace Engineering (MAE)
+
+### **MAE 40 - Linear Circuits**
+
+- **Term:** Winter 2026
+- **Description:** Introductory circuitry.
+- **Tasks:** Teaching assistant who held office hours once per week and graded assignments.
+- **Topics:**
+  - Singular value decomposition
+  - 4 fundamental subspaces of linear algebra
+  - Laplace transform
+  - Bode plots
+  - Low-pass, high-pass, & notch filters
+  - Diodes & transistors
+  - Operational amplifiers
+  - Signal transmission & characteristic impedance
+
 ## Stony Brook University | Applied Mathematics & Statistics (AMS)
 
 ### **AMS 210 – Applied Linear Algebra**
