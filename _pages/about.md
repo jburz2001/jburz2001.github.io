@@ -2,14 +2,14 @@
 layout: about
 title: about
 permalink: /
-subtitle: PhD student in Mech. Engineering at UC San Diego; advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
+subtitle: Ph.D. student in Mech. Engineering at UC San Diego; advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
-    <p>Office at General Atomics</p>
+    <p>Office at General Atomics.</p>
 
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
@@ -25,8 +25,8 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-My research interests span scientific machine learning, tensor algebra, and high-performance computing, with applications across science and engineering.
+My research interests span scientific machine learning, tensor computation, and high-performance computing, with applications across science and engineering. I'm currently working on signal processing & computer vision for nuclear fusion engineering.
 
 During my undergraduate I interned at the Department of Energy’s [Oak Ridge National Laboratory](https://www.ornl.gov/group/application-engineering) as a [SULI](https://science.osti.gov/wdts/suli) software engineer, where I developed verification and validation software for supercomputing. Later, while working on my Master's degree, I joined [VJ Technologies](https://vjt.com/) as an X--ray CT systems engineer intern, where I worked on Monte Carlo simulations of radiation transport, X-ray–based non-destructive testing, in addition to setting up CT machines and a particle accelerator.
 
-Prior to beginning my PhD in Mechanical and Aerospace Engineering at the University of California, San Diego, I graduated magna cum laude with a B.S. in Physics from the University of California, Riverside, and earned an M.S. in Computational Applied Mathematics from Stony Brook University.
+Prior to beginning my Ph.D. in Mechanical and Aerospace Engineering at the University of California, San Diego, I graduated magna cum laude with a B.S. in Physics from the University of California, Riverside, and earned an M.S. in Computational Applied Mathematics from Stony Brook University.
