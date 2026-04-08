@@ -13,20 +13,20 @@ toc:
 
 ## Source Separation: From Smoothies to PDEs
 
-Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called source separation and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves. 
+Physical systems are often measured as mixtures of signals. For instance, seismometers measure not only the magnitude of earthquakes but also any other vibrations significant enough to register, such as mining explosions. Such extraneous signals can corrupt measurements (e.g., pressure waves from mining explosions mixed with seismic pressure waves from earthquakes), so it is often vital to isolate the signals of interest. This process is called source separation and is a type of inverse problem since the goal is to infer the original source signals (i.e., causes) from a collection of observed mixtures (i.e., effects). Source separation problems are often blind due to the absence of a well--defined model for how the constituent signals were mixed or of the sources themselves.
 
-As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as *a priori* information. One could take this analogy further by assuming that this *a priori* information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this *a priori* information would be an instance of "smoothie--informed machine learning."
+As an analogy for blind source separation, imagine if I concocted a delicious smoothie and tasked you with reverse engineering the recipe! With training, you can become better at deconstructing the smoothie by incorporating knowledge of how smoothies are typically made, how Justin likes to make smoothies, which ingredients are reasonable for smoothies, etc. This accumulated knowledge of "smoothie deconstruction" can be thought of in a statistical sense as _a priori_ information. One could take this analogy further by assuming that this _a priori_ information represents a Bayesian prior that updates over time with each taste test! Training a machine learning model with this _a priori_ information would be an instance of "smoothie--informed machine learning."
 
-Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation. This information can be leveraged as *a priori* information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness. 
+Fortunately, unlike smoothies, many physical systems yield observed signals whose constituent mixed sources abide by known partial differential equations (PDEs), such as the linear advection equation. This information can be leveraged as _a priori_ information, yielding physics--informed source separation algorithms with improved efficiency, accuracy, and mathematical well--posedness.
 
 This post elaborates on these points by explaining:
 
-  - An example blind source separation (BSS) problem from physics
-  - How to regularize the aforementioned BSS problem with physically meaningful loss terms that incorporate *a priori* information about the constituent source signals
-  - The penalty method for converting numerical constrained optimization problems into unconstrained ones
-  - The method of multipliers for improving convergence of the penalty method
-  - The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems 
-  - Implementation in Python using NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
+- An example blind source separation (BSS) problem from physics
+- How to regularize the aforementioned BSS problem with physically meaningful loss terms that incorporate _a priori_ information about the constituent source signals
+- The penalty method for converting numerical constrained optimization problems into unconstrained ones
+- The method of multipliers for improving convergence of the penalty method
+- The Gauss--Newton algorithm and Levenberg--Marquardt algorithm for solving nonlinear least--squares problems
+- Implementation in Python using NumPy, JAX, and JAXopt libraries for high--performance computing--based numerical simulation of PDEs and optimization.
 
 ## The Linear Advection PDE
 
@@ -42,6 +42,7 @@ This post elaborates on these points by explaining:
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_true.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
+
 </div>
 
 <div class="caption">
@@ -54,7 +55,7 @@ This post elaborates on these points by explaining:
 
 Physics is often expressed in the language of partial differential equations (PDEs). These equations leverage partial derivatives to model how multivariate dependent variables respond to changes in their independent variables, often space and time. For instance, the linear advection equation models how the value of an advected quantity changes according to the spatial gradient of that quantity and the underlying velocity field. The algebraic structure of this PDE and the spectral properties of the differential operators composing it conspire together to model translational motion called advection.
 
-This post uses JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a *blind* source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
+This post uses JAX for physics--informed source separation with simulated data from a 1--dimensional linear advection PDE. This equation is linear, ubiquitous, and well--suited to modeling the transport of localized signals that are easily distinguished by the naked eye but not necessarily to a _blind_ source separation algorithm. Linearity of the advection equation is particularly helpful here since it allows us to easily model the (trivially) coupled evolution of multiple advecting signals by virtue of the principle of superposition:
 
 $$
 \begin{equation}
@@ -86,7 +87,7 @@ $$
 
 where $U_1\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source one at timestamp $j$, $u_1(:, t_j)$; $U_2\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is source two at timestamp $j$, $u_2(:, t_j)$; and $U\in\mathbb{R}^{n\times K}$ is a matrix whose $j$th column is the observed signal at timestamp $j$, $u(:, t_j)$. The $1/2$ in front of the Frobenius norm is a fudge factor used to remove irrelevant coefficients of $2$ from gradients of the norm with respect to design variables $U_1$, $U_2$, or $W=[U_1^\top \quad U_2^\top]^\top$ where $U_1 + U_2 - U = [I \quad I]~W - U$. Neglecting this $1/2$ does not change the optimal $(\hat{U}_1,\hat{U}_2)$.
 
-This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(\hat{U}_1,\hat{U}_2)=(U,0)$ and $(\hat{U}_1,\hat{U}_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, *a priori* knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $\hat{U}_1$ and $\hat{U}_2$ are non--negative matrices:
+This BSS problem is unfortunately ill--posed since there are many equivalently--optimal solutions, most of which are physically meaningless. For instance, both $(\hat{U}_1,\hat{U}_2)=(U,0)$ and $(\hat{U}_1,\hat{U}_2)=(0,U)$ are valid solutions even though we assume $U_1\neq0\neq U_2$ by formulation of the residual in the norm being minimized. This ill--posedness is a common obstacle in the solution of computational inverse problems, such as source separation. Fortunately, _a priori_ knowledge of signals $U_1$ and $U_2$ can be leveraged to regularize this problem, making it well--posed. One such regularization enforces that $\hat{U}_1$ and $\hat{U}_2$ are non--negative matrices:
 
 $$
 \begin{equation}
@@ -100,7 +101,7 @@ $$
 \begin{equation}
 \begin{aligned}
 (\hat{U}_1, \hat{U}_2)
-&\in 
+&\in
 \arg\min_{U_1 \ge 0,\, U_2 \ge 0}
 \Bigg[
     \frac{1}{2}\,\| U_1 + U_2 - U \|_\text{F}^2 \\
@@ -115,7 +116,6 @@ $$
 
 where $\dot{U}_i$ is a finite--difference--computed time derivative of $U_i$ and $U^\prime_i$ is a finite--difference--computed spatial derivative. Constants $c_i$ can be computed from observed snapshots $U$, such as from the slope of the $i$th line detected in Hough space via the line Hough transform of $U$.
 
-
 ## Unconstrained Optimization for Physics--Informed Source Separation
 
 Our constrained optimization problem can be converted into an unconstrained one through the penalty method. Doing so enables the solution of our constrained optimization problem by using optimizers for unconstrained problems:
@@ -123,9 +123,9 @@ Our constrained optimization problem can be converted into an unconstrained one 
 $$
 \begin{equation}
 \begin{aligned}
-(\hat{U}_1^{(k)}, \hat{U}_2^{(k)}) 
-&\in 
-\arg\min_{U_1^{(k)},\, U_2^{(k)}} 
+(\hat{U}_1^{(k)}, \hat{U}_2^{(k)})
+&\in
+\arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \Bigg[
     \frac{1}{2}\,\| U_1^{(k)} + U_2^{(k)} - U \|_\text{F}^2 \\
 &\quad
@@ -133,7 +133,7 @@ $$
 &\quad
     +\ \lambda_{\text{PDE}_2}\, \| \dot{U}^{(k)}_2 + c_2 U^{(k)\prime}_2 \|_\text{F}^2 \\
 &\quad
-    +\ \frac{1}{2}\mu^{(k)} \big( 
+    +\ \frac{1}{2}\mu^{(k)} \big(
         \| \min(0,\,-U_1^{(k)}) \|_\text{F}^2
         +\ \| \min(0,\,-U_2^{(k)}) \|_\text{F}^2
       \big)
@@ -181,7 +181,7 @@ $$
 \begin{equation}
 \begin{aligned}
 (\hat{U}_1^{(k)}, \hat{U}_2^{(k)}) \in
-&\;\arg\min_{U_1^{(k)},\, U_2^{(k)}} 
+&\;\arg\min_{U_1^{(k)},\, U_2^{(k)}}
 \Bigg[
 \frac{1}{2}\, \bigl\lVert r^{(k)} \bigr\rVert_F^2 \\
 &\qquad + \big\langle \Lambda_1^{(k)},\, \min(0,\,-U_1^{(k)}) \big\rangle
@@ -195,7 +195,7 @@ with matrix--matrix inner product
 
 $$
 \begin{equation}
-\left\langle A, B \right\rangle 
+\left\langle A, B \right\rangle
 = \sum_{j,\ell} A_{j\ell} B_{j\ell}.
 \end{equation}
 $$
@@ -209,7 +209,6 @@ $$
 $$
 
 where $[\cdot]_+ = \max(0,\cdot)$ clips negative entries to zero, ensuring that all Lagrange multipliers are positive (each element of $\Lambda_i^{(k)}$ is a Lagrange multiplier).
-
 
 ## The Levenberg--Marquardt Algorithm for Least--Squares Problems
 
@@ -291,7 +290,7 @@ $$
 \end{equation}
 $$
 
-yielding a system of linear equations whose application is known as the Levenberg--Marquardt algorithm. 
+yielding a system of linear equations whose application is known as the Levenberg--Marquardt algorithm.
 
 There are various benefits to adding $\gamma I$ to $J^\top J$, namely those stemming from increasing the positive--definiteness of the system matrix. To convey these benefits, let's first use the Rayleigh--Ritz quotient to show that eigenvalues of $J^\top J + \gamma I$ are larger than those of $J^\top J$ when $\gamma > 0$:
 
@@ -309,9 +308,9 @@ $$
 
 where $\lambda_i^{\text{LM}}$ is the $i$th largest eigenvalue of $J^\top J + \gamma I$, $\lambda_i^{\text{GN}}$ is the $i$th largest eigenvalue of $J^\top J$, and $\gamma \geq 0$. Thus, adding a sufficiently large value of $\gamma$ will make the system matrix in the Levenberg--Marquardt algorithm symmetric positive--definite. Importantly, if $J^\top J + \gamma I$ is symmetric positive--definite (meaning that it's symmetric and all eigenvalues are positive), then:
 
-  - there exists a unique solution for $\delta\beta$
-  - the step taken is always a descent direction
-  - conjugate gradient, a fast and numerically stable solver, can be used.
+- there exists a unique solution for $\delta\beta$
+- the step taken is always a descent direction
+- conjugate gradient, a fast and numerically stable solver, can be used.
 
 Appropriately choosing $\gamma$ can significantly reduce the condition number of the system matrix at hand. As a simple example, let's assume that $J^\top J$ is a symmetric positive--definite matrix such that its singular values are its eigenvalues, yielding a condition number $\kappa(J^\top J) = \lambda_1^{\text{GN}} / \lambda_n^{\text{GN}}$. Let's assert that $\lambda_1^{\text{GN}}=100$ and $\lambda_n^{\text{GN}}=0.0001$ such that $\kappa(J^\top J) = 100 / 0.0001 = 1,000,000$---a very ill--conditioned system! Despite this enormous condition number, the condition number of $J^\top J + \gamma I$ with $\gamma=1$ is orders of magnitude smaller: $\kappa(J^\top J + 1I) = (\lambda_1^{\text{GN}} + 1) / (\lambda_n^{\text{GN}}+1) = (100 + 1) / (0.0001 + 1) = 100.99$. Notably, the Levenberg--Marquardt algorithm interpolates between Gauss--Newton and gradient descent: $\gamma=0$ yields Gauss--Newton; $\gamma\gg 0$ yields gradient descent.
 
@@ -324,7 +323,6 @@ $$
 $$
 
 A diagonal matrix (rather than one with arbitrarily located nonzero elements) is added for regularization to preserve symmetry.
-
 
 ## JAX for Physics--Informed Source Separation
 
@@ -340,6 +338,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_reconstruction.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
+
 </div>
 
 <div class="caption">
@@ -357,6 +356,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U1_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
+
 </div>
 
 <div class="caption">
@@ -373,6 +373,7 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/posts/physics-informed-source-separation/U2_error.jpg" class="img-fluid rounded z-depth-1" zoomable=true %}
     </div>
+
 </div>
 
 <div class="caption">
@@ -380,7 +381,6 @@ A diagonal matrix (rather than one with arbitrarily located nonzero elements) is
     <strong>Left:</strong> Inferred source one from physics--informed source separation.
     <strong>Right:</strong> Elementwise difference between true source two and inferred source two, with Frobenius norm percentage error.
 </div>
-
 
 JAX is an incredible Python library that facilitates the use of automatic differentiation to easily compute Jacobians for numerical optimization (and anywhere else they may be used, such as in the numerical solution of nonlinear systems of ordinary differential equations using Newton's method). One can also use it for just--in--time (JIT) compilation but we do not do so here. This library forms the backbone of another called JAXopt, which has an intuitive interface for calling a routine that uses the Levenberg--Marquardt algorithm to solve a least--squares problem, such as the one we posed using physics--informed regularization. The following illustrates how to solve the optimization problem we've discussed so far through JAXopt.
 
@@ -557,7 +557,7 @@ def get_residual(U_obs, dx, dt, c1, c2, reg_pde1, reg_pde2, mu, lam_1, lam_2, x)
     ])
 ```
 
-Now pose the physics--informed source separation problem with JAX's *jax.numpy* syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the *jaxopt.LevenbergMarquardt* method:
+Now pose the physics--informed source separation problem with JAX's _jax.numpy_ syntax. With residuals defined in this way, the Levenberg--Marquardt algorithm can be implemented to compute optimal $U_1$ and $U_2$ through the _jaxopt.LevenbergMarquardt_ method:
 
 ```python
 nx, nt = U.shape

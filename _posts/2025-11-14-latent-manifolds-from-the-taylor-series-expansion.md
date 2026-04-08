@@ -43,12 +43,11 @@ $$
 
 where $\mathbf{y}\in\mathbb{R}^N$ with $N$ being the number of discretization cells.
 
-The integer, $N$, is arbitrary, but larger values correspond to higher spatial resolution, which may be necessary for resolving details. Unfortunately, increasing $N$ increases computational costs in both memory and time since more data must be stored and processed. This is just like how having a 4K resolution image of me is great since you have $N = 3840 \times 2160 = 8,294,400$ pixels to resolve fine details with but such a 4K image requires much more storage than a Full HD image with $N = 1920 \times 1080 = 2,073,600$ pixels. 
+The integer, $N$, is arbitrary, but larger values correspond to higher spatial resolution, which may be necessary for resolving details. Unfortunately, increasing $N$ increases computational costs in both memory and time since more data must be stored and processed. This is just like how having a 4K resolution image of me is great since you have $N = 3840 \times 2160 = 8,294,400$ pixels to resolve fine details with but such a 4K image requires much more storage than a Full HD image with $N = 1920 \times 1080 = 2,073,600$ pixels.
 
 The number $N$ is arbitrary---you can still simulate diffusion with $N=10$, $N=100$, or $N=1,000,000$! Importantly though, the actual physics are aptly modeled with a small number of latent variables that we don't directly observe. In other words, even though we have $N$ physical observables (i.e., the temperature readings at each of our $N$ cells), there are actually $n\ll N$ latent variables that evolve over time! This is best understood geometrically: the state of a dynamical system can be envisioned as a point in $\mathbb{R}^N$ that flies around over time; in physics, the path traced out happens to be some curve in low--dimensional surface. To better imagine this concept, put your index finger on your nose then move your finger back and forth as if you were tracing out Pinocchio's nose. This curve you traced out with your finger is a 1--dimensional curve embedded in a 3--dimensional space, so positions along the curve can aptly be described with a single latent variable, that being the "distance from nose" instead of 3 different physical observables $x$, $y$, and $z$! In physics, the same logic applies, but we can take computer simulations with hundreds of millions of physical observables but simulate them in the latent manifolds rather than in the high--dimensional physical observable space, yielding astronomical speedups. As an example, researchers have taken a soft robot with $N\approx 800,000$ degrees of freedom but controlled it by actuating $n=2$ latent variables.
 
 The identification and use of latent manifolds from data is a field of machine learning called dimensionality reduction; it is paramount to model order reduction in computational physics, principal component analysis in statistics, and autoencoder architectures in deep learning--based artificial intelligence. This post discusses how to infer latent manifolds from snapshots of the state of a physical system under the assumption that the manifold is well--modeled by a Taylor series expansion. In doing so, we will derive the data--driven optimization problem used to infer what some researchers in model order reduction call a polynomial manifold but others call a spectral submanifold.
-
 
 ## The Taylor Series Expansion
 
@@ -78,7 +77,6 @@ Leveraging a Maclaurin expansion does not, however, mean that the physical obser
 
 The following subsections derive Taylor expansions for the different values of $n$ and $N$. Pardon me for using both "Taylor expansion" and "Maclaurin expansion" terminology in this post. Both terminologies are correct anyway since a Maclaurin expansion is a special case of the Taylor expansion and we will assume that our latent manifolds are constructed about the origin.
 
-
 ### One Input, One Output $(n=1,N=1)$
 
 In this subsection we consider the Taylor expansion of a univariate, scalar--valued function, where $\mathbf{y}\equiv y$, $\mathbf{x}\equiv x$, and $\mathbf{0}\equiv 0$:
@@ -106,7 +104,7 @@ We can write out this result with the help of a Taylor expansion operator, $\mat
 $$
 \begin{equation}
 \begin{aligned}
-\mathcal{T}[\mathbf{y}] = (\mathcal{T}[y_{1}]) = \left( y_{1}(0) + \frac{\partial y_{1}}{\partial x_{1}}(0) x_{1} + \frac{1}{2}\frac{\partial^{2}y_{1}}{\partial x_{1}^{2}}(0)x_{1}^{2} + \dots \right).    
+\mathcal{T}[\mathbf{y}] = (\mathcal{T}[y_{1}]) = \left( y_{1}(0) + \frac{\partial y_{1}}{\partial x_{1}}(0) x_{1} + \frac{1}{2}\frac{\partial^{2}y_{1}}{\partial x_{1}^{2}}(0)x_{1}^{2} + \dots \right).
 \end{aligned}
 \end{equation}
 $$
@@ -120,12 +118,12 @@ Now we consider the Taylor expansion of a univariate, vector--valued function, w
 $$
 \begin{equation}
 \begin{aligned}
-\underbrace{ \mathbf{y}(x) }_{ N\times 1 } &= 
-\underbrace{ \mathbf{y}(0) }_{ N\times 1 } 
-+ \underbrace{ [\mathrm{D}\mathbf{y}]_{0} }_{ N\times1 }\underbrace{ x }_{ 1\times 1 } 
-+ \frac{1}{2}\underbrace{ [\mathrm{D}^2\mathbf{y}]_{0} }_{ N\times1 }\underbrace{ x^{\otimes 2} }_{ 1\times 1 } 
+\underbrace{ \mathbf{y}(x) }_{ N\times 1 } &=
+\underbrace{ \mathbf{y}(0) }_{ N\times 1 }
++ \underbrace{ [\mathrm{D}\mathbf{y}]_{0} }_{ N\times1 }\underbrace{ x }_{ 1\times 1 }
++ \frac{1}{2}\underbrace{ [\mathrm{D}^2\mathbf{y}]_{0} }_{ N\times1 }\underbrace{ x^{\otimes 2} }_{ 1\times 1 }
 + \ldots\\
-&= 
+&=
 \begin{pmatrix}
     y_1(0)\\
     y_2(0)\\
@@ -139,7 +137,7 @@ $$
 \vdots \\
 \frac{\partial y_N}{\partial x}(0)
 \end{pmatrix}
-x 
+x
 + \frac{1}{2}
 \begin{pmatrix}
 \frac{\partial^{2} y_1}{\partial x^{2}}(0) \\
@@ -157,26 +155,25 @@ This shows that the Taylor expansion of a univariate, vector--valued function is
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:taylor_vectorValuedUnivariate}
-    \mathcal{T}[\mathbf{y}] = 
+    \mathcal{T}[\mathbf{y}] =
     \begin{pmatrix}
     \mathcal{T}[y_{1}] \\
     \mathcal{T}[y_{2}] \\
     \vdots \\
     \mathcal{T}[y_{N}]
     \end{pmatrix}
-     = 
+     =
      \begin{pmatrix}
     y_{1}(0) + \frac{\partial y_{1}}{\partial x_{1}}(0)x_{1} + \frac{1}{2}\frac{\partial^{2}y_{1}}{\partial x_{1}^{2}}(0)x_{1}^{2}+\dots \\
     y_{2}(0) + \frac{\partial y_{2}}{\partial x_{1}}(0)x_{1} + \frac{1}{2}\frac{\partial^{2}y_{2}}{\partial x_{1}^{2}}(0)x_{1}^{2}+\dots  \\
     \vdots \\
-    y_{N}(0) + \frac{\partial y_{N}}{\partial x_{1}}(0)x_{1} + \frac{1}{2}\frac{\partial^{2}y_{N}}{\partial x_{1}^{2}}(0)x_{1}^{2}+\dots 
-    \end{pmatrix}.    
+    y_{N}(0) + \frac{\partial y_{N}}{\partial x_{1}}(0)x_{1} + \frac{1}{2}\frac{\partial^{2}y_{N}}{\partial x_{1}^{2}}(0)x_{1}^{2}+\dots
+    \end{pmatrix}.
     \end{aligned}
 \end{equation}
 $$
 
 Here, one could envision a dynamical system with $N$ physical observables but a singular latent variable "pulling the strings" behind the scenes. Systems well--described by a singular latent variable are rather rare but it turns out that systems described by two form an important class of dynamical systems, motivating the case of $(n\neq1,\,N\neq1)$ case we are building up to. Take note that I said referred to systems "well--described" by a singular latent variable and not systems "fully--described" by a singular latent variable. This is because a single latent variable might describe most of the dynamics---perhaps even the dynamics we actually care about---but not all of the observed data.
-
 
 ### Multiple Inputs, One Output $(n\neq1, N=1)$
 
@@ -185,23 +182,23 @@ Here we consider the Taylor expansion of a multivariate, scalar--valued function
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:scalar-valued,multivariate_derivation}
-    \underbrace{ y(\mathbf{x}) }_{1\times 1} 
-    &= \underbrace{ y(\mathbf{0}) }_{1\times 1} 
-    + \underbrace{ [\mathrm{D}y]_{\mathbf{0}} }_{1\times n}\,\underbrace{ \mathbf{x} }_{n\times 1} 
+    \underbrace{ y(\mathbf{x}) }_{1\times 1}
+    &= \underbrace{ y(\mathbf{0}) }_{1\times 1}
+    + \underbrace{ [\mathrm{D}y]_{\mathbf{0}} }_{1\times n}\,\underbrace{ \mathbf{x} }_{n\times 1}
     + \frac{1}{2}\underbrace{ [\mathrm{D}^2y]_{\mathbf{0}} }_{1\times n^{2}}\,\underbrace{ x^{\otimes 2} }_{n^{2}\times 1} + \ldots\\
     &= \underbrace{ y(\mathbf{0}) }_{1\times 1}
     + \underbrace{ [\mathrm{D}y]_{\mathbf{0}} }_{1\times n}\,\underbrace{ \mathbf{x} }_{n\times 1}
     + \frac{1}{2}\underbrace{ \mathbf{x}^{\top} }_{1\times n}\,\underbrace{ \left[ \mathrm{D}^{2}y \right]_{\mathbf{0}} }_{n\times n}\,\underbrace{ \mathbf{x} }_{n\times 1}
     + \ldots\notag\\
     &= y(\mathbf{0})
-    + 
+    +
     \begin{pmatrix}
-    \frac{\partial y}{\partial x_{1}}(\mathbf{0}) &\dots & 
+    \frac{\partial y}{\partial x_{1}}(\mathbf{0}) &\dots &
     \frac{\partial y}{\partial x_{n}}(\mathbf{0})
     \end{pmatrix}
     \begin{pmatrix}
-    x_{1} \\ 
-    \vdots \\ 
+    x_{1} \\
+    \vdots \\
     x_{n}
     \end{pmatrix} \\
     &\quad + \frac{1}{2}
@@ -214,8 +211,8 @@ $$
     \frac{\partial^{2} y}{\partial x_{n}\partial x_{1}}(\mathbf{0}) & \cdots & \frac{\partial^{2} y}{\partial x_{n}^{2}}(\mathbf{0})
     \end{pmatrix}
     \begin{pmatrix}
-    x_{1} \\ 
-    \vdots \\ 
+    x_{1} \\
+    \vdots \\
     x_{n}
     \end{pmatrix}
     + \cdots\notag\\
@@ -229,8 +226,8 @@ $$
     \frac{1}{2}\left[
     \frac{\partial^{2}y}{\partial x_{1}^{2}}(\mathbf{0})x_{1}^{2}
     +\dots
-    +\frac{\partial^{2}y}{\partial x_{1}\partial x_{n}}(\mathbf{0})x_{1}x_{n} 
-    + \frac{\partial^{2}y}{\partial x_{2}\partial x_{1}}(\mathbf{0})x_{2}x_{1} 
+    +\frac{\partial^{2}y}{\partial x_{1}\partial x_{n}}(\mathbf{0})x_{1}x_{n}
+    + \frac{\partial^{2}y}{\partial x_{2}\partial x_{1}}(\mathbf{0})x_{2}x_{1}
     + \dots \right]+\dots\notag\\
     &= y(\mathbf{0})
     + \sum_{j=1}^{m}\left[ \frac{\partial y}{\partial x_{j}}(\mathbf{0})x_{j} \right]
@@ -264,8 +261,8 @@ Finally, let's consider the Taylor expansion of a multivariate, vector--valued f
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:taylor_vectorValuedMultivariate}
-    \mathcal{T}[\mathbf{y}] 
-    = 
+    \mathcal{T}[\mathbf{y}]
+    =
     \begin{pmatrix}
     \mathcal{T}[y_{1}] \\
     \mathcal{T}[y_{2}] \\
@@ -278,13 +275,12 @@ $$
     y_{2}(\mathbf{0}) + G_{2j}(\mathbf{0})[x_{j}] + \frac{1}{2}H_{2jk}(\mathbf{0})[x_{j},x_{k}] + \dots \\
     \dots \\
     y_{N}(\mathbf{0}) + G_{Nj}(\mathbf{0})[x_{j}] + \frac{1}{2}H_{Njk}(\mathbf{0})[x_{j},x_{k}] + \dots
-    \end{pmatrix}    
+    \end{pmatrix}
 \end{aligned}
 \end{equation}
 $$
 
 This is the most general case and forms the mathematical foundation for inferring latent manifolds from data. Here, we have any number of latent variables describing any number of physical observables.
-
 
 ### Multilinear Forms
 
@@ -301,11 +297,11 @@ $$
 
 The following table defines multilinear forms:
 
-| Form | Mapping | Description |
-|------|---------|-------------|
-| $G$ | $X \to \mathbb{R}$ | Linear form |
-| $H$ | $X \times X \to \mathbb{R}$ | Bilinear form |
-| $F$ | $X^k \to \mathbb{R}$ | $k$–linear form |
+| Form | Mapping                     | Description     |
+| ---- | --------------------------- | --------------- |
+| $G$  | $X \to \mathbb{R}$          | Linear form     |
+| $H$  | $X \times X \to \mathbb{R}$ | Bilinear form   |
+| $F$  | $X^k \to \mathbb{R}$        | $k$–linear form |
 
 The structure of the inferred latent manifold parameterized by a Taylor series expansion has its polynomial nonlinear structure encoded by different multilinear forms: the linear form encodes linear structure (i.e., that underpinning the subspace inferred through PCA/POD); the quadratic form encodes quadratic structure (i.e., the quadratic structure of a quadratic manifold); and so on for $k$--linear forms and higher order structure.
 
@@ -313,13 +309,13 @@ The structure of the inferred latent manifold parameterized by a Taylor series e
 
 Now we want to leverage the equation for a general Taylor series expansion when $(n\neq1, N\neq1)$ so that we can use it as a model for our underlying latent manifold. Doing so facilitates its use in an optimization problem for parameterizing the multilinear forms composing the Taylor polynomial. This optimization problem is the same one solved in PCA/POD, spectral submanifold, and polynomial manifold applications. Be aware that this subsection is rather mathy (as if this blog post wasn't already).
 
-First, let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion: 
+First, let $\mathbf{y}\in\mathbb{R}^N$ be a function of $\mathbf{x}\in\mathbb{R}^n$ and represent $\mathbf{y}$ in terms of its Maclaurin expansion. Notice that $\mathbf{y}:\mathbb{R}^N\rightarrow\mathbb{R}^n$, so $\mathbf{y}$ is a multivariate, vector--valued function, and thus permits a Maclaurin expansion:
 
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:start}
     \mathbf{y}
-    = 
+    =
     \begin{pmatrix}
     \mathcal{T}[y_{1}] \\
     \mathcal{T}[y_{2}] \\
@@ -420,7 +416,6 @@ $$
 \end{aligned}
 \end{equation}
 $$
-
 
 Next, we "pull out" the arguments of the multilinear forms into their corresponding vectors of monomials. Here, $G_{i}(\mathbf{0};j)$ is a function parameterized by index $j$ corresponding to the $j$ in $x_{j}$
 Likewise for $H_{i}(\mathbf{0};j,k)$ with indices $j$ and $k$ from product $x_{j}x_{k}$ and higher--order terms.
@@ -535,7 +530,6 @@ H_{N}(\mathbf{0};j,k)
 \end{equation}
 $$
 
-
 So far we have considered an infinite series Maclaurin expansion. Let us now consider the following truncated expansion, yielding a quadratic approximation of $\tilde{\mathbf{y}}$:
 
 $$
@@ -558,7 +552,7 @@ $$
 \begin{equation}
 \begin{aligned}
 \text{argmin}_{\mathbf{T}_1,\mathbf{T}_2}
-\left\lVert  
+\left\lVert
 \tilde{\mathbf{y}}
 -
 \mathbf{T}_1\mathbf{x}
@@ -569,14 +563,13 @@ $$
 \end{equation}
 $$
 
-
 Of course, we could generalize this optimization problem to include monomial terms in our Kronecker product vectors up to degree $d$, yielding the following problem:
 
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:result}
     \text{argmin}_{\{ \mathbf{T}_{p} \}}
-    \left\lVert  
+    \left\lVert
     \tilde{\mathbf{y}}
     - \sum_{p=1}^d\mathbf{T}_p\mathbf{x}^{\otimes p}
     \right\rVert_2^2.
@@ -584,13 +577,13 @@ $$
 \end{equation}
 $$
 
-Next, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can  rewrite our truncated expansion using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
+Next, we can assume that $\mathbf{T}_p=\mathbf{V}_p\mathbf{R}_p$, where $\mathbf{Q}_p\in\mathbb{R}^{N\times n^p}$ is orthogonal and $\mathbf{R}_p\in\mathbb{R}^{n^p\times n^p}$ is upper--triangular. Using this QR decomposition, we can rewrite our truncated expansion using orthogonal matrices, where $\mathbf{s}^{\otimes p}\equiv\mathbf{R}_p\mathbf{x}^{\otimes p}$:
 
 $$
 \begin{equation}
 \begin{aligned}\label{eqn:result_with_orthogonal_matrices}
     \text{argmin}_{\{ \mathbf{V}_{p} \}}
-    \left\lVert  
+    \left\lVert
     \tilde{\mathbf{y}}
     - \sum_{p=1}^d\mathbf{V}_p\mathbf{s}^{\otimes p}
     \right\rVert_2^2.
@@ -604,7 +597,7 @@ $$
 \begin{equation}
 \begin{aligned}
     \left( \mathbf{V}_1, \dots, \mathbf{V}_d \right) = \text{argmin}_{\{ \mathbf{V}_{p} \}}
-    \left\lVert  
+    \left\lVert
     \tilde{\mathbf{Y}}
     - \sum_{p=1}^d\mathbf{V}_p\mathbf{S}_K^{\odot p}
     \right\rVert_F^2,
@@ -613,7 +606,6 @@ $$
 $$
 
 where $\tilde{\mathbf{Y}} = \begin{bmatrix} \tilde{\mathbf{y}}_1 & \cdots & \tilde{\mathbf{y}}_K \end{bmatrix}$ and $\mathbf{S}^{\odot p} = \begin{bmatrix} \mathbf{s}_1^{\otimes p} & \cdots & \mathbf{s}_K^{\otimes p} \end{bmatrix}$, and $K$ is the number of samples (aka, snapshots).
-
 
 ## Sequential Closure Modeling
 
@@ -682,7 +674,7 @@ $$
     \frac{1}{2}\lVert \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \rVert_\text{F}^2 &= \frac{1}{2}\text{tr}\left( \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)^{\top} \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)  \right)  \nonumber\\
     &=\frac{1}{2}\text{tr} \left( \left( \mathbf{V}_{2}\mathbf{W}_{2}-\mathcal{E}_{1} \right) \left( \mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top}-\mathcal{E}_{1}^{\top} \right)  \right) \nonumber \\
     &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} - \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} - \mathcal{E}_{1}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} + \mathcal{E}_{1}\mathcal{E}_{1}^{\top} \right) \nonumber \\
-    &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) + \frac{1}{2}\text{tr}\left( \mathcal{E}_{1}\mathcal{E}_{1}^{\top} \right) 
+    &= \frac{1}{2}\text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathbf{W}_{2}^{\top}\mathbf{V}_{2}^{\top} \right) - \text{tr}\left( \mathbf{V}_{2}\mathbf{W}_{2}\mathcal{E}_{1}^{\top} \right) + \frac{1}{2}\text{tr}\left( \mathcal{E}_{1}\mathcal{E}_{1}^{\top} \right)
 \end{aligned}
 \end{equation}
 $$
@@ -774,7 +766,7 @@ $$
 \begin{aligned}
     \mathbf{V}_{3} &= \mathcal{E}_{2}\mathbf{W}_{3}^{\top}\left( \mathbf{W}_{3}\mathbf{W}_{3}^{\top} \right)^{-1} \nonumber\\
     &= \left( \mathbf{I}- \mathbf{V}_{1}\mathbf{V}_{1}^{\top} - \mathbf{V}_{2}\mathbf{V}_{2}^{\top} \right)\mathbf{S}\mathbf{W}_{3}^{\top}\left( \mathbf{W}_{3}\mathbf{W}_{3}^{\top} \right)^{-1} \nonumber\\
-    &= \left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right] \left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right]^{\top} \left( \mathbf{S}\mathbf{W}_{3}^{\top}\left( \mathbf{W}_{3}\mathbf{W}_{3}^{\top} \right)^{-1} \right) 
+    &= \left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right] \left[ \tilde{\mathbf{V}}_{1} \tilde{\mathbf{V}}_{2} \right]^{\top} \left( \mathbf{S}\mathbf{W}_{3}^{\top}\left( \mathbf{W}_{3}\mathbf{W}_{3}^{\top} \right)^{-1} \right)
 \end{aligned}
 \end{equation}
 $$
@@ -794,7 +786,6 @@ $$
 \end{aligned}
 \end{equation}
 $$
-
 
 ### Inferring $\mathbf{V}_{k+1}$
 
@@ -835,7 +826,6 @@ $$
 \end{aligned}
 \end{equation}
 $$
-
 
 ## Conclusion
 

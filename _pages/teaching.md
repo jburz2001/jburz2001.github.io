@@ -33,7 +33,7 @@ nav_order: 5
 - **Description:** Introductory ordinary differential equations (ODEs).
 - **Tasks:** Teaching assistant who held two 1-hour lectures per week. Office hours were held twice per week each semester.
 - **Topics:**
-  - Classification of ODEs  
+  - Classification of ODEs
   - Separable, Bernoulli, exact, and Riccati ODEs
   - Constant coefficient ODEs
   - Cauchy-Euler ODEs
@@ -44,4 +44,3 @@ nav_order: 5
   - Laplace transforms and convolutions
 
 ---
-
