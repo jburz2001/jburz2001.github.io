@@ -41,6 +41,7 @@ nav_order: 5
   - Markov chains
   - Least-squares regression via pseudoinverse
   - Vector space theory
+  - Applications to econometrics, population ecology, & machine learning
 
 ---
 
@@ -59,5 +60,6 @@ nav_order: 5
   - Systems of inhomogenous ODEs
   - Generalized eigenvectors
   - Laplace transforms and convolutions
+  - Applications to growth models and fluid dynamics
 
 ---
