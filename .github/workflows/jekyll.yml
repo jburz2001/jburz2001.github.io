@@ -48,7 +48,9 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Prettier auto-format
-        run: npx prettier . --write
+        run: |
+          npm install --save-dev prettier @shopify/prettier-plugin-liquid
+          npx prettier . --write
       - name: Commit prettier changes
         run : |
           git config --local user.email "action@github.com"
