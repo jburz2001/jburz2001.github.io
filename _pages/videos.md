@@ -11,7 +11,7 @@ nav_order: 3
   <div class="col mb-4">
     {%
       include video.liquid
-      path="jburz2001.github.io"
+      path="https://jburz2001.github.io"
       class="img-fluid rounded z-depth-1"
       controls=true
       title="Deep Learning: Convolutional Neural Networks"
