@@ -1,7 +1,7 @@
 ---
 layout: page
 title: tutorials
-permalink: /tutorials/
+# permalink: /tutorials/
 description: Tutorials by Justin
 nav: false
 # nav_order: 3
