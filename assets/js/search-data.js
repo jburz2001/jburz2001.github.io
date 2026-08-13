@@ -16,6 +16,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
+        },{id: "nav-videos",
+          title: "videos",
+          description: "Video technical talks by Justin (coming soon!)",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/videos/";
+          },
         },{id: "nav-teaching",
           title: "teaching",
           description: "",
