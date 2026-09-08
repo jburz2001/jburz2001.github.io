@@ -6,5 +6,5 @@ related_posts: false
 ---
 
 I am attending the 2026 MagNetUS Meeting at UC San Diego from 08/03--08/06.
-//
+\\
 I am presenting a poster on stereo imaging.
