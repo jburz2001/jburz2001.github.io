@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-My poster was accepted for this year's American Physical Society's Division of Plasma Physics annual meeting (APS DPP 2026) in Chicago. The title is "Cross-Spectral Stereo Imaging for 3D Reconstruction of Particulate Trajectories in DIII-D."
+My poster was accepted for this year's American Physical Society's Division of Plasma Physics annual meeting ([2026 APS DPP Annual Meeting](https://engage.aps.org/dpp/meetings/annual-meeting)) in Chicago. The title is "Cross-Spectral Stereo Imaging for 3D Reconstruction of Particulate Trajectories in DIII-D."
