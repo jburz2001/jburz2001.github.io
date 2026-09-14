@@ -7,4 +7,4 @@ related_posts: false
 
 I am attending the [2026 MagNetUS Meeting](https://sites.google.com/magnetus.net/2026-magnetus-workshop/home?authuser=0) at UC San Diego from 08/03--08/06.
 \\
-I am presenting a poster on stereo imaging.
+While there I will present a poster on stereo imaging at DIII-D.
