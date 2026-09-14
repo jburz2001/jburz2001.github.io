@@ -105,7 +105,7 @@ ninja.data = [{
           section: "News",},{id: "news-i-am-attending-the-30th-workshop-on-mhd-stability-control-at-uc-san-diego-from-07-13-07-15",
           title: 'I am attending the 30th Workshop on MHD Stability Control at UC San...',
           description: "",
-          section: "News",},{id: "news-i-am-attending-the-2026-magnetus-meeting-at-uc-san-diego-from-08-03-08-06-i-am-presenting-a-poster-on-stereo-imaging",
+          section: "News",},{id: "news-i-am-attending-the-2026-magnetus-meeting-at-uc-san-diego-from-08-03-08-06-while-there-i-will-present-a-poster-on-stereo-imaging-at-diii-d",
           title: 'I am attending the 2026 MagNetUS Meeting at UC San Diego from 08/03–08/06....',
           description: "",
           section: "News",},{id: "news-a-preprint-of-our-work-on-validating-plasma-physics-of-hypersonic-reentry-was-put-onto-the-arxiv-spacecraft-heat-shield-study-in-the-diii-d-tokamak",
