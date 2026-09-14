@@ -111,7 +111,7 @@ ninja.data = [{
           section: "News",},{id: "news-a-preprint-of-our-work-on-validating-plasma-physics-of-hypersonic-reentry-was-put-onto-the-arxiv-spacecraft-heat-shield-study-in-the-diii-d-tokamak",
           title: 'A preprint of our work on validating plasma physics of hypersonic reentry was...',
           description: "",
-          section: "News",},{id: "news-my-poster-was-accepted-for-this-year-s-american-physical-society-s-division-of-plasma-physics-annual-meeting-aps-dpp-2026-in-chicago-the-title-is-cross-spectral-stereo-imaging-for-3d-reconstruction-of-particulate-trajectories-in-diii-d",
+          section: "News",},{id: "news-my-poster-was-accepted-for-this-year-s-american-physical-society-s-division-of-plasma-physics-annual-meeting-2026-aps-dpp-annual-meeting-in-chicago-the-title-is-cross-spectral-stereo-imaging-for-3d-reconstruction-of-particulate-trajectories-in-diii-d",
           title: 'My poster was accepted for this year’s American Physical Society’s Division of Plasma...',
           description: "",
           section: "News",},{id: "news-i-attended-the-2026-cal-bridge-fall-conference-at-uc-irvine-from-09-11-09-13-this-conference-provided-professional-development-training-and-networking-opportunities-with-faculty-across-california-s-public-university-system-cal-bridge-was-awarded-10-2-million-for-2026-2027-to-continue-their-work-in-helping-underrepresented-youth-in-stem-join-the-professoriate-and-research-workforce",
