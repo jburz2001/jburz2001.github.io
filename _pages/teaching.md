@@ -37,7 +37,7 @@ nav_order: 5
   - LU decomposition
   - Jacobi iteration
   - Eigenvalue decomposition
-  - Conditiondness, stability, and computational complexity
+  - Conditioning, stability, and computational complexity
   - Markov chains
   - Least-squares regression via pseudoinverse
   - Vector space theory
@@ -57,7 +57,7 @@ nav_order: 5
   - Cauchy-Euler ODEs
   - Linear independence and the Wronskian
   - Method of undetermined coefficients and variation of parameters
-  - Systems of inhomogenous ODEs
+  - Systems of inhomogeneous ODEs
   - Generalized eigenvectors
   - Laplace transforms and convolutions
   - Applications to growth models and fluid dynamics
