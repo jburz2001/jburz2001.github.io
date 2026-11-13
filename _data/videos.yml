@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------------
+# Videos shown on the /videos/ page.
+#
+# Videos are grouped into sections by subtopic. Sections appear on the page in
+# the order they are listed here; videos inside a section are sorted newest
+# first by `date`, so their order in this file does not matter. A section with
+# no videos is hidden.
+#
+# To add a video, copy the template under the right section's `videos:` list.
+# To add a section, copy a whole `- topic:` block.
+#
+# - topic: "Section name"                    # required
+#   description: "Optional subtitle for the section."
+#   videos:
+#     - title: "Talk title"                  # required
+#       youtube_id: dQw4w9WgXcQ               # required: the part after "v=" in the
+#                                             #   YouTube URL (or after "youtu.be/")
+#       date: 2026-11-13                      # required: YYYY-MM-DD
+#       event: "Conference or venue"          # optional
+#       description: "One or two sentences."  # optional
+#       tags: [imaging, plasma]               # optional
+# -----------------------------------------------------------------------------
+
+- topic: "Machine Learning"
+  videos:
+    - title: "Deep Learning: Convolutional Neural Networks"
+      youtube_id: hwDT-qm1uzs
+      date: 2026-07-23
+      event: "MFE-CER Meeting"
+      description: "Explaining the anatomy of AlexNet."
+      tags: [deep learning, computer vision]
