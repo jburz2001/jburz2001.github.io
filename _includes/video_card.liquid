@@ -1,0 +1,28 @@
+{% assign v = include.video %}
+<a
+  class="video-card"
+  href="https://www.youtube.com/watch?v={{ v.youtube_id }}"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="{{ v.title | escape }} (opens YouTube in a new tab)"
+>
+  <div class="video-thumb">
+    <img src="https://i.ytimg.com/vi/{{ v.youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+    <span class="video-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span>
+  </div>
+  <div class="video-body">
+    <p class="video-meta">
+      {% if v.date %}<time datetime="{{ v.date | date: '%Y-%m-%d' }}">{{ v.date | date: '%b %-d, %Y' }}</time>{% endif %}
+      {% if v.date and v.event %}<span class="video-meta-sep">&middot;</span>{% endif %}
+      {% if v.event %}<span>{{ v.event }}</span>{% endif %}
+    </p>
+    <h3 class="video-title">{{ v.title }}</h3>
+    {% if v.description %}<p class="video-description">{{ v.description }}</p>{% endif %}
+    <div class="video-footer">
+      <div class="video-tags">
+        {% for tag in v.tags %}<span class="video-tag">{{ tag }}</span>{% endfor %}
+      </div>
+      <span class="video-external" aria-hidden="true"><i class="fa-brands fa-youtube"></i> Watch <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,205 @@
+/*******************************************************************************
+ * Videos page (_pages/videos.md, _includes/video_card.liquid, _data/videos.yml)
+ ******************************************************************************/
+
+.videos {
+  margin-top: 0.5rem;
+}
+
+.videos-empty {
+  color: var(--global-text-color-light);
+  font-style: italic;
+}
+
+// Jump links to each topic (shown when there is more than one section).
+.videos-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  a {
+    padding: 0.25rem 0.85rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--global-text-color);
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      color: var(--global-theme-color);
+      text-decoration: none;
+    }
+  }
+}
+
+.videos-section {
+  scroll-margin-top: 5rem; // keep headings clear of the fixed navbar
+}
+
+.videos-heading {
+  margin: 2rem 0 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--global-divider-color);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.videos-section-description {
+  margin: 0.5rem 0 0;
+  color: var(--global-text-color-light);
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+// One clickable panel per video.
+.video-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 0.75rem;
+  background: var(--global-card-bg-color);
+  color: var(--global-text-color);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--global-theme-color);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+    color: var(--global-text-color);
+    text-decoration: none;
+
+    .video-thumb img {
+      transform: scale(1.04);
+      filter: brightness(0.8);
+    }
+
+    .video-play {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: var(--global-theme-color);
+    }
+
+    .video-title,
+    .video-external {
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 0.3s ease,
+      filter 0.3s ease;
+  }
+}
+
+.video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding-left: 0.2rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 1.3rem;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.video-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1rem 1.25rem 1.1rem;
+}
+
+.video-meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--global-text-color-light);
+
+  span {
+    color: var(--global-text-color-light);
+  }
+
+  time {
+    color: var(--global-theme-color);
+  }
+}
+
+.video-meta-sep {
+  margin: 0 0.4rem;
+}
+
+.video-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.video-description {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--global-text-color-light);
+}
+
+.video-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.video-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.video-tag {
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: var(--global-text-color-light);
+}
+
+.video-external {
+  margin-left: auto;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  color: var(--global-text-color-light);
+  transition: color 0.2s ease;
+}
