@@ -7,6 +7,12 @@ nav: true
 nav_order: 5
 ---
 
+<p class="teaching-reviews">
+  <a href="{{ '/assets/pdf/ams210_fall2023_studentReviews.pdf' | relative_url }}" target="_blank" rel="noopener">
+    <i class="fa-solid fa-file-pdf"></i> Student reviews for AMS 210 – Applied Linear Algebra (Fall 2023)
+  </a>
+</p>
+
 ## University of California, San Diego | Mechanical & Aerospace Engineering (MAE)
 
 ### **MAE 40 - Linear Circuits**
