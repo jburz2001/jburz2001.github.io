@@ -2,6 +2,45 @@
  * About page (_pages/about.md, _layouts/about.liquid)
  ******************************************************************************/
 
+// Top row: intro text on the left, photo + social icons on the right.
+.about-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30%;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 1rem;
+
+  &.about-row-left {
+    grid-template-columns: 30% minmax(0, 1fr);
+
+    .about-side {
+      order: -1;
+    }
+  }
+
+  .about-side {
+    width: 100%;
+    margin: 0;
+  }
+
+  .about-main > :first-child {
+    margin-top: 0;
+  }
+}
+
+// On phones, stack the photo above the text.
+@media (max-width: 575.98px) {
+  .about-row,
+  .about-row.about-row-left {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    .about-side {
+      order: -1;
+    }
+  }
+}
+
 // Social icons under the profile photo.
 .profile .profile-social {
   display: flex;
@@ -42,10 +81,6 @@
   font-weight: 400;
 }
 
-// Let headings sit beside the floated profile photo without running under it.
-.about-heading {
-  overflow: hidden;
-}
 
 // Education rows: item on the left, year on the right.
 .about-list {

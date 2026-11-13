@@ -2,10 +2,10 @@
 layout: about
 title: about
 permalink: /
-subtitle: Ph.D. student in Mech. Engineering at UC San Diego, advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
+subtitle: Ph.D. student in Mechanical and Aerospace Engineering at UC San Diego<br>Advised by Dr. <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>
 
 profile:
-  align: right
+  align: right # photo column on the right (or left)
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   social: true # show the social icons under the photo instead of at the bottom of the page
@@ -29,6 +29,8 @@ latest_posts:
 <p class="about-lead">
 I build machine learning and computational tools for science and engineering. Currently, I work on signal processing and computer vision for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
 </p>
+
+<!-- end-intro -->
 
 <h2 class="about-heading">Education</h2>
 
