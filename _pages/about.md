@@ -30,8 +30,6 @@ latest_posts:
 I build machine learning and computational tools for science and engineering. Currently, I work on signal processing and computer vision for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
 </p>
 
-<!-- end-intro -->
-
 <h2 class="about-heading">Education</h2>
 
 <ul class="about-list">
@@ -57,3 +55,6 @@ I build machine learning and computational tools for science and engineering. Cu
     <span class="about-year">2023</span>
   </li>
 </ul>
+
+<!-- end-intro -->
+<!-- Anything above this line sits in the left column beside the photo; anything below spans the full width. -->
