@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Ph.D. student in Mech. Engineering at UC San Diego; advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
+subtitle: Ph.D. student in Mech. Engineering at UC San Diego, advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>.
 
 profile:
   align: right
