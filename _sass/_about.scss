@@ -1,0 +1,96 @@
+/*******************************************************************************
+ * About page (_pages/about.md, _layouts/about.liquid)
+ ******************************************************************************/
+
+// Social icons under the profile photo.
+.profile .profile-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 1.75rem;
+
+  a {
+    line-height: 1;
+
+    i::before {
+      color: var(--global-text-color);
+      transition: color 0.2s ease-in-out;
+    }
+
+    &:hover {
+      text-decoration: none;
+
+      i::before {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+}
+
+.about-lead {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-heading {
+  margin: 1.75rem 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--global-divider-color);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+// Let headings sit beside the floated profile photo without running under it.
+.about-heading {
+  overflow: hidden;
+}
+
+// Education rows: item on the left, year on the right.
+.about-list {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+  }
+
+  li + li {
+    border-top: 1px dashed var(--global-divider-color);
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  em {
+    font-size: 0.9em;
+    color: var(--global-text-color-light);
+  }
+}
+
+.about-where {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--global-text-color-light);
+}
+
+.about-year {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: var(--global-text-color-light);
+  white-space: nowrap;
+}
+
+.about-note {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--global-text-color-light);
+}
