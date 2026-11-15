@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Ph.D. student in Mechanical and Aerospace Engineering at UC San Diego<br>Advised by Dr. <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dmitri Orlov</a>
+subtitle: Ph.D. student in Mechanical and Aerospace Engineering at UC San Diego.<br>Advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dr. Dmitri Orlov.</a>
 
 profile:
   align: right # photo column on the right (or left)
@@ -27,7 +27,7 @@ latest_posts:
 ---
 
 <p class="about-lead">
-I build machine learning and computational tools for science and engineering. Currently, I work on signal processing and computer vision for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
+I work on signal processing, computer vision, &amp machine learning for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
 </p>
 
 <h2 class="about-heading">Education</h2>
@@ -36,21 +36,21 @@ I build machine learning and computational tools for science and engineering. Cu
   <li>
     <div>
       <strong>Ph.D., Mechanical &amp; Aerospace Engineering</strong><span class="about-where">University of California, San Diego</span>
-      <p class="about-note">In 2025, U.S. News &amp; World Report ranked UC San Diego <a href="https://jacobsschool.ucsd.edu/about/rankings">10th among the nation's engineering schools</a> and #1 among public universities for citations per publication.</p>
+      <p class="about-note"><a href="https://jacobsschool.ucsd.edu/about/rankings">10th among nation's top engineering schools</a> and #1 public university for citations per publication (U.S. News &amp; World Report, 2025).</p>
     </div>
     <span class="about-year">2025–present</span>
   </li>
   <li>
     <div>
       <strong>M.S., Computational Applied Mathematics</strong><span class="about-where">Stony Brook University</span>
-      <p class="about-note">In 2024, the Academic Ranking of World Universities ranked Stony Brook <a href="https://www.shanghairanking.com/rankings/gras/2024/RS0101">8th in the U.S. for Mathematics</a>.</p>
+      <p class="about-note"><a href="https://www.shanghairanking.com/rankings/gras/2024/RS0101">8th in the U.S. for Mathematics</a> (Academic Ranking of World Universities, 2024).</p>
     </div>
     <span class="about-year">2024</span>
   </li>
   <li>
     <div>
       <strong>B.S., Physics</strong> <em>(magna cum laude)</em><span class="about-where">University of California, Riverside</span>
-      <p class="about-note">U.S. News &amp; World Report has ranked UC Riverside <a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a> in six of the past eight years.</p>
+      <p class="about-note"><a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a> (U.S. News &amp; World Report, 6 of past 8 years before 2027).</p>
     </div>
     <span class="about-year">2023</span>
   </li>
