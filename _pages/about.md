@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Ph.D. student in Mechanical and Aerospace Engineering at UC San Diego.<br>Advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dr. Dmitri Orlov.</a>
+subtitle: Ph.D. student in Mechanical and Aerospace Engineering at UC San Diego.<br>Advised by <a href="https://sites.google.com/site/dorlovsandiego/orlov-lab-research/team-and-collaborators?authuser=0">Dr. Dmitri Orlov</a>.
 
 profile:
   align: right # photo column on the right (or left)
