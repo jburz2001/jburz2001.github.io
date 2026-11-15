@@ -27,7 +27,7 @@ latest_posts:
 ---
 
 <p class="about-lead">
-I work on signal processing, computer vision, &amp machine learning for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
+I work on signal processing, computer vision, & machine learning for nuclear fusion at the <a href="https://www.ga.com/magnetic-fusion/diii-d">DIII-D National Fusion Facility</a>.
 </p>
 
 <h2 class="about-heading">Education</h2>
