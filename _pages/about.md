@@ -50,7 +50,7 @@ I work on signal processing, computer vision, & machine learning for nuclear fus
   <li>
     <div>
       <strong>B.S., Physics</strong> <em>(magna cum laude)</em><span class="about-where">University of California, Riverside</span>
-      <p class="about-note"><a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a> (U.S. News &amp; World Report, 6 of past 8 years before 2027).</p>
+      <p class="about-note"><a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a> (U.S. News &amp; World Report, 2023).</p>
     </div>
     <span class="about-year">2023</span>
   </li>
