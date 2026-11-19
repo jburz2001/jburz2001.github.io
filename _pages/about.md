@@ -36,7 +36,8 @@ I work on signal processing, computer vision, & machine learning for nuclear fus
   <li>
     <div>
       <strong>Ph.D., Mechanical &amp; Aerospace Engineering</strong><span class="about-where">University of California, San Diego</span>
-      <p class="about-note"><a href="https://jacobsschool.ucsd.edu/about/rankings">10th among nation's top engineering schools</a> and #1 public university for citations per publication (U.S. News &amp; World Report, 2025).</p>
+      <p class="about-note"><a href="https://jacobsschool.ucsd.edu/about/rankings">10th among nation's top engineering schools</a><br> 
+      <a href="https://jacobsschool.ucsd.edu/about/rankings">#1 public university for citations per publication</a> (U.S. News &amp; World Report, 2025).</p>
     </div>
     <span class="about-year">2025–present</span>
   </li>
