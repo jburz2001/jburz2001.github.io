@@ -128,3 +128,38 @@
   line-height: 1.5;
   color: var(--global-text-color-light);
 }
+
+// Always-visible scrollbar on the scrollable news list (overlay scrollbars,
+// e.g. on macOS, otherwise only appear while hovering or scrolling).
+.news-scroll {
+  overflow-y: scroll;
+  padding-right: 0.5rem;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: var(--global-divider-color);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--global-text-color-light);
+
+    &:hover {
+      background: var(--global-theme-color);
+    }
+  }
+}
+
+// Firefox does not support the ::-webkit-scrollbar styles above.
+@supports not selector(::-webkit-scrollbar) {
+  .news-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: var(--global-text-color-light) var(--global-divider-color);
+  }
+}
