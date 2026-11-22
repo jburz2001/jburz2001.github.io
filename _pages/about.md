@@ -37,21 +37,21 @@ I work on signal processing, computer vision, & machine learning for nuclear fus
     <div>
       <strong>Ph.D., Mechanical &amp; Aerospace Engineering</strong><span class="about-where">University of California, San Diego</span>
       <p class="about-note"><a href="https://jacobsschool.ucsd.edu/about/rankings">10th among nation's top engineering schools</a><br> 
-      <a href="https://jacobsschool.ucsd.edu/about/rankings">#1 public university for citations per publication</a> (U.S. News &amp; World Report, 2025).</p>
+      <a href="https://jacobsschool.ucsd.edu/about/rankings">#1 public university for citations per publication</a><br>(U.S. News &amp; World Report, 2025).</p>
     </div>
     <span class="about-year">2025–present</span>
   </li>
   <li>
     <div>
       <strong>M.S., Computational Applied Mathematics</strong><span class="about-where">Stony Brook University</span>
-      <p class="about-note"><a href="https://www.shanghairanking.com/rankings/gras/2024/RS0101">8th in the U.S. for Mathematics</a> (Academic Ranking of World Universities, 2024).</p>
+      <p class="about-note"><a href="https://www.shanghairanking.com/rankings/gras/2024/RS0101">8th in the U.S. for Mathematics</a><br>(Academic Ranking of World Universities, 2024).</p>
     </div>
     <span class="about-year">2024</span>
   </li>
   <li>
     <div>
       <strong>B.S., Physics</strong> <em>(magna cum laude)</em><span class="about-where">University of California, Riverside</span>
-      <p class="about-note"><a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a> (U.S. News &amp; World Report, 2023).</p>
+      <p class="about-note"><a href="https://www.universityofcalifornia.edu/news/university-of-california-best-public-university-2027-us-news-best-colleges-rankings">#1 in the nation for social mobility</a><br>(U.S. News &amp; World Report, 2023).</p>
     </div>
     <span class="about-year">2023</span>
   </li>
